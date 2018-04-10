@@ -1,0 +1,38 @@
+{
+  "extends": "airbnb",
+  "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+  "env": {
+    "browser": true,
+    "node": true, 
+    "jest": true
+  },
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import"
+  ],
+  "rules": {
+      "linebreak-style": 0, // Delegate the management of the linebreaks to git
+      "indent": [
+          "error",
+          2
+      ],
+      "max-len": [
+          2,
+          {
+            "code": 120,
+            "tabWidth": 2,
+  		"ignoreUrls": true,
+      "ignoreRegExpLiterals": true
+          }
+      ],
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "react/forbid-prop-types": 0, // Give me some slack on propTypes validation
+      "import/no-extraneous-dependencies": 0, // Some dependencies are nested within next.js (react, babel, ...)
+      "no-underscore-dangle": 0 // Needed for CouchDB's system properties
+  }
+}

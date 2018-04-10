@@ -1,0 +1,8 @@
+# =========================
+# Project
+# =========================
+.leveldb
+node_modules
+renderer/out
+renderer/.next
+dist

@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The renderView component should render correctly 1`] = `
+<div
+  className={[MockFunction]}
+>
+  <WithStyles(GridWrapper)
+    container={true}
+    spacing={24}
+  >
+    <WithStyles(GridWrapper)
+      item={true}
+      xs={12}
+    >
+      <WithStyles(Typography)
+        className={[MockFunction]}
+        variant="display1"
+      >
+        Paramètres
+      </WithStyles(Typography)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
+          htmlFor="input"
+          shrink={true}
+        >
+          Dossier source
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          disabled={true}
+          id="input"
+          startAdornment={
+            <WithStyles(InputAdornment)
+              position="start"
+            >
+              <WithStyles(IconButton)
+                aria-label="Choisir le dossier source"
+                onClick={[Function]}
+              >
+                <pure(FolderOpen) />
+              </WithStyles(IconButton)>
+            </WithStyles(InputAdornment)>
+          }
+          type="text"
+          value=""
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
+          htmlFor="output"
+          shrink={true}
+        >
+          Dossier cible
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          disabled={true}
+          id="output"
+          label=""
+          startAdornment={
+            <WithStyles(InputAdornment)
+              position="start"
+            >
+              <WithStyles(IconButton)
+                aria-label="Choisir le dossier cible"
+                onClick={[Function]}
+              >
+                <pure(FolderOpen) />
+              </WithStyles(IconButton)>
+            </WithStyles(InputAdornment)>
+          }
+          type="text"
+          value=""
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
+          htmlFor="filename"
+          shrink={true}
+        >
+          Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          id="filename"
+          onChange={[Function]}
+          type="text"
+          value="%dossiersource%_%dateiso%"
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
+          htmlFor="title"
+          shrink={true}
+        >
+          Titre de(s) document(s) (options : %dossiersource%, %datefr%, %ligne%)
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          id="title"
+          onChange={[Function]}
+          type="text"
+          value="%dossiersource%%ligne%%datefr%"
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
+          htmlFor="level"
+          shrink={true}
+        >
+          Agréger au niveau
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          className={[MockFunction]}
+          id="level"
+          onChange={[Function]}
+          type="number"
+          value={1}
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={undefined}
+      >
+        <WithStyles(FormControlLabel)
+          control={
+            <WithStyles(Checkbox)
+              checked={true}
+              onChange={[Function]}
+            />
+          }
+          label="Journal des modifications"
+        />
+        <WithStyles(FormControlLabel)
+          control={
+            <WithStyles(Checkbox)
+              checked={true}
+              onChange={[Function]}
+            />
+          }
+          label="Signets"
+        />
+      </WithStyles(FormControl)>
+    </WithStyles(GridWrapper)>
+    <WithStyles(GridWrapper)
+      item={true}
+      xs={12}
+    >
+      <WithStyles(Button)
+        className={[MockFunction]}
+        color="primary"
+        onClick={[Function]}
+        variant="raised"
+      >
+        Valider
+      </WithStyles(Button)>
+      <WithStyles(Button)
+        className={[MockFunction]}
+        color="secondary"
+        onClick={[Function]}
+        variant="raised"
+      >
+        Annuler
+      </WithStyles(Button)>
+    </WithStyles(GridWrapper)>
+  </WithStyles(GridWrapper)>
+</div>
+`;
