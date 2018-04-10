@@ -73,7 +73,7 @@
         "portable",
         "nsis"
       ],
-      "icon": "main/static/icon.ico"
+      "icon": "main/static/icon.png"
     }
   }
 
