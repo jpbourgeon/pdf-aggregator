@@ -17,7 +17,7 @@
     "postinstall": "electron-builder install-app-deps",
     "tdd": "cross-env ELECTRON_IS_DEV=1 jest --watchAll --verbose",
     "test": "npm run build && jest",
-    "report": "npm run build && jest --coverage"
+    "test-report": "npm run build && jest --coverage --verbose"
   },
   
   "dependencies": {
