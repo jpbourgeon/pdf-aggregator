@@ -1,4 +1,4 @@
-import withRoot from '../styles/withRoot';
+import withRoot from '../components/styles/withRoot';
 import View from '../components/start';
 import { withContextProvider } from '../store';
 
