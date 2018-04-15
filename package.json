@@ -4,12 +4,10 @@
   "main": "main/index.js",
   "author": "Jean-Philippe Bourgeon <jeanphilippe.bourgeon@gmail.com> (http://bourgeon.jp.net)",
   "license": "CECILL-2.1",
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jpbourgeon/cdg71-pdf-aggregator.git"
   },
-
   "scripts": {
     "start": "electron .",
     "build": "next build renderer && next export renderer",
@@ -19,7 +17,6 @@
     "test": "npm run build && jest",
     "test-report": "npm run build && jest --coverage --verbose"
   },
-  
   "dependencies": {
     "app-root-path": "^2.0.1",
     "deep-equal": "^1.0.1",
@@ -31,22 +28,21 @@
     "next": "^5.1.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.1",
-    "react-dom": "^16.3.1"
+    "react-dom": "^16.3.1",
+    "validator": "^9.4.1"
   },
-  
   "devDependencies": {
     "cross-env": "^5.1.4",
     "electron": "^2.0.0-beta.5",
     "electron-builder": "^20.8.1",
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "jest": "^22.4.3",
     "react-test-renderer": "^16.3.1"
   },
-  
   "jest": {
     "testPathIgnorePatterns": [
       "<rootDir>\\renderer\\out\\",
@@ -61,7 +57,6 @@
       "text"
     ]
   },
-  
   "build": {
     "files": [
       "**/*",
@@ -76,5 +71,4 @@
       "icon": "main/static/icon.png"
     }
   }
-
 }
