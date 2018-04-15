@@ -35,7 +35,7 @@ const styles = theme => ({
 
 const RenderView = (props) => {
   const {
-    state, actions, parameters, classes,
+    state, actions, classes,
   } = props;
   return (
     <div className={classes.root}>
@@ -54,12 +54,7 @@ const RenderView = (props) => {
                 <InputAdornment position="start">
                   <IconButton
                     aria-label="Choisir le dossier source"
-                    onClick={() => actions.getFolder(
-                      'input',
-                      actions.openDialog,
-                      parameters.currentWindow,
-                      parameters.dialogOptions,
-                    )}
+                    onClick={() => actions.getFolder('input')}
                   >
                     <FolderOpen />
                   </IconButton>
@@ -80,12 +75,7 @@ const RenderView = (props) => {
                 <InputAdornment position="start">
                   <IconButton
                     aria-label="Choisir le dossier cible"
-                    onClick={() => actions.getFolder(
-                      'output',
-                      actions.openDialog,
-                      parameters.currentWindow,
-                      parameters.dialogOptions,
-                    )}
+                    onClick={() => actions.getFolder('output')}
                   >
                     <FolderOpen />
                   </IconButton>
@@ -125,7 +115,7 @@ const RenderView = (props) => {
               id="level"
               type="number"
               value={state.data.level}
-              onChange={e => actions.handleChange('level', e)}
+              onChange={e => actions.handleLevelChange(e)}
             />
           </FormControl>
 
@@ -169,7 +159,6 @@ const RenderView = (props) => {
 RenderView.propTypes = {
   actions: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  parameters: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
 };
 

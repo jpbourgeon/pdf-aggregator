@@ -1,5 +1,6 @@
 import electron from 'electron';
 import React from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
 
@@ -60,12 +61,12 @@ class ContextProvider extends React.Component {
     }
   }
 
-  getFolder(folder, dialog, win, options) {
-    const path = dialog(
-      win,
-      options,
+  getFolder(field) {
+    const path = this.openDialog(
+      this.currentWindow,
+      this.dialogOptions,
     );
-    const data = { ...this.state.data, [folder]: path };
+    const data = { ...this.state.data, [field]: path };
     this.setState({ data });
   }
 
@@ -83,13 +84,22 @@ class ContextProvider extends React.Component {
     this.setState({ data });
   }
 
+  handleLevelChange(event) {
+    let value = parseInt(event.target.value, 10);
+    if (value < 1 || Number.isNaN(value)) {
+      value = this.defaultState.data.level;
+    }
+    const data = { ...this.state.data, level: value };
+    this.setState({ data });
+  }
+
   resetState() {
     this.setState({ ...this.defaultState });
   }
 
+  /* eslint-disable-next-line */
   submit() {
-    /* eslint-disable-next-line */
-    console.log(this.state);
+    Router.push('/result', '/result', { shallow: true });
   }
 
   render() {
@@ -101,6 +111,7 @@ class ContextProvider extends React.Component {
             openDialog: this.openDialog,
             getFolder: this.getFolder.bind(this),
             handleChange: this.handleChange.bind(this),
+            handleLevelChange: this.handleLevelChange.bind(this),
             resetState: this.resetState.bind(this),
             submit: this.submit.bind(this),
           },

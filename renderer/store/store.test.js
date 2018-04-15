@@ -1,7 +1,9 @@
 const React = require('react');
 const TestRenderer = require('react-test-renderer');
+const Router = require('next/router').default;
 const { ContextProvider } = require('../store');
 
+jest.mock('next/router');
 
 describe('Given the application store ContextProvider component', () => {
   let instance;
@@ -40,6 +42,31 @@ describe('Given the application store ContextProvider component', () => {
     });
   });
 
+  describe('the method handleLevelChange', () => {
+    const makeEvent = value => ({
+      target: {
+        value,
+      },
+    });
+    it('should set the level correctly if the value provided is a positive integer', () => {
+      const event = makeEvent('2');
+      instance.handleLevelChange(event);
+      expect(instance.state.data.level).toBe(2);
+    });
+
+    it('should set the default value if the value provided is an integer below 1', () => {
+      const event = makeEvent('-1');
+      instance.handleLevelChange(event);
+      expect(instance.state.data.level).toBe(instance.defaultState.data.level);
+    });
+
+    it('should set the default value if the value provided is not a number', () => {
+      const event = makeEvent('not a number');
+      instance.handleLevelChange(event);
+      expect(instance.state.data.level).toBe(instance.defaultState.data.level);
+    });
+  });
+
   describe('the method resetState', () => {
     it('should reset the state to the default', () => {
       instance.initStore(() => ({ key: 'value' }));
@@ -49,21 +76,24 @@ describe('Given the application store ContextProvider component', () => {
   });
 
   describe('the method submit', () => {
-    it('should work');
+    it('should navigate to the result page', () => {
+      instance.submit();
+      expect(Router.push).toHaveBeenCalledWith('/result', '/result', { shallow: true });
+    });
   });
 
   describe('the method getFolder', () => {
     it('should open the native folder picker', () => {
-      instance.getFolder(
-        'input',
-        instance.openDialog,
-        instance.currentWindow,
-        instance.dialogOptions,
-      );
+      instance.getFolder('input');
       expect(instance.openDialog).toHaveBeenCalledWith(
         instance.currentWindow,
         instance.dialogOptions,
       );
+    });
+    it('should save the path to the state\'s data to the provided field', () => {
+      instance.openDialog = jest.fn().mockReturnValueOnce('/path/');
+      instance.getFolder('input');
+      expect(instance.state.data.input).toBe('/path/');
     });
   });
 
@@ -89,5 +119,9 @@ describe('Given the application store ContextProvider component', () => {
       instance.componentDidUpdate(null, { data: { key: 'value' } });
       expect(instance.db.setState).not.toHaveBeenCalled();
     });
+  });
+
+  describe.only('the method validateForm', () => {
+    it('should work');
   });
 });
