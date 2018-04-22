@@ -40,7 +40,7 @@
     "json": false,
     "csv": false,
     "md": false,
-    "outdir": "out"
+    "outdir": ""
   },
   "LineCount.excludes": [
     ".vscode/**",
