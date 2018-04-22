@@ -26,13 +26,33 @@
     "package.json": true,
     "package-lock.json": true,
     "license.txt": true,
-    "renderer/next.config.js": true,
-    "db.json": true
+    "renderer/next.config.js": true
   },
   "workbench.activityBar.visible": false,
   "workbench.colorTheme": "Cobalt2",
   "workbench.iconTheme": "vs-seti",
   "workbench.startupEditor": "none",
   "telemetry.enableTelemetry": false,
-  "telemetry.enableCrashReporter": false
+  "telemetry.enableCrashReporter": false,
+  "LineCount.showStatusBarItem": false,
+  "LineCount.output": {
+    "txt": false,
+    "json": false,
+    "csv": false,
+    "md": false,
+    "outdir": "out"
+  },
+  "LineCount.excludes": [
+    ".vscode/**",
+    ".git/**",
+    "dist/**",
+    "node_module/**",
+    "renderer/.next/**",
+    "renderer/out/**",
+    "db.json",
+    "package-lock.json"
+  ],
+  "LineCount.includes": [
+      "**/*"
+  ]
 }
