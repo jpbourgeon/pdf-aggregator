@@ -25,6 +25,7 @@ const defaultState = {
     filename: '%dossiersource%_%dateiso%',
     title: '%dossiersource%%ligne%%datefr%',
     level: 0,
+    cover: true,
     changelog: true,
     bookmarks: true,
   },
