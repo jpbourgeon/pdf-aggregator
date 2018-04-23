@@ -1,5 +1,6 @@
 import electron from 'electron';
 import React from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
 
@@ -20,22 +21,27 @@ const defaultState = {
   data: {
     input: '',
     output: '',
+    logo: '',
     filename: '%dossiersource%_%dateiso%',
     title: '%dossiersource%%ligne%%datefr%',
-    level: 1,
+    level: 0,
     changelog: true,
     bookmarks: true,
   },
-  tree: {},
-  ui: {
-    jobsDone: false,
-    hasErrors: false,
-  },
 };
 
-const dialogOptions = {
+const foldersOptions = {
   title: 'Choisissez un dossier',
   properties: ['openDirectory'],
+  buttonLabel: 'Valider',
+};
+
+const imagesOptions = {
+  title: 'Choisissez une image',
+  filters: [
+    { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+  ],
+  properties: ['openFile'],
   buttonLabel: 'Valider',
 };
 
@@ -46,7 +52,8 @@ class ContextProvider extends React.Component {
     this.state = { ...this.defaultState };
     this.db = db;
     this.openDialog = openDialog;
-    this.dialogOptions = dialogOptions;
+    this.foldersOptions = foldersOptions;
+    this.imagesOptions = imagesOptions;
     this.currentWindow = currentWindow;
   }
 
@@ -60,12 +67,21 @@ class ContextProvider extends React.Component {
     }
   }
 
-  getFolder(folder, dialog, win, options) {
-    const path = dialog(
-      win,
-      options,
+  setFolder(field) {
+    const path = this.openDialog(
+      this.currentWindow,
+      this.foldersOptions,
     );
-    const data = { ...this.state.data, [folder]: path };
+    const data = { ...this.state.data, [field]: path };
+    this.setState({ data });
+  }
+
+  setLogo() {
+    const path = this.openDialog(
+      this.currentWindow,
+      this.imagesOptions,
+    );
+    const data = { ...this.state.data, logo: path };
     this.setState({ data });
   }
 
@@ -83,13 +99,34 @@ class ContextProvider extends React.Component {
     this.setState({ data });
   }
 
+  handleLevelChange(event) {
+    let value = parseInt(event.target.value, 10);
+    if (value < 0 || Number.isNaN(value)) {
+      value = this.defaultState.data.level;
+    }
+    const data = { ...this.state.data, level: value };
+    this.setState({ data });
+  }
+
   resetState() {
     this.setState({ ...this.defaultState });
   }
 
-  submit() {
-    /* eslint-disable-next-line */
-    console.log(this.state);
+  isDataValid() {
+    const { data } = this.state;
+    if (data.input === '') return false;
+    if (data.output === '') return false;
+    if (data.filename === '') return false;
+    if (data.title === '') return false;
+    if (Number.isNaN(parseInt(data.level, 10))) return false;
+    if (parseInt(data.level, 10) < 0) return false;
+    return true;
+  }
+
+  /* eslint-disable-next-line */
+  submit(event) {
+    event.preventDefault();
+    Router.push('/result', '/result');
   }
 
   render() {
@@ -99,14 +136,13 @@ class ContextProvider extends React.Component {
           state: this.state,
           actions: {
             openDialog: this.openDialog,
-            getFolder: this.getFolder.bind(this),
+            setFolder: this.setFolder.bind(this),
+            setLogo: this.setLogo.bind(this),
             handleChange: this.handleChange.bind(this),
+            handleLevelChange: this.handleLevelChange.bind(this),
             resetState: this.resetState.bind(this),
+            isDataValid: this.isDataValid.bind(this),
             submit: this.submit.bind(this),
-          },
-          parameters: {
-            currentWindow: this.currentWindow,
-            dialogOptions: this.dialogOptions,
           },
         }}
       >

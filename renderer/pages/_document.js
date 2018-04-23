@@ -2,18 +2,21 @@ import React from 'react';
 import Document, { Head, Main, NextScript } from 'next/document';
 import JssProvider from 'react-jss/lib/JssProvider';
 import flush from 'styled-jsx/server';
-import getPageContext from '../styles/getPageContext';
+import getPageContext from '../components/styles/getPageContext';
 
 class MyDocument extends Document {
   render() {
     return (
       <html lang="fr" dir="ltr">
         <Head>
-          <title>CDG71 - Agrégateur de fichiers PDF</title>
+          <title>Agrégateur de fichiers PDF</title>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta name="description" content="Assistant de classement à la nomination stagiaire" />
-          <meta name="author" content="CDG71 <contact@cdg71.fr> (http://www.cdg71.fr), Jean-Philippe Bourgeon <jeanphilippe.bourgeon@gmail.com> (http://bourgeon.jp.net)" />
+          <meta
+            name="author"
+            content="Jean-Philippe Bourgeon <jeanphilippe.bourgeon@gmail.com> (http://bourgeon.jp.net"
+          />
           {/* Use minimum-scale=1 to enable GPU rasterization */}
           <meta
             name="viewport"

@@ -22,6 +22,7 @@ module.exports = {
   exportPathMap() {
     return {
       '/start': { page: '/start' },
+      '/result': { page: '/result' },
     };
   },
 };

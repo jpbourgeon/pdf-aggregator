@@ -13,7 +13,9 @@ app.on('ready', async () => {
 
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 630,
+    minWidth: 800,
+    minHeight: 630,
   });
 
   const devPath = 'http://localhost:8000/start';
@@ -31,7 +33,7 @@ app.on('ready', async () => {
   } else {
     url = prodPath;
     mainWindow.setMenu(null);
-    mainWindow.setResizable(false);
+    mainWindow.setResizable(true);
   }
 
   mainWindow.loadURL(url);

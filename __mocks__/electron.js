@@ -1,15 +1,13 @@
 const electron = {
   remote: {
     require: (module) => {
-      let mock;
-      if (module === './utils/dialog') {
-        mock = jest.fn();
-      }
+      // default mock for './utils/dialog' './utils/gettree'
+      let mock = jest.fn();
       if (module === './utils/database') {
         mock = {
-          getState: () => jest.fn().mockReturnValue({}),
+          getState: jest.fn().mockReturnValue({}),
           setState: jest.fn().mockReturnThis(),
-          write: () => jest.fn(),
+          write: jest.fn(),
         };
       }
       return mock;
@@ -18,6 +16,12 @@ const electron = {
   },
   dialog: {
     showOpenDialog: jest.fn(),
+  },
+  shell: {
+    openItem: jest.fn(),
+  },
+  ipcRenderer: {
+    on: jest.fn(),
   },
 };
 
