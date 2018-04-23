@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The renderView component of the result page should render correctly 1`] = `
+<div
+  className={[MockFunction]}
+>
+  <div
+    className=""
+  >
+    <WithStyles(Button)
+      onClick={[Function]}
+    >
+      isDone (
+      false
+      )
+    </WithStyles(Button)>
+    <WithStyles(Button)
+      onClick={[Function]}
+    >
+      hasErrors (
+      false
+      )
+    </WithStyles(Button)>
+    <WithStyles(Button)
+      onClick={[Function]}
+    >
+      isDev (
+      true
+      )
+    </WithStyles(Button)>
+  </div>
+  <WithStyles(GridWrapper)
+    className={undefined}
+    container={true}
+    spacing={24}
+  >
+    <WithStyles(GridWrapper)
+      className={undefined}
+      item={true}
+      xs={12}
+    >
+      <WithStyles(Typography)
+        className={[MockFunction]}
+        variant="display1"
+      >
+        <span
+          className=""
+        >
+          Traitement en cours
+        </span>
+        <span
+          className={undefined}
+        >
+          Traitement terminé
+        </span>
+        <WithStyles(Button)
+          className="function () {
+        return fn.apply(this, arguments);
+      } undefined"
+          color="default"
+          onClick={undefined}
+          size="small"
+          variant="raised"
+        >
+          <pure(Home)
+            className={undefined}
+          />
+          Nouveau
+        </WithStyles(Button)>
+        <WithStyles(Button)
+          className="function () {
+        return fn.apply(this, arguments);
+      } undefined"
+          color="primary"
+          onClick={[Function]}
+          size="small"
+          type="submit"
+          variant="raised"
+        >
+          <pure(FolderOpen)
+            className={undefined}
+          />
+          Dossier cible
+        </WithStyles(Button)>
+      </WithStyles(Typography)>
+      <WithStyles(LinearProgress)
+        color="primary"
+        hidden={false}
+      />
+      <WithStyles(ExpansionPanel)
+        className={undefined}
+        color="primary"
+        defaultExpanded={true}
+        elevation={0}
+      >
+        <WithStyles(ExpansionPanelSummary)
+          expandIcon={<pure(ExpandMore) />}
+        >
+          <WithStyles(Typography)
+            color="primary"
+            variant="subheading"
+          >
+            <span
+              className=""
+            >
+              Opération en cours : 
+              -
+            </span>
+            <span
+              className={undefined}
+            >
+              Journal des opérations
+            </span>
+          </WithStyles(Typography)>
+        </WithStyles(ExpansionPanelSummary)>
+        <WithStyles(ExpansionPanelDetails)>
+          <WithStyles(Divider) />
+          <pre>
+            []
+          </pre>
+        </WithStyles(ExpansionPanelDetails)>
+      </WithStyles(ExpansionPanel)>
+    </WithStyles(GridWrapper)>
+  </WithStyles(GridWrapper)>
+</div>
+`;

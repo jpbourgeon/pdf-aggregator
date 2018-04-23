@@ -9,18 +9,25 @@ import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import FolderOpen from 'material-ui-icons/FolderOpen';
-import { withContextConsumer } from '../../store';
+import PhotoLibrary from 'material-ui-icons/PhotoLibrary';
+import { withContextConsumer } from './store';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing.unit * 2,
   },
+  container: {
+    justifyContent: 'center',
+  },
+  item: {
+    maxWidth: 800,
+  },
   title: {
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit,
   },
   formControl: {
-    margin: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
     width: '100%',
   },
   smallFormControl: {
@@ -29,6 +36,7 @@ const styles = theme => ({
   },
   button: {
     marginRight: theme.spacing.unit,
+    marginTop: theme.spacing.unit,
   },
 });
 
@@ -38,9 +46,9 @@ const RenderView = (props) => {
     state, actions, classes,
   } = props;
   return (
-    <div className={classes.root}>
-      <Grid container spacing={24}>
-        <Grid item xs={12}>
+    <form className={classes.root} onSubmit={e => actions.submit(e)}>
+      <Grid container spacing={24} className={classes.container}>
+        <Grid item xs={12} className={classes.item}>
           <Typo variant="display1" className={classes.title} >Paramètres</Typo>
 
           <FormControl className={classes.formControl}>
@@ -54,7 +62,7 @@ const RenderView = (props) => {
                 <InputAdornment position="start">
                   <IconButton
                     aria-label="Choisir le dossier source"
-                    onClick={() => actions.getFolder('input')}
+                    onClick={() => actions.setFolder('input')}
                   >
                     <FolderOpen />
                   </IconButton>
@@ -75,9 +83,30 @@ const RenderView = (props) => {
                 <InputAdornment position="start">
                   <IconButton
                     aria-label="Choisir le dossier cible"
-                    onClick={() => actions.getFolder('output')}
+                    onClick={() => actions.setFolder('output')}
                   >
                     <FolderOpen />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="output" shrink>Logo</InputLabel>
+            <Input
+              id="logo"
+              label=""
+              type="text"
+              value={state.data.logo}
+              disabled
+              startAdornment={
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label="Choisir un logo"
+                    onClick={() => actions.setLogo()}
+                  >
+                    <PhotoLibrary />
                   </IconButton>
                 </InputAdornment>
               }
@@ -140,19 +169,24 @@ const RenderView = (props) => {
               label="Signets"
             />
           </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Button variant="raised" color="primary" className={classes.button} onClick={actions.submit}>
+          <div>
+            <Button
+              variant="raised"
+              color="primary"
+              className={classes.button}
+              disabled={(!actions.isDataValid())}
+              type="submit"
+            >
               Valider
-          </Button>
+            </Button>
 
-          <Button variant="raised" color="secondary" className={classes.button} onClick={actions.resetState}>
+            <Button variant="raised" color="secondary" className={classes.button} onClick={actions.resetState}>
               Annuler
-          </Button>
+            </Button>
+          </div>
         </Grid>
       </Grid>
-    </div>
+    </form>
   );
 };
 

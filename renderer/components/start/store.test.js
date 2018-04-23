@@ -1,11 +1,11 @@
 const React = require('react');
 const TestRenderer = require('react-test-renderer');
 const Router = require('next/router').default;
-const { ContextProvider } = require('../store');
+const { ContextProvider } = require('./store');
 
 jest.mock('next/router');
 
-describe('Given the application store ContextProvider component', () => {
+describe('Given the start store ContextProvider component', () => {
   let instance;
   beforeEach(() => {
     const renderer = TestRenderer.create(<ContextProvider><div /></ContextProvider>);
@@ -15,7 +15,7 @@ describe('Given the application store ContextProvider component', () => {
   describe('the method initStore', () => {
     it('should initialise the store with the data provided', () => {
       const data = { input: 'hello world' };
-      const expectedState = Object.assign(instance.defaultState, { data });
+      const expectedState = { ...instance.defaultState, data };
       instance.initStore(() => data);
       expect(instance.state).toEqual(expectedState);
     });
@@ -48,10 +48,11 @@ describe('Given the application store ContextProvider component', () => {
         value,
       },
     });
+
     it('should set the level correctly if the value provided is a positive integer', () => {
-      const event = makeEvent('2');
+      const event = makeEvent('1');
       instance.handleLevelChange(event);
-      expect(instance.state.data.level).toBe(2);
+      expect(instance.state.data.level).toBe(1);
     });
 
     it('should set the default value if the value provided is an integer below 1', () => {
@@ -77,23 +78,40 @@ describe('Given the application store ContextProvider component', () => {
 
   describe('the method submit', () => {
     it('should navigate to the result page', () => {
-      instance.submit();
-      expect(Router.push).toHaveBeenCalledWith('/result', '/result', { shallow: true });
+      instance.submit({ preventDefault: jest.fn() });
+      expect(Router.push).toHaveBeenCalledWith('/result', '/result');
     });
   });
 
-  describe('the method getFolder', () => {
+  describe('the method setFolder', () => {
     it('should open the native folder picker', () => {
-      instance.getFolder('input');
+      instance.setFolder('input');
       expect(instance.openDialog).toHaveBeenCalledWith(
         instance.currentWindow,
-        instance.dialogOptions,
+        instance.foldersOptions,
       );
     });
-    it('should save the path to the state\'s data to the provided field', () => {
+
+    it('should save the selected path to the provided field of the state\'s data property', () => {
       instance.openDialog = jest.fn().mockReturnValueOnce('/path/');
-      instance.getFolder('input');
+      instance.setFolder('input');
       expect(instance.state.data.input).toBe('/path/');
+    });
+  });
+
+  describe('the method setLogo', () => {
+    it('should open the native file picker', () => {
+      instance.setLogo();
+      expect(instance.openDialog).toHaveBeenCalledWith(
+        instance.currentWindow,
+        instance.imagesOptions,
+      );
+    });
+
+    it('should save the selected path to the provided field of the state\'s data property', () => {
+      instance.openDialog = jest.fn().mockReturnValueOnce('/path/to/image.jpg');
+      instance.setLogo();
+      expect(instance.state.data.logo).toBe('/path/to/image.jpg');
     });
   });
 
@@ -121,7 +139,85 @@ describe('Given the application store ContextProvider component', () => {
     });
   });
 
-  describe.only('the method validateForm', () => {
-    it('should work');
+  describe('the method isDataValid', () => {
+    const makeData = () => ({
+      data: {
+        input: 'path',
+        output: 'path',
+        filename: '%dossiersource%_%dateiso%',
+        title: '%dossiersource%%ligne%%datefr%',
+        level: 0,
+        changelog: true,
+        bookmarks: true,
+      },
+    });
+
+    it('should return false if input folder is empty', () => {
+      const state = makeData();
+      state.data.input = '';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return false if output folder is empty', () => {
+      const state = makeData();
+      state.data.output = '';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return false if filename is empty', () => {
+      const state = makeData();
+      state.data.filename = '';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return false if title is empty', () => {
+      const state = makeData();
+      state.data.title = '';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+    it('should return false if level is not a number', () => {
+      const state = makeData();
+      state.data.level = 'value';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return false if level is a negative integer', () => {
+      const state = makeData();
+      state.data.level = '-1';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return true otherwise', () => {
+      const state = makeData();
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeTruthy();
+      });
+    });
   });
 });
