@@ -1,17 +1,18 @@
 const React = require('react');
 const ShallowRenderer = require('react-test-renderer/shallow');
 const { RenderView } = require('../start');
-const { defaultState } = require('../../store');
+const { defaultState } = require('./store');
 
-describe('The renderView component', () => {
+describe('The renderView component of the start page', () => {
   it('should render correctly', () => {
     const props = {
       actions: {
-        openDialog: () => jest.fn(),
-        getFolder: () => jest.fn(),
-        handleChange: () => jest.fn(),
-        resetState: () => jest.fn(),
-        submit: () => jest.fn(),
+        openDialog: jest.fn(),
+        setFolder: jest.fn(),
+        handleChange: jest.fn(),
+        resetState: jest.fn(),
+        isDataValid: jest.fn(),
+        submit: jest.fn(),
       },
       classes: {
         root: jest.fn(),
@@ -19,10 +20,6 @@ describe('The renderView component', () => {
         formControl: jest.fn(),
         smallFormControl: jest.fn(),
         button: jest.fn(),
-      },
-      parameters: {
-        currentWindow: jest.fn(),
-        dialogOptions: () => jest.fn(),
       },
       state: defaultState,
     };

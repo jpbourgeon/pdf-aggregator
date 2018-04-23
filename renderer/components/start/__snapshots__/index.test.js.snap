@@ -1,14 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The renderView component should render correctly 1`] = `
-<div
+exports[`The renderView component of the start page should render correctly 1`] = `
+<form
   className={[MockFunction]}
+  onSubmit={[Function]}
 >
   <WithStyles(GridWrapper)
+    className={undefined}
     container={true}
     spacing={24}
   >
     <WithStyles(GridWrapper)
+      className={undefined}
       item={true}
       xs={12}
     >
@@ -79,6 +82,35 @@ exports[`The renderView component should render correctly 1`] = `
         className={[MockFunction]}
       >
         <WithStyles(InputLabel)
+          htmlFor="output"
+          shrink={true}
+        >
+          Logo
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          disabled={true}
+          id="logo"
+          label=""
+          startAdornment={
+            <WithStyles(InputAdornment)
+              position="start"
+            >
+              <WithStyles(IconButton)
+                aria-label="Choisir un logo"
+                onClick={[Function]}
+              >
+                <pure(PhotoLibrary) />
+              </WithStyles(IconButton)>
+            </WithStyles(InputAdornment)>
+          }
+          type="text"
+          value=""
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
           htmlFor="filename"
           shrink={true}
         >
@@ -121,7 +153,7 @@ exports[`The renderView component should render correctly 1`] = `
           id="level"
           onChange={[Function]}
           type="number"
-          value={1}
+          value={0}
         />
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
@@ -146,28 +178,26 @@ exports[`The renderView component should render correctly 1`] = `
           label="Signets"
         />
       </WithStyles(FormControl)>
-    </WithStyles(GridWrapper)>
-    <WithStyles(GridWrapper)
-      item={true}
-      xs={12}
-    >
-      <WithStyles(Button)
-        className={[MockFunction]}
-        color="primary"
-        onClick={[Function]}
-        variant="raised"
-      >
-        Valider
-      </WithStyles(Button)>
-      <WithStyles(Button)
-        className={[MockFunction]}
-        color="secondary"
-        onClick={[Function]}
-        variant="raised"
-      >
-        Annuler
-      </WithStyles(Button)>
+      <div>
+        <WithStyles(Button)
+          className={[MockFunction]}
+          color="primary"
+          disabled={true}
+          type="submit"
+          variant="raised"
+        >
+          Valider
+        </WithStyles(Button)>
+        <WithStyles(Button)
+          className={[MockFunction]}
+          color="secondary"
+          onClick={[MockFunction]}
+          variant="raised"
+        >
+          Annuler
+        </WithStyles(Button)>
+      </div>
     </WithStyles(GridWrapper)>
   </WithStyles(GridWrapper)>
-</div>
+</form>
 `;
