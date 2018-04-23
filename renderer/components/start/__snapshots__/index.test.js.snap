@@ -178,29 +178,25 @@ exports[`The renderView component of the start page should render correctly 1`] 
           label="Signets"
         />
       </WithStyles(FormControl)>
-    </WithStyles(GridWrapper)>
-    <WithStyles(GridWrapper)
-      className={undefined}
-      item={true}
-      xs={12}
-    >
-      <WithStyles(Button)
-        className={[MockFunction]}
-        color="primary"
-        disabled={true}
-        type="submit"
-        variant="raised"
-      >
-        Valider
-      </WithStyles(Button)>
-      <WithStyles(Button)
-        className={[MockFunction]}
-        color="secondary"
-        onClick={[MockFunction]}
-        variant="raised"
-      >
-        Annuler
-      </WithStyles(Button)>
+      <div>
+        <WithStyles(Button)
+          className={[MockFunction]}
+          color="primary"
+          disabled={true}
+          type="submit"
+          variant="raised"
+        >
+          Valider
+        </WithStyles(Button)>
+        <WithStyles(Button)
+          className={[MockFunction]}
+          color="secondary"
+          onClick={[MockFunction]}
+          variant="raised"
+        >
+          Annuler
+        </WithStyles(Button)>
+      </div>
     </WithStyles(GridWrapper)>
   </WithStyles(GridWrapper)>
 </form>
