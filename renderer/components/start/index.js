@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Grid from 'material-ui/Grid';
 import Typo from 'material-ui/Typography';
 import { withStyles } from 'material-ui/styles';
@@ -9,7 +10,6 @@ import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import FolderOpen from 'material-ui-icons/FolderOpen';
-import PhotoLibrary from 'material-ui-icons/PhotoLibrary';
 import { withContextConsumer } from './store';
 
 const styles = theme => ({
@@ -37,6 +37,9 @@ const styles = theme => ({
   button: {
     marginRight: theme.spacing.unit,
     marginTop: theme.spacing.unit,
+  },
+  hidden: {
+    display: 'none',
   },
 });
 
@@ -72,6 +75,17 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="level" shrink>Agréger au niveau</InputLabel>
+            <Input
+              className={classes.smallFormControl}
+              id="level"
+              type="number"
+              value={state.data.level}
+              onChange={e => actions.handleLevelChange(e)}
+            />
+          </FormControl>
+
+          <FormControl className={classes.formControl}>
             <InputLabel htmlFor="output" shrink>Dossier cible</InputLabel>
             <Input
               id="output"
@@ -93,6 +107,34 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="filename" shrink>
+              Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
+            </InputLabel>
+            <Input
+              id="filename"
+              type="text"
+              value={state.data.filename}
+              onChange={e => actions.handleChange('filename', e)}
+            />
+          </FormControl>
+
+          <FormControl className={classes.FormControl}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.data.cover}
+                  onChange={e => actions.handleChange('cover', e, 'checked')}
+                />
+              }
+              label="Page de couverture"
+            />
+          </FormControl>
+
+          <FormControl className={classNames({
+            [classes.formControl]: true,
+            [classes.hidden]: !state.data.cover,
+          })}
+          >
             <InputLabel htmlFor="output" shrink>Logo</InputLabel>
             <Input
               id="logo"
@@ -106,26 +148,18 @@ const RenderView = (props) => {
                     aria-label="Choisir un logo"
                     onClick={() => actions.setLogo()}
                   >
-                    <PhotoLibrary />
+                    <FolderOpen />
                   </IconButton>
                 </InputAdornment>
               }
             />
           </FormControl>
 
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="filename" shrink>
-              Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
-            </InputLabel>
-            <Input
-              id="filename"
-              type="text"
-              value={state.data.filename}
-              onChange={e => actions.handleChange('filename', e)}
-            />
-          </FormControl>
-
-          <FormControl className={classes.formControl}>
+          <FormControl className={classNames({
+            [classes.formControl]: true,
+            [classes.hidden]: !state.data.cover,
+          })}
+          >
             <InputLabel htmlFor="title" shrink>
               Titre de(s) document(s) (options : %dossiersource%, %datefr%, %ligne%)
             </InputLabel>
@@ -137,16 +171,7 @@ const RenderView = (props) => {
             />
           </FormControl>
 
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="level" shrink>Agréger au niveau</InputLabel>
-            <Input
-              className={classes.smallFormControl}
-              id="level"
-              type="number"
-              value={state.data.level}
-              onChange={e => actions.handleLevelChange(e)}
-            />
-          </FormControl>
+          <br />
 
           <FormControl className={classes.FormControl}>
             <FormControlLabel
