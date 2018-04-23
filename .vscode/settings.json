@@ -26,7 +26,8 @@
     "package.json": true,
     "package-lock.json": true,
     "license.txt": true,
-    "renderer/next.config.js": true
+    "renderer/next.config.js": true,
+    ".circleci": true
   },
   "workbench.activityBar.visible": false,
   "workbench.colorTheme": "Cobalt2",
