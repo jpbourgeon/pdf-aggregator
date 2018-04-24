@@ -1,6 +1,7 @@
 const readdirp = require('readdirp');
 
 const onData = (entry, arr) => {
+  console.log(entry.stat);
   const parentDir = entry.parentDir.replace(/\\/g, '/');
   const fullPath = entry.fullPath.replace(/\\/g, '/');
   let depth;
@@ -9,12 +10,21 @@ const onData = (entry, arr) => {
   } else {
     depth = parentDir.split('/').length + 1;
   }
+  let type;
+  if (entry.stat.isFile()) type = 'File';
+  if (entry.stat.isDirectory()) type = 'Directory';
+  if (entry.stat.isBlockDevice()) type = 'BlockDevice';
+  if (entry.stat.isCharacterDevice()) type = 'CharacterDevice';
+  if (entry.stat.isSymbolicLink()) type = 'SymbolicLink';
+  if (entry.stat.isFIFO()) type = 'FIFO';
+  if (entry.stat.isSocket()) type = 'Socket';
   arr.push({
     depth,
-    parentDir,
-    name: entry.name,
     fullPath,
     lastModified: entry.stat.mtime,
+    name: entry.name,
+    parentDir,
+    type,
   });
 };
 
