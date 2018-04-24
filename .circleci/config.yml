@@ -17,23 +17,27 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - run:
+          name: "Checking Versions"
+          command: |
+            node --version
+            npm --version
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
+      # greenkeeper-lockfile
+      - run: npm install greenkeeper-lockfile@1 -g
       - run: npm install
-
+      - run: greenkeeper-lockfile-update
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
+
       # run tests!
       - run: npm test
-
-
+      - run: greenkeeper-lockfile-upload
