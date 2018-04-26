@@ -29,4 +29,5 @@ describe('The renderView component of the result page', () => {
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
+  it('should format and display the aggregation steps from the log');
 });
