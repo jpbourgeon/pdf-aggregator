@@ -53,6 +53,23 @@ exports[`The renderView component of the start page should render correctly 1`] 
         className={[MockFunction]}
       >
         <WithStyles(InputLabel)
+          htmlFor="level"
+          shrink={true}
+        >
+          Agréger au niveau
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          className={[MockFunction]}
+          id="level"
+          onChange={[Function]}
+          type="number"
+          value={0}
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
           htmlFor="output"
           shrink={true}
         >
@@ -82,6 +99,37 @@ exports[`The renderView component of the start page should render correctly 1`] 
         className={[MockFunction]}
       >
         <WithStyles(InputLabel)
+          htmlFor="filename"
+          shrink={true}
+        >
+          Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          id="filename"
+          onChange={[Function]}
+          type="text"
+          value="%dossiersource%_%dateiso%"
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={undefined}
+      >
+        <WithStyles(FormControlLabel)
+          control={
+            <WithStyles(Checkbox)
+              checked={true}
+              onChange={[Function]}
+            />
+          }
+          label="Page de couverture"
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className="function () {
+        return fn.apply(this, arguments);
+      }"
+      >
+        <WithStyles(InputLabel)
           htmlFor="output"
           shrink={true}
         >
@@ -99,7 +147,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
                 aria-label="Choisir un logo"
                 onClick={[Function]}
               >
-                <pure(PhotoLibrary) />
+                <pure(FolderOpen) />
               </WithStyles(IconButton)>
             </WithStyles(InputAdornment)>
           }
@@ -108,23 +156,9 @@ exports[`The renderView component of the start page should render correctly 1`] 
         />
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="filename"
-          shrink={true}
-        >
-          Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          id="filename"
-          onChange={[Function]}
-          type="text"
-          value="%dossiersource%_%dateiso%"
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
+        className="function () {
+        return fn.apply(this, arguments);
+      }"
       >
         <WithStyles(InputLabel)
           htmlFor="title"
@@ -139,23 +173,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           value="%dossiersource%%ligne%%datefr%"
         />
       </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="level"
-          shrink={true}
-        >
-          Agréger au niveau
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          className={[MockFunction]}
-          id="level"
-          onChange={[Function]}
-          type="number"
-          value={0}
-        />
-      </WithStyles(FormControl)>
+      <br />
       <WithStyles(FormControl)
         className={undefined}
       >

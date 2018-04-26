@@ -1,7 +1,6 @@
 const readdirp = require('readdirp');
 
 const onData = (entry, arr) => {
-  console.log(entry.stat);
   const parentDir = entry.parentDir.replace(/\\/g, '/');
   const fullPath = entry.fullPath.replace(/\\/g, '/');
   let depth;
