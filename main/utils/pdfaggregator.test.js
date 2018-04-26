@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const fs = require('fs-extra-promise');
 const { resolve } = require('app-root-path');
 const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
 const aggregate = require('./pdfaggregator');

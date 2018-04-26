@@ -1,5 +1,4 @@
-const fs = require('fs-extra');
-const { resolve } = require('app-root-path');
+const fs = require('fs-extra-promise');
 
 const snapshotPdfFiles = (folder) => {
   const pdfFiles = fs.readdirSync(folder).filter(element => (element.substr(-4) === '.pdf'));
