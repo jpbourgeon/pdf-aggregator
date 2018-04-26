@@ -30,4 +30,5 @@ describe('The renderView component of the result page', () => {
     expect(result).toMatchSnapshot();
   });
   it('should format and display the aggregation steps from the log');
+  it('should be localized (react-i18n + i18next-electron-language-detector)');
 });
