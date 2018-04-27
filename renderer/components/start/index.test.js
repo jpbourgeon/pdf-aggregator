@@ -28,6 +28,5 @@ describe('The renderView component of the start page', () => {
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
-  it('should provide a subtitle field to the coverpage option)');
   it('should be localized (react-i18n + i18next-electron-language-detector)');
 });
