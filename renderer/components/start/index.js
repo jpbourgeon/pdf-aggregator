@@ -161,13 +161,29 @@ const RenderView = (props) => {
           })}
           >
             <InputLabel htmlFor="title" shrink>
-              Titre de(s) document(s) (options : %dossiersource%, %datefr%, %ligne%)
+              Titre (options : %dossiersource%, %date%, %ligne%)
             </InputLabel>
             <Input
               id="title"
               type="text"
               value={state.data.title}
               onChange={e => actions.handleChange('title', e)}
+            />
+          </FormControl>
+
+          <FormControl className={classNames({
+            [classes.formControl]: true,
+            [classes.hidden]: !state.data.cover,
+          })}
+          >
+            <InputLabel htmlFor="subtitle" shrink>
+              Sous-titre (options : %dossiersource%, %date%, %ligne%)
+            </InputLabel>
+            <Input
+              id="subtitle"
+              type="text"
+              value={state.data.subtitle}
+              onChange={e => actions.handleChange('subtitle', e)}
             />
           </FormControl>
 
