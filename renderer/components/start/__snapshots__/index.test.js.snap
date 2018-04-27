@@ -164,13 +164,31 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="title"
           shrink={true}
         >
-          Titre de(s) document(s) (options : %dossiersource%, %datefr%, %ligne%)
+          Titre (options : %dossiersource%, %date%, %ligne%)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           id="title"
           onChange={[Function]}
           type="text"
-          value="%dossiersource%%ligne%%datefr%"
+          value="%dossiersource%"
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className="function () {
+        return fn.apply(this, arguments);
+      }"
+      >
+        <WithStyles(InputLabel)
+          htmlFor="subtitle"
+          shrink={true}
+        >
+          Sous-titre (options : %dossiersource%, %date%, %ligne%)
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          id="subtitle"
+          onChange={[Function]}
+          type="text"
+          value="%date%"
         />
       </WithStyles(FormControl)>
       <br />
