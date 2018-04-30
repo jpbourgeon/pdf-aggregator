@@ -30,7 +30,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       # greenkeeper-lockfile update
-      - run: sudo -v
+      - run: sudo
       - run: npm install greenkeeper-lockfile@1 -g
       # install deps
       - run: npm install
