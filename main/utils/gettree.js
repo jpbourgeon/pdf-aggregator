@@ -31,6 +31,11 @@ const onEnd = (err, arr, resolve, reject) => {
   if (err) {
     reject(err);
   } else {
+    arr.sort((a, b) => {
+      if (a.fullPath < b.fullPath) return -1;
+      if (a.fullPath > b.fullPath) return 1;
+      return 0;
+    });
     resolve(arr);
   }
 };

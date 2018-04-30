@@ -6,12 +6,16 @@ import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
 
 let remote;
-let db;
 let openItem;
+let db;
+let aggregate;
+let send;
 if (typeof window !== 'undefined') {
   ({ remote } = electron);
   ({ openItem } = shell);
   db = remote.require('./utils/database');
+  ({ aggregate } = remote.require('./utils/pdfaggregator'));
+  ({ send } = remote.getCurrentWebContents());
 }
 
 const Context = React.createContext();
@@ -36,6 +40,8 @@ class ContextProvider extends React.Component {
     this.state = { ...this.defaultState };
     this.db = db;
     this.openItem = openItem;
+    this.aggregate = aggregate;
+    this.send = send;
 
     if (typeof window !== 'undefined') {
       ipcRenderer.on('set-current-task', (event, arg) => {
@@ -56,7 +62,7 @@ class ContextProvider extends React.Component {
       isLast: false,
       label: 'Initialisation',
     });
-    // this.aggregatePdf(this.state.data);
+    this.aggregate(this.send, this.state.data);
   }
 
 

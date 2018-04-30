@@ -1,10 +1,23 @@
 const { getTree } = require('./gettree');
 
+const setCurrentTask = (send, label) => {
+  send('set-current-task', label);
+};
+
+const addLogEntry = (send, label, isError = false, isLast = false) => {
+  send('add-log-entry', {
+    date: new Date(),
+    isError,
+    isLast,
+    label,
+  });
+};
+
 const crawlFolder = async (path) => {
   try {
     let tree;
     if (path !== '') {
-      tree = await getTree({ root: path, entryType: 'both', filesFilter: '*.pdf' });
+      tree = await getTree({ root: path, entryType: 'both', fileFilter: '*.pdf' });
     } else {
       tree = [];
     }
@@ -14,15 +27,28 @@ const crawlFolder = async (path) => {
   }
 };
 
-const main = async (data) => {
+const aggregate = async (send, data) => {
+  let tree;
+  let foldersToAggregate;
+
+  setCurrentTask(send, 'Lecture du dossier source');
   try {
-    const tree = await crawlFolder(data.input);
-    /* eslint-disable-next-line */
-    console.log(tree);
+    tree = await crawlFolder(data.input);
+    addLogEntry(send, 'Lecture du dossier source');
   } catch (error) {
+    addLogEntry(send, 'Lecture du dossier source', true, true);
     /* eslint-disable-next-line */
     console.log(error);
+    return false;
   }
+
+  setCurrentTask(send, 'Traitement terminé');
+  console.log({ tree, foldersToAggregate });
+  addLogEntry(send, 'Traitement terminé', false, true);
+  return true;
 };
 
-module.exports = main;
+module.exports = {
+  aggregate,
+  crawlFolder,
+};
