@@ -49,37 +49,36 @@ const crawlFolder = async (path) => {
   }
 };
 
+const getFoldersToAggregate = (tree, data) => {
+  if (tree.length === 0) return [];
+  if (data.level === 0) {
+    return [data.input];
+  }
+  return tree
+    .reduce((result, item) => {
+      if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
+      return result;
+    }, []);
+};
+
 const aggregate = async (data, send) => {
-  console.log(data);
   let tree;
-  // let foldersToAggregate;
+  let foldersToAggregate;
   try {
-    await stepAsync('Lecture du dossier source', async () => { tree = await crawlFolder(data.input); }, send);
-    await step('Traitement terminé', async () => (console.log(tree)), send, true, true);
+    await stepAsync('Lecture du dossier source', async () => { tree = await crawlFolder(data.input); }, send, true);
+    await step(
+      'Récupération des dossiers à fusionner',
+      () => { foldersToAggregate = getFoldersToAggregate(tree, data); }, send, true,
+    );
+    await step('Traitement terminé', () => true, send, true, true);
   } catch (error) {
     /* eslint-disable-next-line */
     console.log(error);
   }
-
-  // taskName = 'Lecture du dossier source';
-  // setCurrentTask(send, taskName);
-  // try {
-  //   tree = await crawlFolder(data.input);
-  //   addLogEntry(send, taskName);
-  // } catch (error) {
-  //   addLogEntry(send, taskName, true, true);
-  //   /* eslint-disable-next-line */
-  //   console.log(error);
-  //   return false;
-  // }
-
-  // setCurrentTask(send, 'Traitement terminé');
-  // console.log({ tree, foldersToAggregate });
-  // addLogEntry(send, 'Traitement terminé', false, true);
-  // return true;
 };
 
 module.exports = {
   aggregate,
   crawlFolder,
+  getFoldersToAggregate,
 };

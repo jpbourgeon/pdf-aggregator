@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PDF Aggregator the crawlFolder function should return a valid tree 1`] = `
+exports[`PDF Aggregator the crawlFolder function should return a valid snapshot 1`] = `
 Array [
   Object {
     "depth": 1,
@@ -8,7 +8,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_00_File_01.pdf",
     "parentDir": "",
-    "type": "File",
+    "type": "file",
   },
   Object {
     "depth": 1,
@@ -16,7 +16,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_00_File_02.pdf",
     "parentDir": "",
-    "type": "File",
+    "type": "file",
   },
   Object {
     "depth": 1,
@@ -24,7 +24,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01",
     "parentDir": "",
-    "type": "Directory",
+    "type": "directory",
   },
   Object {
     "depth": 2,
@@ -32,7 +32,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01_Subfolder_01",
     "parentDir": "Folder_01",
-    "type": "Directory",
+    "type": "directory",
   },
   Object {
     "depth": 2,
@@ -40,7 +40,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01_Subfolder_02",
     "parentDir": "Folder_01",
-    "type": "Directory",
+    "type": "directory",
   },
   Object {
     "depth": 1,
@@ -48,7 +48,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_02",
     "parentDir": "",
-    "type": "Directory",
+    "type": "directory",
   },
   Object {
     "depth": 2,
@@ -56,7 +56,7 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_02_Subfolder_01",
     "parentDir": "Folder_02",
-    "type": "Directory",
+    "type": "directory",
   },
   Object {
     "depth": 2,
@@ -64,7 +64,16 @@ Array [
     "lastModified": "MOCKED_DATE",
     "name": "Folder_02_Subfolder_02",
     "parentDir": "Folder_02",
-    "type": "Directory",
+    "type": "directory",
   },
+]
+`;
+
+exports[`PDF Aggregator the getFoldersToAggregate function should return a valid snapshot for level 2 1`] = `
+Array [
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01",
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_02",
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_01",
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_02",
 ]
 `;
