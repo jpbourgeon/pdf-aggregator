@@ -3,7 +3,7 @@ const { resolve } = require('app-root-path');
 // const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
 const PdfAggregator = require('./pdfaggregator');
 
-const testbed = resolve('main/utils/__testbed__/');
+const testbed = resolve('main/utils/__testbed__');
 
 const defaultOptions = {
   input: `${testbed}/pdfaggregator/input`,
@@ -37,7 +37,9 @@ describe('PDF Aggregator', () => {
   });
 
   describe('the getFoldersToAggregate function', () => {
-    it('should return a valid tree');
+    it('should return a valid tree', () => {
+      PdfAggregator.aggregate(defaultOptions, jest.fn());
+    });
   });
 
   it('should be localized (i18n ?)');

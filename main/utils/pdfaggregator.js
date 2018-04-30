@@ -13,6 +13,28 @@ const addLogEntry = (send, label, isError = false, isLast = false) => {
   });
 };
 
+const stepAsync = async (taskName, task, send, errorIsFatal = false, isLast = false) => {
+  setCurrentTask(send, taskName);
+  try {
+    await task();
+    addLogEntry(send, taskName, false, isLast);
+  } catch (error) {
+    addLogEntry(send, taskName, true, errorIsFatal);
+    throw (error);
+  }
+};
+
+const step = (taskName, task, send, errorIsFatal = false, isLast = false) => {
+  setCurrentTask(send, taskName);
+  try {
+    task();
+    addLogEntry(send, taskName, false, isLast);
+  } catch (error) {
+    addLogEntry(send, taskName, true, errorIsFatal);
+    throw (error);
+  }
+};
+
 const crawlFolder = async (path) => {
   try {
     let tree;
@@ -27,25 +49,34 @@ const crawlFolder = async (path) => {
   }
 };
 
-const aggregate = async (send, data) => {
+const aggregate = async (data, send) => {
+  console.log(data);
   let tree;
-  let foldersToAggregate;
-
-  setCurrentTask(send, 'Lecture du dossier source');
+  // let foldersToAggregate;
   try {
-    tree = await crawlFolder(data.input);
-    addLogEntry(send, 'Lecture du dossier source');
+    await stepAsync('Lecture du dossier source', async () => { tree = await crawlFolder(data.input); }, send);
+    await step('Traitement terminé', async () => (console.log(tree)), send, true, true);
   } catch (error) {
-    addLogEntry(send, 'Lecture du dossier source', true, true);
     /* eslint-disable-next-line */
     console.log(error);
-    return false;
   }
 
-  setCurrentTask(send, 'Traitement terminé');
-  console.log({ tree, foldersToAggregate });
-  addLogEntry(send, 'Traitement terminé', false, true);
-  return true;
+  // taskName = 'Lecture du dossier source';
+  // setCurrentTask(send, taskName);
+  // try {
+  //   tree = await crawlFolder(data.input);
+  //   addLogEntry(send, taskName);
+  // } catch (error) {
+  //   addLogEntry(send, taskName, true, true);
+  //   /* eslint-disable-next-line */
+  //   console.log(error);
+  //   return false;
+  // }
+
+  // setCurrentTask(send, 'Traitement terminé');
+  // console.log({ tree, foldersToAggregate });
+  // addLogEntry(send, 'Traitement terminé', false, true);
+  // return true;
 };
 
 module.exports = {
