@@ -10,13 +10,13 @@ const onData = (entry, arr) => {
     depth = parentDir.split('/').length + 1;
   }
   let type;
-  if (entry.stat.isFile()) type = 'File';
-  if (entry.stat.isDirectory()) type = 'Directory';
-  if (entry.stat.isBlockDevice()) type = 'BlockDevice';
-  if (entry.stat.isCharacterDevice()) type = 'CharacterDevice';
-  if (entry.stat.isSymbolicLink()) type = 'SymbolicLink';
+  if (entry.stat.isFile()) type = 'file';
+  if (entry.stat.isDirectory()) type = 'directory';
+  if (entry.stat.isBlockDevice()) type = 'blockDevice';
+  if (entry.stat.isCharacterDevice()) type = 'characterDevice';
+  if (entry.stat.isSymbolicLink()) type = 'symbolicLink';
   if (entry.stat.isFIFO()) type = 'FIFO';
-  if (entry.stat.isSocket()) type = 'Socket';
+  if (entry.stat.isSocket()) type = 'socket';
   arr.push({
     depth,
     fullPath,
