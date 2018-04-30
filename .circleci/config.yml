@@ -32,7 +32,7 @@ jobs:
       # greenkeeper-lockfile update
       - run: sudo npm install greenkeeper-lockfile@1 -g
       # install deps
-      - run: sudo npm install
+      - run: sudo npm install --unsafe-perm=true --allow-root
       - run: greenkeeper-lockfile-update
       - save_cache:
           paths:
