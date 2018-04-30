@@ -29,7 +29,7 @@ describe('PDF Aggregator', () => {
       let tree = await PdfAggregator.crawlFolder(defaultOptions.input);
       tree = tree.map(element => ({
         ...element,
-        fullPath: `[...]${element.fullPath.split('__testbed__')[1]}`,
+        fullPath: `[MOCKED_OS_SPECIFIC_PATH]${element.fullPath.split('__testbed__')[1]}`,
         lastModified: 'MOCKED_DATE',
       }), []);
       expect(tree).toMatchSnapshot();

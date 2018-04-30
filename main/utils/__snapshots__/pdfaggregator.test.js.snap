@@ -4,7 +4,7 @@ exports[`PDF Aggregator the crawlFolder function should return a valid tree 1`] 
 Array [
   Object {
     "depth": 1,
-    "fullPath": "[...]/pdfaggregator/input/Folder_00_File_01.pdf",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_00_File_01.pdf",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_00_File_01.pdf",
     "parentDir": "",
@@ -12,7 +12,7 @@ Array [
   },
   Object {
     "depth": 1,
-    "fullPath": "[...]/pdfaggregator/input/Folder_00_File_02.pdf",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_00_File_02.pdf",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_00_File_02.pdf",
     "parentDir": "",
@@ -20,7 +20,7 @@ Array [
   },
   Object {
     "depth": 1,
-    "fullPath": "[...]/pdfaggregator/input/Folder_01",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01",
     "parentDir": "",
@@ -28,7 +28,7 @@ Array [
   },
   Object {
     "depth": 2,
-    "fullPath": "[...]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01_Subfolder_01",
     "parentDir": "Folder_01",
@@ -36,7 +36,7 @@ Array [
   },
   Object {
     "depth": 2,
-    "fullPath": "[...]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_02",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_02",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01_Subfolder_02",
     "parentDir": "Folder_01",
@@ -44,7 +44,7 @@ Array [
   },
   Object {
     "depth": 1,
-    "fullPath": "[...]/pdfaggregator/input/Folder_02",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_02",
     "parentDir": "",
@@ -52,7 +52,7 @@ Array [
   },
   Object {
     "depth": 2,
-    "fullPath": "[...]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_01",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_01",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_02_Subfolder_01",
     "parentDir": "Folder_02",
@@ -60,7 +60,7 @@ Array [
   },
   Object {
     "depth": 2,
-    "fullPath": "[...]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_02",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_02",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_02_Subfolder_02",
     "parentDir": "Folder_02",

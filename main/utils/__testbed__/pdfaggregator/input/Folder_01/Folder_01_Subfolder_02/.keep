@@ -1,0 +1,3 @@
+# This plain file is useless for the codebase
+# It protect's the empty directories of the folder's structure from beeing ignored by git
+# for testing purpose
