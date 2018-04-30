@@ -27,7 +27,11 @@ describe('PDF Aggregator', () => {
     it('should return a valid tree', async () => {
       expect.assertions(1);
       let tree = await PdfAggregator.crawlFolder(defaultOptions.input);
-      tree = tree.map(element => ({ ...element, lastModified: 'MOCKED_DATE' }), []);
+      tree = tree.map(element => ({
+        ...element,
+        fullPath: `...${element.fullPath.split('__testbed__')[1]}`,
+        lastModified: 'MOCKED_DATE',
+      }), []);
       expect(tree).toMatchSnapshot();
     });
   });
