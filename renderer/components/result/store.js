@@ -53,18 +53,22 @@ class ContextProvider extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setCurrentTask('Initialisation');
-    this.initStore(this.db.getState);
+    await this.initStore(this.db.getState);
     this.addLogEntry({
       date: new Date(),
       isError: false,
       isLast: false,
       label: 'Initialisation',
     });
-    this.aggregate(this.send, this.state.data);
+    this.aggregate(this.state.data, this.send);
   }
 
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners('set-current-task');
+    ipcRenderer.removeAllListeners('add-log-entry');
+  }
 
   /* eslint-disable-next-line */
   goHome(event) {
@@ -73,10 +77,13 @@ class ContextProvider extends React.Component {
   }
 
   initStore(getStateFn) {
-    const data = getStateFn();
-    if (!deepEqual(data, {})) {
-      this.setState({ data });
-    }
+    return new Promise((resolve) => {
+      const data = getStateFn();
+      if (!deepEqual(data, {})) {
+        this.setState({ data }, () => { resolve(); });
+      }
+      resolve();
+    });
   }
 
   openOutputFolder(fullPath) {
