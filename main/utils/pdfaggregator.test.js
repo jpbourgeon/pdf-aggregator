@@ -37,9 +37,10 @@ describe('PDF Aggregator', () => {
   });
 
   describe('the getFoldersToAggregate function', () => {
-    it('should return an empty folder if the tree is empty', () => {
-      const foldersToAggregate = PdfAggregator.getFoldersToAggregate([], defaultOptions);
-      expect(foldersToAggregate).toEqual([]);
+    it('should throw an error if the tree is empty', () => {
+      expect(() => {
+        PdfAggregator.getFoldersToAggregate([], defaultOptions);
+      }).toThrowError('There is nothing to aggregate');
     });
 
     it('should return the input folder\'s path for level 0', async () => {
@@ -51,19 +52,57 @@ describe('PDF Aggregator', () => {
       expect(foldersToAggregate).toEqual(expectedValue);
     });
 
-    it('should return a valid snapshot for level 2', async () => {
+    it('should match the snapshot for level 2', async () => {
       expect.assertions(1);
       const tree = await PdfAggregator.crawlFolder(defaultOptions.input);
       const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: 2 })
         .map(element => `[MOCKED_OS_SPECIFIC_PATH]${element.split('__testbed__')[1]}`, []);
       expect(foldersToAggregate).toMatchSnapshot();
     });
+
+    it(
+      'should match the snapshot of the tree\'s max depth, if the level provided is greater than it',
+      async () => {
+        expect.assertions(1);
+        const tree = await PdfAggregator.crawlFolder(defaultOptions.input);
+        const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: 99 })
+          .map(element => `[MOCKED_OS_SPECIFIC_PATH]${element.split('__testbed__')[1]}`, []);
+        expect(foldersToAggregate).toMatchSnapshot();
+      },
+    );
   });
 
-  it('should be localized (i18n ?)');
-});
+  describe('the getFilesToAggregate function', () => {
+    it('should throw an error if the tree is empty');
 
-// const options = {
-//   ...defaultOptions,
-//   output: `${defaultOptions.output}/folder_of_the_test`,
-// };
+    it('should return a tree of pdf files otherwise');
+  });
+
+  describe('the aggregate function', () => {
+    describe('on an empty folder', () => {
+      it('should throw an error with the following config: cover page, change log, outline');
+
+      it('should throw an error with the following config: no cover page, no change log, no outline');
+    });
+
+    describe('on the root folder with unlimited depth', () => {
+      it('should match the snapshot with the following config: cover page, change log, outline');
+
+      it('should match the snapshot with the following config: no cover page, no change log, no outline');
+    });
+
+    describe('on level 1 folders with depth 1', () => {
+      it('should match the snapshot with the following config: cover page, change log, outline');
+
+      it('should match the snapshot with the following config: no cover page, no change log, no outline');
+    });
+
+    describe('on level 2 folders with depth 99', () => {
+      it('should match the snapshot with the following config: cover page, change log, outline');
+
+      it('should match the snapshot with the following config: no cover page, no change log, no outline');
+    });
+
+    it('should send localized messages (i18n)');
+  });
+});

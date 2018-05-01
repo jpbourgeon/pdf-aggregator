@@ -77,3 +77,5 @@ Array [
   "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_02",
 ]
 `;
+
+exports[`PDF Aggregator the getFoldersToAggregate function should return a valid snapshot of the tree's max depth, if the level provided is greater than it 1`] = `Array []`;

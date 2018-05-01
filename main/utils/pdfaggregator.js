@@ -36,21 +36,29 @@ const step = (taskName, task, send, errorIsFatal = false, isLast = false) => {
 };
 
 const crawlFolder = async (path) => {
-  try {
-    let tree;
-    if (path !== '') {
-      tree = await getTree({ root: path, entryType: 'both', fileFilter: '*.pdf' });
-    } else {
-      tree = [];
-    }
-    return tree;
-  } catch (error) {
-    throw (error);
+  let tree;
+  if (path !== '') {
+    tree = await getTree({ root: path, entryType: 'both', fileFilter: '*.pdf' });
+  } else {
+    tree = [];
   }
+  return tree;
 };
 
 const getFoldersToAggregate = (tree, data) => {
-  if (tree.length === 0) return [];
+  if (tree.length === 0) throw new Error('There is nothing to aggregate');
+  if (data.level === 0) {
+    return [data.input];
+  }
+  return tree
+    .reduce((result, item) => {
+      if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
+      return result;
+    }, []);
+};
+
+const getFilesToAggregate = (tree, data) => {
+  if (tree.length === 0) throw new Error('There is nothing to aggregate');
   if (data.level === 0) {
     return [data.input];
   }
@@ -70,6 +78,11 @@ const aggregate = async (data, send) => {
       'Récupération des dossiers à fusionner',
       () => { foldersToAggregate = getFoldersToAggregate(tree, data); }, send, true,
     );
+    // For each folder to aggregate:
+    // Get a list of the files
+    // If needed: Generate cover page (don't forget the bookmark)
+    // If needed: Generate log of modifications (don't forget the bookmark)
+    // merge each file (don't forget the bookmark)
     await step('Traitement terminé', () => true, send, true, true);
   } catch (error) {
     /* eslint-disable-next-line */
