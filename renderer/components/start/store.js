@@ -26,6 +26,7 @@ const defaultState = {
     title: '%dossiersource%',
     subtitle: '%date%',
     level: 0,
+    depth: 0,
     cover: true,
     changelog: true,
     bookmarks: true,
@@ -101,12 +102,12 @@ class ContextProvider extends React.Component {
     this.setState({ data });
   }
 
-  handleLevelChange(event) {
+  handleLevelOrDepthChange(field, event) {
     let value = parseInt(event.target.value, 10);
     if (value < 0 || Number.isNaN(value)) {
       value = this.defaultState.data.level;
     }
-    const data = { ...this.state.data, level: value };
+    const data = { ...this.state.data, [field]: value };
     this.setState({ data });
   }
 
@@ -141,7 +142,7 @@ class ContextProvider extends React.Component {
             setFolder: this.setFolder.bind(this),
             setLogo: this.setLogo.bind(this),
             handleChange: this.handleChange.bind(this),
-            handleLevelChange: this.handleLevelChange.bind(this),
+            handleLevelOrDepthChange: this.handleLevelOrDepthChange.bind(this),
             resetState: this.resetState.bind(this),
             isDataValid: this.isDataValid.bind(this),
             submit: this.submit.bind(this),

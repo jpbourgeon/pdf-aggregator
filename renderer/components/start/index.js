@@ -32,6 +32,7 @@ const styles = theme => ({
   },
   smallFormControl: {
     marginBottom: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
     width: '25%',
   },
   button: {
@@ -74,14 +75,25 @@ const RenderView = (props) => {
             />
           </FormControl>
 
-          <FormControl className={classes.formControl}>
+          <FormControl className={classes.smallFormControl}>
             <InputLabel htmlFor="level" shrink>Agréger au niveau</InputLabel>
             <Input
-              className={classes.smallFormControl}
+              className={classes.formControl}
               id="level"
               type="number"
               value={state.data.level}
-              onChange={e => actions.handleLevelChange(e)}
+              onChange={e => actions.handleLevelOrDepthChange('level', e)}
+            />
+          </FormControl>
+
+          <FormControl className={classes.smallFormControl}>
+            <InputLabel htmlFor="depth" shrink>Profondeur (0 = illimité)</InputLabel>
+            <Input
+              className={classes.formControl}
+              id="depth"
+              type="number"
+              value={state.data.depth}
+              onChange={e => actions.handleLevelOrDepthChange('depth', e)}
             />
           </FormControl>
 
