@@ -57,17 +57,17 @@ const getFoldersToAggregate = (tree, data) => {
     }, []);
 };
 
-const getFilesToAggregate = (tree, data) => {
-  if (tree.length === 0) throw new Error('There is nothing to aggregate');
-  if (data.level === 0) {
-    return [data.input];
-  }
-  return tree
-    .reduce((result, item) => {
-      if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
-      return result;
-    }, []);
-};
+// const getFilesToAggregate = (tree, data) => {
+//   if (tree.length === 0) throw new Error('There is nothing to aggregate');
+//   if (data.level === 0) {
+//     return [data.input];
+//   }
+//   return tree
+//     .reduce((result, item) => {
+//       if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
+//       return result;
+//     }, []);
+// };
 
 const aggregate = async (data, send) => {
   let tree;
@@ -78,6 +78,7 @@ const aggregate = async (data, send) => {
       'Récupération des dossiers à fusionner',
       () => { foldersToAggregate = getFoldersToAggregate(tree, data); }, send, true,
     );
+    console.log(foldersToAggregate);
     // For each folder to aggregate:
     // Get a list of the files
     // If needed: Generate cover page (don't forget the bookmark)
