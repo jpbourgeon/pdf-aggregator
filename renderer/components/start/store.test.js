@@ -42,7 +42,7 @@ describe('Given the start store ContextProvider component', () => {
     });
   });
 
-  describe('the method handleLevelChange', () => {
+  describe('the method handleLevelOrDepthChange', () => {
     const makeEvent = value => ({
       target: {
         value,
@@ -51,19 +51,19 @@ describe('Given the start store ContextProvider component', () => {
 
     it('should set the level correctly if the value provided is a positive integer', () => {
       const event = makeEvent('1');
-      instance.handleLevelChange(event);
+      instance.handleLevelOrDepthChange('level', event);
       expect(instance.state.data.level).toBe(1);
     });
 
     it('should set the default value if the value provided is an integer below 1', () => {
       const event = makeEvent('-1');
-      instance.handleLevelChange(event);
+      instance.handleLevelOrDepthChange('level', event);
       expect(instance.state.data.level).toBe(instance.defaultState.data.level);
     });
 
     it('should set the default value if the value provided is not a number', () => {
       const event = makeEvent('not a number');
-      instance.handleLevelChange(event);
+      instance.handleLevelOrDepthChange('level', event);
       expect(instance.state.data.level).toBe(instance.defaultState.data.level);
     });
   });
