@@ -70,6 +70,23 @@ exports[`The renderView component of the start page should render correctly 1`] 
         className={[MockFunction]}
       >
         <WithStyles(InputLabel)
+          htmlFor="depth"
+          shrink={true}
+        >
+          Profondeur (0 = illimité)
+        </WithStyles(InputLabel)>
+        <WithStyles(Input)
+          className={[MockFunction]}
+          id="depth"
+          onChange={[Function]}
+          type="number"
+          value={0}
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={[MockFunction]}
+      >
+        <WithStyles(InputLabel)
           htmlFor="output"
           shrink={true}
         >
