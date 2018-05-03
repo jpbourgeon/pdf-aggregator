@@ -8,9 +8,9 @@ import ExpansionPanel, { ExpansionPanelSummary, ExpansionPanelDetails } from 'ma
 import { LinearProgress } from 'material-ui/Progress';
 import Divider from 'material-ui/Divider';
 import Button from 'material-ui/Button';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
-import FolderOpen from 'material-ui-icons/FolderOpen';
-import Home from 'material-ui-icons/Home';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FolderOpen from '@material-ui/icons/FolderOpen';
+import Home from '@material-ui/icons/Home';
 import { withContextConsumer } from './store';
 
 const styles = theme => ({

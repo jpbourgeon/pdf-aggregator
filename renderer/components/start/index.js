@@ -9,7 +9,7 @@ import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-import FolderOpen from 'material-ui-icons/FolderOpen';
+import FolderOpen from '@material-ui/icons/FolderOpen';
 import { withContextConsumer } from './store';
 
 const styles = theme => ({
