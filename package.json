@@ -43,8 +43,8 @@
   },
   "devDependencies": {
     "cross-env": "^5.1.4",
-    "electron": "^2.0.0-beta.5",
-    "electron-builder": "^20.10.0",
+    "electron": "^2.0.0",
+    "electron-builder": "^20.11.1",
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.11.0",
