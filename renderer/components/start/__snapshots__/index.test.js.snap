@@ -73,14 +73,14 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="depth"
           shrink={true}
         >
-          Profondeur (0 = illimité)
+          Profondeur (-1 = illimité)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           className={[MockFunction]}
           id="depth"
           onChange={[Function]}
           type="number"
-          value={0}
+          value={-1}
         />
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
