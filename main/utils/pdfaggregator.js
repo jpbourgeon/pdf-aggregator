@@ -46,28 +46,27 @@ const crawlFolder = async (path) => {
 };
 
 const getFoldersToAggregate = (tree, data) => {
-  if (tree.length === 0) throw new Error('There is nothing to aggregate');
+  if (tree.length === 0) throw new Error('There is no folder to aggregate');
   if (data.level === 0) {
     return [data.input];
   }
-  return tree
+  const folders = tree
     .reduce((result, item) => {
       if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
       return result;
     }, []);
+  return folders;
 };
 
-// const getFilesToAggregate = (tree, data) => {
-//   if (tree.length === 0) throw new Error('There is nothing to aggregate');
-//   if (data.level === 0) {
-//     return [data.input];
-//   }
-//   return tree
-//     .reduce((result, item) => {
-//       if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
-//       return result;
-//     }, []);
-// };
+const getSubTree = (tree, folder) => {
+  const files = tree
+    .reduce((result, item) => {
+      if (item.fullPath.startsWith(folder)) result.push(item);
+      return result;
+    }, []);
+  if (files.length === 0) throw new Error('There is no file to aggregate');
+  return files;
+};
 
 const aggregate = async (data, send) => {
   let tree;
@@ -78,12 +77,16 @@ const aggregate = async (data, send) => {
       'Récupération des dossiers à fusionner',
       () => { foldersToAggregate = getFoldersToAggregate(tree, data); }, send, true,
     );
-    console.log(foldersToAggregate);
-    // For each folder to aggregate:
-    // Get a list of the files
-    // If needed: Generate cover page (don't forget the bookmark)
-    // If needed: Generate log of modifications (don't forget the bookmark)
-    // merge each file (don't forget the bookmark)
+    foldersToAggregate.map(async (folder) => {
+    // await Promise.all(foldersToAggregate.map(async (folder) => {
+      // Get a list of the files
+      const subTree = getSubTree(tree, folder);
+      console.log(JSON.stringify({ [folder]: subTree.map(element => element.fullPath, []) }, null, 2));
+      // If needed: Generate cover page (if needed: don't forget to add the bookmark)
+      // If needed: Generate log of modifications (if needed: don't forget to add the bookmark)
+      // merge all files into a pdf (if needed: don't forget to add the bookmark)
+    });
+    // }));
     await step('Traitement terminé', () => true, send, true, true);
   } catch (error) {
     /* eslint-disable-next-line */
@@ -95,4 +98,5 @@ module.exports = {
   aggregate,
   crawlFolder,
   getFoldersToAggregate,
+  getSubTree,
 };

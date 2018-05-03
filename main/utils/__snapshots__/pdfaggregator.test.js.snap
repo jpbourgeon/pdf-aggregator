@@ -79,3 +79,20 @@ Array [
 `;
 
 exports[`PDF Aggregator the getFoldersToAggregate function should match the snapshot of the tree's max depth, if the level provided is greater than it 1`] = `Array []`;
+
+exports[`PDF Aggregator the getSubTree function should return a tree of pdf files otherwise 1`] = `
+Array [
+  Object {
+    "fullPath": "/file/path/",
+  },
+  Object {
+    "fullPath": "/file/path/file1.pdf",
+  },
+  Object {
+    "fullPath": "/file/path/folder1",
+  },
+  Object {
+    "fullPath": "/file/path/folder1/file1/pdf",
+  },
+]
+`;

@@ -13,6 +13,7 @@ const defaultOptions = {
   title: '%dossiersource%',
   subtitle: 'Version : %date%%ligne%Auteur : jpbourgeon',
   level: 0,
+  depth: '',
   changelog: true,
   bookmarks: true,
 };
@@ -40,7 +41,7 @@ describe('PDF Aggregator', () => {
     it('should throw an error if the tree is empty', () => {
       expect(() => {
         PdfAggregator.getFoldersToAggregate([], defaultOptions);
-      }).toThrowError('There is nothing to aggregate');
+      }).toThrowError('There is no folder to aggregate');
     });
 
     it('should return the input folder\'s path for level 0', async () => {
@@ -72,13 +73,34 @@ describe('PDF Aggregator', () => {
     );
   });
 
-  describe('the getFilesToAggregate function', () => {
-    it('should throw an error if the tree is empty');
+  describe('the getSubTree function', () => {
+    it('should throw an error if the tree is empty', () => {
+      expect(() => {
+        PdfAggregator.getSubTree([{ fullPath: '/file/path' }], '/another/path/');
+      }).toThrowError('There is no file to aggregate');
+    });
 
-    it('should return a tree of pdf files otherwise');
+    it('should return a tree of pdf files otherwise', () => {
+      const files = PdfAggregator.getSubTree([
+        { fullPath: '' },
+        { fullPath: 'file1.pdf' },
+        { fullPath: '/file/' },
+        { fullPath: '/file/path/' },
+        { fullPath: '/file/path/file1.pdf' },
+        { fullPath: '/file/path/folder1' },
+        { fullPath: '/file/path/folder1/file1/pdf' },
+        { fullPath: '/file/another/path' },
+        { fullPath: '/file/another/path/file1.pdf' },
+      ], '/file/path/');
+      expect(files).toMatchSnapshot();
+    });
   });
 
   describe('the aggregate function', () => {
+    it('should work', () => {
+      PdfAggregator.aggregate({ ...defaultOptions, level: 0 }, jest.fn());
+    });
+
     describe('on an empty folder', () => {
       it('should throw an error with the following config: cover page, change log, outline');
 
