@@ -49,22 +49,35 @@ describe('Given the start store ContextProvider component', () => {
       },
     });
 
-    it('should set the level correctly if the value provided is a positive integer', () => {
-      const event = makeEvent('1');
-      instance.handleLevelOrDepthChange('level', event);
-      expect(instance.state.data.level).toBe(1);
+    it('should set the level correctly if the integer provided equals the default value', () => {
+      instance.handleLevelOrDepthChange('level', makeEvent(instance.defaultState.data.level));
+      expect(instance.state.data.level).toBe(instance.defaultState.data.level);
+      instance.handleLevelOrDepthChange('depth', makeEvent(instance.defaultState.data.depth));
+      expect(instance.state.data.depth).toBe(instance.defaultState.data.depth);
     });
 
-    it('should set the default value if the value provided is an integer below 1', () => {
-      const event = makeEvent('-1');
-      instance.handleLevelOrDepthChange('level', event);
+    it('should set the level correctly if the integer provided is greater than the default value', () => {
+      instance.handleLevelOrDepthChange('level', makeEvent('5'));
+      expect(instance.state.data.level).toBe(5);
+    });
+
+    it('should set the default value if the integer provided is lower than the default value', () => {
+      instance.handleLevelOrDepthChange('level', makeEvent('-5'));
+      expect(instance.state.data.level).toBe(instance.defaultState.data.level);
+      instance.handleLevelOrDepthChange('depth', makeEvent('-5'));
+      expect(instance.state.data.depth).toBe(instance.defaultState.data.depth);
+    });
+
+    it('should set the default value if the value provided is not an integer or the character \'-\'', () => {
+      instance.handleLevelOrDepthChange('level', makeEvent('not an integer or \'-\''));
       expect(instance.state.data.level).toBe(instance.defaultState.data.level);
     });
 
-    it('should set the default value if the value provided is not a number', () => {
-      const event = makeEvent('not a number');
-      instance.handleLevelOrDepthChange('level', event);
+    it('should allow the character \'-\' as an input for default the value', () => {
+      instance.handleLevelOrDepthChange('level', makeEvent('-'));
       expect(instance.state.data.level).toBe(instance.defaultState.data.level);
+      instance.handleLevelOrDepthChange('depth', makeEvent('-'));
+      expect(instance.state.data.depth).toBe(instance.defaultState.data.depth);
     });
   });
 

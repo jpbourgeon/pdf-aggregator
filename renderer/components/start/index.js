@@ -87,7 +87,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="depth" shrink>Profondeur (0 = illimité)</InputLabel>
+            <InputLabel htmlFor="depth" shrink>Profondeur (-1 = illimité)</InputLabel>
             <Input
               className={classes.formControl}
               id="depth"
