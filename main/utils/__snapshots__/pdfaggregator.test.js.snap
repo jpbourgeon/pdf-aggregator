@@ -4,17 +4,9 @@ exports[`PDF Aggregator the crawlFolder function should return a valid snapshot 
 Array [
   Object {
     "depth": 1,
-    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_00_File_01.pdf",
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/File_01.pdf",
     "lastModified": "MOCKED_DATE",
-    "name": "Folder_00_File_01.pdf",
-    "parentDir": "",
-    "type": "file",
-  },
-  Object {
-    "depth": 1,
-    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_00_File_02.pdf",
-    "lastModified": "MOCKED_DATE",
-    "name": "Folder_00_File_02.pdf",
+    "name": "File_01.pdf",
     "parentDir": "",
     "type": "file",
   },
@@ -28,10 +20,42 @@ Array [
   },
   Object {
     "depth": 2,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_File_01.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "Folder_01_File_01.pdf",
+    "parentDir": "Folder_01",
+    "type": "file",
+  },
+  Object {
+    "depth": 2,
     "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01",
     "lastModified": "MOCKED_DATE",
     "name": "Folder_01_Subfolder_01",
     "parentDir": "Folder_01",
+    "type": "directory",
+  },
+  Object {
+    "depth": 3,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01/Folder_01_Subfolder01_File_01.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "Folder_01_Subfolder01_File_01.pdf",
+    "parentDir": "Folder_01/Folder_01_Subfolder_01",
+    "type": "file",
+  },
+  Object {
+    "depth": 3,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01/Folder_01_Subfolder01_File_02.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "Folder_01_Subfolder01_File_02.pdf",
+    "parentDir": "Folder_01/Folder_01_Subfolder_01",
+    "type": "file",
+  },
+  Object {
+    "depth": 3,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01/Folder_01_Subfolder_01_Subsubfolder01",
+    "lastModified": "MOCKED_DATE",
+    "name": "Folder_01_Subfolder_01_Subsubfolder01",
+    "parentDir": "Folder_01/Folder_01_Subfolder_01",
     "type": "directory",
   },
   Object {
@@ -41,6 +65,14 @@ Array [
     "name": "Folder_01_Subfolder_02",
     "parentDir": "Folder_01",
     "type": "directory",
+  },
+  Object {
+    "depth": 3,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_02/Folder_01_Subfolder02_File_01.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "Folder_01_Subfolder02_File_01.pdf",
+    "parentDir": "Folder_01/Folder_01_Subfolder_02",
+    "type": "file",
   },
   Object {
     "depth": 1,
@@ -59,6 +91,14 @@ Array [
     "type": "directory",
   },
   Object {
+    "depth": 3,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_01/Folder_02_Subfolder_01_File_01.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "Folder_02_Subfolder_01_File_01.pdf",
+    "parentDir": "Folder_02/Folder_02_Subfolder_01",
+    "type": "file",
+  },
+  Object {
     "depth": 2,
     "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_02",
     "lastModified": "MOCKED_DATE",
@@ -69,30 +109,88 @@ Array [
 ]
 `;
 
-exports[`PDF Aggregator the getFoldersToAggregate function should match the snapshot for level 2 1`] = `
+exports[`PDF Aggregator the getFoldersToAggregate function should match the snapshot of the folders at level 1 1`] = `
 Array [
-  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01",
-  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_02",
-  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_01",
-  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02/Folder_02_Subfolder_02",
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01",
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_02",
 ]
 `;
 
-exports[`PDF Aggregator the getFoldersToAggregate function should match the snapshot of the tree's max depth, if the level provided is greater than it 1`] = `Array []`;
+exports[`PDF Aggregator the getFoldersToAggregate function should match the snapshot of the folders at the tree's max depth, if the level provided is greater than it 1`] = `
+Array [
+  "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/Folder_01/Folder_01_Subfolder_01/Folder_01_Subfolder_01_Subsubfolder01",
+]
+`;
 
-exports[`PDF Aggregator the getSubTree function should return a tree of pdf files otherwise 1`] = `
+exports[`PDF Aggregator the getSubTree function should match the snapshot of the subtree with a limited depth 1`] = `
 Array [
   Object {
+    "depth": 2,
     "fullPath": "/file/path/",
   },
   Object {
+    "depth": 3,
     "fullPath": "/file/path/file1.pdf",
   },
   Object {
+    "depth": 3,
     "fullPath": "/file/path/folder1",
-  },
-  Object {
-    "fullPath": "/file/path/folder1/file1/pdf",
   },
 ]
 `;
+
+exports[`PDF Aggregator the getSubTree function should match the snapshot of the subtree with an unlimited depth 1`] = `
+Array [
+  Object {
+    "depth": 2,
+    "fullPath": "/file/path/",
+  },
+  Object {
+    "depth": 3,
+    "fullPath": "/file/path/file1.pdf",
+  },
+  Object {
+    "depth": 3,
+    "fullPath": "/file/path/folder1",
+  },
+  Object {
+    "depth": 4,
+    "fullPath": "/file/path/folder1/file1.pdf",
+  },
+]
+`;
+
+exports[`PDF Aggregator the stripEmptyFolders function should match the snapshot of the cleaned subtree 1`] = `
+Array [
+  Object {
+    "fullPath": "",
+    "type": "directory",
+  },
+  Object {
+    "fullPath": "file1.pdf",
+    "type": "file",
+  },
+  Object {
+    "fullPath": "/file/",
+    "type": "directory",
+  },
+  Object {
+    "fullPath": "/file/file1.pdf",
+    "type": "file",
+  },
+  Object {
+    "fullPath": "/file/path/",
+    "type": "directory",
+  },
+  Object {
+    "fullPath": "/file/path/folder1",
+    "type": "directory",
+  },
+  Object {
+    "fullPath": "/file/path/folder1/file1.pdf",
+    "type": "file",
+  },
+]
+`;
+
+exports[`PDF Aggregator the stripEmptyFolders function should work on empty folders 1`] = `Array []`;

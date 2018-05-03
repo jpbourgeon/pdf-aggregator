@@ -47,25 +47,35 @@ const crawlFolder = async (path) => {
 
 const getFoldersToAggregate = (tree, data) => {
   if (tree.length === 0) throw new Error('There is no folder to aggregate');
-  if (data.level === 0) {
-    return [data.input];
-  }
-  const folders = tree
-    .reduce((result, item) => {
-      if (item.type === 'directory' && item.depth === data.level) result.push(item.fullPath);
-      return result;
-    }, []);
+  const maxDepth = tree.reduce((result, item) => ((item.depth > result) ? item.depth : result), 0);
+  const level = (data.level < maxDepth) ? data.level : maxDepth;
+  if (level === 0) return [data.input];
+  const folders = tree.reduce((result, item) => {
+    if (item.type === 'directory' && item.depth === level) result.push(item.fullPath);
+    return result;
+  }, []);
   return folders;
 };
 
-const getSubTree = (tree, folder) => {
-  const files = tree
-    .reduce((result, item) => {
-      if (item.fullPath.startsWith(folder)) result.push(item);
-      return result;
-    }, []);
+const getSubTree = (tree, folder, maxDepth = Infinity) => {
+  const files = tree.reduce((result, item) => {
+    if (item.fullPath.startsWith(folder) && item.depth <= maxDepth) result.push(item);
+    return result;
+  }, []);
   if (files.length === 0) throw new Error('There is no file to aggregate');
   return files;
+};
+
+const stripEmptyFolders = (tree) => {
+  const files = tree.reduce((result, item) => {
+    if (item.type === 'file') result.push(item.fullPath);
+    return result;
+  }, []);
+  const strippedTree = tree.reduce((result, item) => {
+    if (files.find(file => file.startsWith(item.fullPath)) !== undefined) result.push(item);
+    return result;
+  }, []);
+  return strippedTree;
 };
 
 const aggregate = async (data, send) => {
@@ -79,9 +89,18 @@ const aggregate = async (data, send) => {
     );
     foldersToAggregate.map(async (folder) => {
     // await Promise.all(foldersToAggregate.map(async (folder) => {
-      // Get a list of the files
-      const subTree = getSubTree(tree, folder);
-      console.log(JSON.stringify({ [folder]: subTree.map(element => element.fullPath, []) }, null, 2));
+      // Get a subtree without empty folders
+      const maxDepth = (data.depth === -1) ? Infinity : data.level + data.depth;
+      let subTree = getSubTree(tree, folder, maxDepth);
+      subTree = stripEmptyFolders(subTree);
+      /* eslint-disable-next-line no-console */
+      console.log(JSON.stringify({
+        [folder]: subTree.map(element => ({
+          fullPath: element.fullPath,
+          // depth: element.depth,
+          // parentDir: element.parentDir,
+        }), []),
+      }, null, 2));
       // If needed: Generate cover page (if needed: don't forget to add the bookmark)
       // If needed: Generate log of modifications (if needed: don't forget to add the bookmark)
       // merge all files into a pdf (if needed: don't forget to add the bookmark)
@@ -99,4 +118,5 @@ module.exports = {
   crawlFolder,
   getFoldersToAggregate,
   getSubTree,
+  stripEmptyFolders,
 };

@@ -13,7 +13,7 @@ const defaultOptions = {
   title: '%dossiersource%',
   subtitle: 'Version : %date%%ligne%Auteur : jpbourgeon',
   level: 0,
-  depth: '',
+  depth: -1,
   changelog: true,
   bookmarks: true,
 };
@@ -53,16 +53,16 @@ describe('PDF Aggregator', () => {
       expect(foldersToAggregate).toEqual(expectedValue);
     });
 
-    it('should match the snapshot for level 2', async () => {
+    it('should match the snapshot of the folders at level 1', async () => {
       expect.assertions(1);
       const tree = await PdfAggregator.crawlFolder(defaultOptions.input);
-      const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: 2 })
+      const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: 1 })
         .map(element => `[MOCKED_OS_SPECIFIC_PATH]${element.split('__testbed__')[1]}`, []);
       expect(foldersToAggregate).toMatchSnapshot();
     });
 
     it(
-      'should match the snapshot of the tree\'s max depth, if the level provided is greater than it',
+      'should match the snapshot of the folders at the tree\'s max depth, if the level provided is greater than it',
       async () => {
         expect.assertions(1);
         const tree = await PdfAggregator.crawlFolder(defaultOptions.input);
@@ -76,29 +76,65 @@ describe('PDF Aggregator', () => {
   describe('the getSubTree function', () => {
     it('should throw an error if the tree is empty', () => {
       expect(() => {
-        PdfAggregator.getSubTree([{ fullPath: '/file/path' }], '/another/path/');
+        PdfAggregator.getSubTree([{ fullPath: '/file/path', depth: 5 }], '/another/path/');
       }).toThrowError('There is no file to aggregate');
     });
 
-    it('should return a tree of pdf files otherwise', () => {
+    it('should match the snapshot of the subtree with an unlimited depth', () => {
       const files = PdfAggregator.getSubTree([
-        { fullPath: '' },
-        { fullPath: 'file1.pdf' },
-        { fullPath: '/file/' },
-        { fullPath: '/file/path/' },
-        { fullPath: '/file/path/file1.pdf' },
-        { fullPath: '/file/path/folder1' },
-        { fullPath: '/file/path/folder1/file1/pdf' },
-        { fullPath: '/file/another/path' },
-        { fullPath: '/file/another/path/file1.pdf' },
+        { fullPath: '', depth: 0 },
+        { fullPath: 'file1.pdf', depth: 0 },
+        { fullPath: '/file/', depth: 1 },
+        { fullPath: '/file/path/', depth: 2 },
+        { fullPath: '/file/path/file1.pdf', depth: 3 },
+        { fullPath: '/file/path/folder1', depth: 3 },
+        { fullPath: '/file/path/folder1/file1.pdf', depth: 4 },
+        { fullPath: '/file/another/path', depth: 3 },
+        { fullPath: '/file/another/path/file1.pdf', depth: 4 },
       ], '/file/path/');
       expect(files).toMatchSnapshot();
+    });
+
+    it('should match the snapshot of the subtree with a limited depth', () => {
+      const files = PdfAggregator.getSubTree([
+        { fullPath: '', depth: 0 },
+        { fullPath: 'file1.pdf', depth: 0 },
+        { fullPath: '/file/', depth: 1 },
+        { fullPath: '/file/path/', depth: 2 },
+        { fullPath: '/file/path/file1.pdf', depth: 3 },
+        { fullPath: '/file/path/folder1', depth: 3 },
+        { fullPath: '/file/path/folder1/file1.pdf', depth: 4 },
+        { fullPath: '/file/another/path', depth: 3 },
+        { fullPath: '/file/another/path/file1.pdf', depth: 4 },
+      ], '/file/path/', 3);
+      expect(files).toMatchSnapshot();
+    });
+  });
+
+  describe('the stripEmptyFolders function', () => {
+    it('should match the snapshot of the cleaned subtree', () => {
+      const result = PdfAggregator.stripEmptyFolders([
+        { fullPath: '', type: 'directory' },
+        { fullPath: 'file1.pdf', type: 'file' },
+        { fullPath: '/file/', type: 'directory' },
+        { fullPath: '/file/file1.pdf', type: 'file' },
+        { fullPath: '/file/path/', type: 'directory' },
+        { fullPath: '/file/path/folder1', type: 'directory' },
+        { fullPath: '/file/path/folder1/file1.pdf', type: 'file' },
+        { fullPath: '/file/path/folder2', type: 'directory' },
+        { fullPath: '/file/another/path', type: 'directory' },
+      ]);
+      expect(result).toMatchSnapshot();
+    });
+    it('should work on empty folders', () => {
+      const result = PdfAggregator.stripEmptyFolders([]);
+      expect(result).toMatchSnapshot();
     });
   });
 
   describe('the aggregate function', () => {
     it('should work', () => {
-      PdfAggregator.aggregate({ ...defaultOptions, level: 0 }, jest.fn());
+      PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
     });
 
     describe('on an empty folder', () => {
