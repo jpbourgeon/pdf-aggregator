@@ -26,7 +26,7 @@ const defaultState = {
     title: '%dossiersource%',
     subtitle: '%date%',
     level: 0,
-    depth: 0,
+    depth: -1,
     cover: true,
     changelog: true,
     bookmarks: true,
@@ -103,9 +103,11 @@ class ContextProvider extends React.Component {
   }
 
   handleLevelOrDepthChange(field, event) {
-    let value = parseInt(event.target.value, 10);
-    if (value < 0 || Number.isNaN(value)) {
-      value = this.defaultState.data.level;
+    let { value } = event.target;
+    if (value === '-') value = this.defaultState.data[field];
+    value = parseInt(value, 10);
+    if (value < this.defaultState.data[field] || Number.isNaN(value)) {
+      value = this.defaultState.data[field];
     }
     const data = { ...this.state.data, [field]: value };
     this.setState({ data });
