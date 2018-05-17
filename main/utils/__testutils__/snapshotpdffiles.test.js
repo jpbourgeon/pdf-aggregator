@@ -11,8 +11,7 @@ describe('The test utility function snapshotPdfFiles', () => {
       expect(folderSnapshot).toHaveLength(0);
       expect(folderSnapshot).toMatchSnapshot();
     } catch (error) {
-      /* eslint-disable-next-line no-console */
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     }
   });
 
@@ -23,8 +22,7 @@ describe('The test utility function snapshotPdfFiles', () => {
       expect(folderSnapshot).toHaveLength(1);
       expect(folderSnapshot).toMatchSnapshot();
     } catch (error) {
-      /* eslint-disable-next-line no-console */
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     }
     expect.assertions(2);
   });
@@ -36,8 +34,7 @@ describe('The test utility function snapshotPdfFiles', () => {
       expect(folderSnapshot).toHaveLength(3);
       expect(folderSnapshot).toMatchSnapshot();
     } catch (error) {
-      /* eslint-disable-next-line no-console */
-      console.log(error);
+      console.log(error); // eslint-disable-line no-console
     }
     expect.assertions(2);
   });

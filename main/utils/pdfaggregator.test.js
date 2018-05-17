@@ -154,19 +154,7 @@ describe('PDF Aggregator', () => {
       });
     });
 
-    describe('the aggregate function', () => {
-      beforeEach(async (done) => {
-      // discard the output folder's content
-        await fs.emptyDir(`${testbed}/pdfaggregator/output`);
-        done();
-      });
-
-      afterAll(async (done) => {
-      // discard the output folder's content
-        await fs.emptyDir(`${testbed}/pdfaggregator/output`);
-        done();
-      });
-
+    describe.skip('the aggregate function', () => {
       it('should work', async () => {
         await PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
       });
@@ -194,8 +182,11 @@ describe('PDF Aggregator', () => {
 
         it('should match the snapshot with the following config: no cover page, no change log, no outline');
       });
-
-      it('should send localized messages (i18n)');
     });
   });
+});
+
+describe('todo', () => {
+  it('should send localized messages (i18n)');
+  it('should use an alternative to try catch in async mode');
 });

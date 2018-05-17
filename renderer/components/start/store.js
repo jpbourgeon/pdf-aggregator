@@ -128,8 +128,7 @@ class ContextProvider extends React.Component {
     return true;
   }
 
-  /* eslint-disable-next-line */
-  submit(event) {
+  submit(event) { // eslint-disable-line class-methods-use-this
     event.preventDefault();
     Router.push('/result', '/result');
   }

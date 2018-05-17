@@ -23,8 +23,7 @@ const stepAsync = async (taskName, task, send, errorIsFatal = false, isLast = fa
     addLogEntry(send, taskName, false, isLast);
   } catch (error) {
     addLogEntry(send, taskName, true, errorIsFatal);
-    /* eslint-disable-next-line no-console */
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
 };
 
@@ -35,8 +34,7 @@ const step = (taskName, task, send, errorIsFatal = false, isLast = false) => {
     addLogEntry(send, taskName, false, isLast);
   } catch (error) {
     addLogEntry(send, taskName, true, errorIsFatal);
-    /* eslint-disable-next-line no-console */
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
   }
 };
 
@@ -50,8 +48,7 @@ const crawlFolder = async (path) => {
     }
     return tree;
   } catch (error) {
-    /* eslint-disable-next-line no-console */
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
     return [];
   }
 };
@@ -94,15 +91,13 @@ const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
     const doc = new pdf.Document({ font: Helvetica });
     doc.text();
     doc.info.id = '_blank';
-    doc.info.creationDate = new Date(2018, 5, 16, 0, 0, 0);
     doc.info.producer = 'pdf-aggregator: _blank template';
     const write = fs.createWriteStream(`${folder}/_blank.pdf`);
     doc.pipe(write);
     await doc.end();
     write.on('finish', resolve);
   } catch (error) {
-    /* eslint-disable-next-line no-console */
-    console.log(`Error: ${error}`);
+    console.log(`Error: ${error}`); // eslint-disable-line no-console
     reject();
   }
 });
@@ -133,8 +128,7 @@ const aggregate = async (data, send) => {
       try {
         tree = await crawlFolder(data.input);
       } catch (error) {
-        /* eslint-disable-next-line no-console */
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       }
     }, send, true);
 
@@ -191,22 +185,19 @@ const aggregate = async (data, send) => {
           send,
         );
       } catch (error) {
-        /* eslint-disable-next-line no-console */
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       }
     }));
     step('Suppression du modèle de page vierge', () => {
       try {
         fs.removeSync(`${data.output}/_blank.pdf`);
       } catch (error) {
-        /* eslint-disable-next-line no-console */
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       }
     }, send, true);
     step('Traitement terminé', () => true, send, true, true);
   } catch (error) {
-    /* eslint-disable-next-line */
-    console.log(error);
+    console.log(error); // eslint-disable-line no-console
     step(`Le traitement a échoué : ${error}`, () => true, send, true, true);
   }
 };

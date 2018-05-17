@@ -70,8 +70,11 @@ class ContextProvider extends React.Component {
     ipcRenderer.removeAllListeners('add-log-entry');
   }
 
-  /* eslint-disable-next-line */
-  goHome(event) {
+  setCurrentTask(label) {
+    this.setState({ currentTask: label });
+  }
+
+  goHome(event) { // eslint-disable-line class-methods-use-this
     event.preventDefault();
     Router.push('/start', '/start');
   }
@@ -88,10 +91,6 @@ class ContextProvider extends React.Component {
 
   openOutputFolder(fullPath) {
     this.openItem(fullPath);
-  }
-
-  setCurrentTask(label) {
-    this.setState({ currentTask: label });
   }
 
   addLogEntry(entry) {
