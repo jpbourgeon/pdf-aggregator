@@ -42,7 +42,7 @@ const foldersOptions = {
 const imagesOptions = {
   title: 'Choisissez une image',
   filters: [
-    { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+    { name: 'Images', extensions: ['jpg', 'pdf'] },
   ],
   properties: ['openFile'],
   buttonLabel: 'Valider',

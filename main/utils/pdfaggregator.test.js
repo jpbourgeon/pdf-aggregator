@@ -1,26 +1,27 @@
-const fs = require('fs-extra-promise');
+const fs = require('fs-extra');
 const { resolve } = require('app-root-path');
-// const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
+const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
 const PdfAggregator = require('./pdfaggregator');
 
 const testbed = resolve('main/utils/__testbed__').replace(/\\/g, '/');
-
 const defaultOptions = {
   input: `${testbed}/pdfaggregator/input`,
-  output: `${testbed}/pdfaggregator/output`,
-  logo: `${testbed}/pdfaggregator/logo/image.jpg`,
-  filename: '%dossiersource%_%dateiso%',
-  title: '%dossiersource%',
-  subtitle: 'Version : %date%%ligne%Auteur : jpbourgeon',
   level: 0,
   depth: -1,
+  output: `${testbed}/pdfaggregator/output`,
+  filename: '%dossiersource%_%dateiso%',
+  cover: true,
+  logo: `${testbed}/pdfaggregator/logo/image.jpg`,
+  title: '%dossiersource%',
+  subtitle: 'Version : %date%%ligne%Auteur : jpbourgeon',
   changelog: true,
   bookmarks: true,
 };
 
-beforeAll(() => {
+beforeEach(async (done) => {
   // discard the output folder's content
-  fs.emptyDirSync(`${testbed}/pdfaggregator/output`);
+  await fs.emptyDir(`${testbed}/pdfaggregator/output`);
+  done();
 });
 
 describe('PDF Aggregator', () => {
@@ -66,7 +67,7 @@ describe('PDF Aggregator', () => {
       async () => {
         expect.assertions(1);
         const tree = await PdfAggregator.crawlFolder(defaultOptions.input);
-        const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: 99 })
+        const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: Infinity })
           .map(element => `[MOCKED_OS_SPECIFIC_PATH]${element.split('__testbed__')[1]}`, []);
         expect(foldersToAggregate).toMatchSnapshot();
       },
@@ -132,9 +133,23 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('the aggregate function', () => {
-    it('should work', () => {
-      PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
+  describe('the makeEmptyPdf function', () => {
+    it('should make an empty pdf document to use as a template', async () => {
+      expect.assertions(1);
+      const folder = `${testbed}/pdfaggregator/output`;
+      await PdfAggregator.makeEmptyPdf(folder);
+      const snap = snapshotPdfFiles(folder);
+      expect(snap).toMatchSnapshot();
+    });
+  });
+
+  describe('the deduplicatePdfPath function', () => {
+    it('should work');
+  });
+
+  describe.skip('the aggregate function', () => {
+    it('should work', async () => {
+      await PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
     });
 
     describe('on an empty folder', () => {
@@ -155,7 +170,7 @@ describe('PDF Aggregator', () => {
       it('should match the snapshot with the following config: no cover page, no change log, no outline');
     });
 
-    describe('on level 2 folders with depth 99', () => {
+    describe('on level 1 folders with unlimited depth', () => {
       it('should match the snapshot with the following config: cover page, change log, outline');
 
       it('should match the snapshot with the following config: no cover page, no change log, no outline');

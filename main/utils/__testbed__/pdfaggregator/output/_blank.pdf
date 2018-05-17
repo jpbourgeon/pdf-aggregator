@@ -8,11 +8,12 @@
 stream
 /CS1 CS
 /CS1 cs
+ET
 endstream
 endobj
 
 4 0 obj
-15
+18
 endobj
 
 5 0 obj
@@ -33,44 +34,12 @@ endobj
 >>
 endobj
 
-6 0 obj
-<<
-	/Length 7 0 R
->>
-stream
-/CS1 CS
-/CS1 cs
-endstream
-endobj
-
-7 0 obj
-15
-endobj
-
-8 0 obj
-<<
-	/Type /Page
-	/Parent 1 0 R
-	/Resources <<
-		/ColorSpace <<
-			/CS1 [/ICCBased 2 0 R]
-		>>
-		/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
-		/Font <<
-		>>
-		/XObject <<
-		>>
-	>>
-	/Contents [6 0 R]
->>
-endobj
-
 1 0 obj
 <<
 	/Type /Pages
 	/MediaBox [0 0 595.296 841.896]
-	/Kids [5 0 R 8 0 R]
-	/Count 2
+	/Kids [5 0 R]
+	/Count 1
 >>
 endobj
 
@@ -87,7 +56,7 @@ endstream
 
 endobj
 
-9 0 obj
+6 0 obj
 <<
 	/Type /Catalog
 	/Pages 1 0 R
@@ -95,27 +64,24 @@ endobj
 endobj
 
 xref
-0 10
+0 7
 0000000000 65535 f 
-0000000632 00000 n 
-0000000732 00000 n 
+0000000327 00000 n 
+0000000421 00000 n 
 0000000016 00000 n 
-0000000086 00000 n 
-0000000105 00000 n 
-0000000324 00000 n 
-0000000394 00000 n 
-0000000413 00000 n 
-0000004272 00000 n 
+0000000089 00000 n 
+0000000108 00000 n 
+0000003961 00000 n 
 trailer
 <<
-	/Size 10
-	/Root 9 0 R
-	/ID [<0042001700470013001a001100440042000e004700120047001a000e0015001600110012000e0019001600190013000e00460045001100170011001200420043001a004700470046> <0042001700470013001a001100440042000e004700120047001a000e0015001600110012000e0019001600190013000e00460045001100170011001200420043001a004700470046>]
+	/Size 7
+	/Root 6 0 R
+	/ID [<00400043004d0042004f004c> <00400043004d0042004f004c>]
 	/Info <<
-		/Producer (pdfjs v2.0.0-alpha.8 \(github.com/rkusa/pdfjs\))
-		/CreationDate (D:20180516101123+02'00')
+		/Producer (pdf-aggregator: _blank template)
+		/CreationDate (D:20180616000000+02'00')
 	>>
 >>
 startxref
-4324
+4013
 %%EOF

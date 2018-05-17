@@ -1,3 +1,6 @@
+const fs = require('fs-extra');
+const pdf = require('pdfjs');
+const Helvetica = require('pdfjs/font/Helvetica');
 const { getTree } = require('./gettree');
 
 const setCurrentTask = (send, label) => {
@@ -14,38 +17,46 @@ const addLogEntry = (send, label, isError = false, isLast = false) => {
 };
 
 const stepAsync = async (taskName, task, send, errorIsFatal = false, isLast = false) => {
-  setCurrentTask(send, taskName);
   try {
+    setCurrentTask(send, taskName);
     await task();
     addLogEntry(send, taskName, false, isLast);
   } catch (error) {
     addLogEntry(send, taskName, true, errorIsFatal);
-    throw (error);
+    /* eslint-disable-next-line no-console */
+    console.log(error);
   }
 };
 
 const step = (taskName, task, send, errorIsFatal = false, isLast = false) => {
-  setCurrentTask(send, taskName);
   try {
+    setCurrentTask(send, taskName);
     task();
     addLogEntry(send, taskName, false, isLast);
   } catch (error) {
     addLogEntry(send, taskName, true, errorIsFatal);
-    throw (error);
+    /* eslint-disable-next-line no-console */
+    console.log(error);
   }
 };
 
 const crawlFolder = async (path) => {
-  let tree;
-  if (path !== '') {
-    tree = await getTree({ root: path, entryType: 'both', fileFilter: '*.pdf' });
-  } else {
-    tree = [];
+  try {
+    let tree;
+    if (path !== '') {
+      tree = await getTree({ root: path, entryType: 'both', fileFilter: '*.pdf' });
+    } else {
+      tree = [];
+    }
+    return tree;
+  } catch (error) {
+    /* eslint-disable-next-line no-console */
+    console.log(error);
+    return [];
   }
-  return tree;
 };
 
-const getFoldersToAggregate = (tree, data) => {
+const getFoldersToAggregate = (tree = [], data) => {
   if (tree.length === 0) throw new Error('There is no folder to aggregate');
   const maxDepth = tree.reduce((result, item) => ((item.depth > result) ? item.depth : result), 0);
   const level = (data.level < maxDepth) ? data.level : maxDepth;
@@ -78,45 +89,134 @@ const stripEmptyFolders = (tree) => {
   return strippedTree;
 };
 
-const aggregate = async (data, send) => {
-  let tree;
-  let foldersToAggregate;
+const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
   try {
-    await stepAsync('Lecture du dossier source', async () => { tree = await crawlFolder(data.input); }, send, true);
-    await step(
+    const doc = new pdf.Document({ font: Helvetica });
+    doc.text();
+    doc.info.id = '_blank';
+    doc.info.creationDate = new Date(2018, 5, 16, 0, 0, 0);
+    doc.info.producer = 'pdf-aggregator: _blank template';
+    const write = fs.createWriteStream(`${folder}/_blank.pdf`);
+    doc.pipe(write);
+    await doc.end();
+    write.on('finish', resolve);
+  } catch (error) {
+    /* eslint-disable-next-line no-console */
+    console.log(`Error: ${error}`);
+    reject();
+  }
+});
+
+const deduplicatePdfPath = (path) => {
+  let result = path.substring(0, path.length - 4);
+  if (fs.pathExistsSync(`${result}.pdf`)) {
+    let i = 1;
+    while (fs.pathExistsSync(`${path}_${i}.pdf`)) {
+      i += 1;
+    }
+    result = `${result}_${i}`;
+  }
+  result = `${result}.pdf`;
+  return result;
+};
+
+const aggregate = async (data, send) => {
+  try {
+    const dateIso = new Date().toISOString().substr(0, 10);
+
+    // Prepare the empty template
+    await stepAsync('Création du modèle de page vierge', async () => (makeEmptyPdf(data.output)), send, true);
+
+    // Read the input tree
+    let tree;
+    await stepAsync('Lecture du dossier source', async () => {
+      try {
+        tree = await crawlFolder(data.input);
+      } catch (error) {
+        /* eslint-disable-next-line no-console */
+        console.log(error);
+      }
+    }, send, true);
+
+    // Get the list of folders to aggregate
+    let foldersToAggregate;
+    step(
       'Récupération des dossiers à fusionner',
       () => { foldersToAggregate = getFoldersToAggregate(tree, data); }, send, true,
     );
-    foldersToAggregate.map(async (folder) => {
-    // await Promise.all(foldersToAggregate.map(async (folder) => {
-      // Get a subtree without empty folders
-      const maxDepth = (data.depth === -1) ? Infinity : data.level + data.depth;
-      let subTree = getSubTree(tree, folder, maxDepth);
-      subTree = stripEmptyFolders(subTree);
-      /* eslint-disable-next-line no-console */
-      console.log(JSON.stringify({
-        [folder]: subTree.map(element => ({
-          fullPath: element.fullPath,
-          // depth: element.depth,
-          // parentDir: element.parentDir,
-        }), []),
-      }, null, 2));
-      // If needed: Generate cover page (if needed: don't forget to add the bookmark)
-      // If needed: Generate log of modifications (if needed: don't forget to add the bookmark)
-      // merge all files into a pdf (if needed: don't forget to add the bookmark)
-    });
-    // }));
-    await step('Traitement terminé', () => true, send, true, true);
+    // Process each folder that will be aggregated
+    await Promise.all(foldersToAggregate.map(async (folder) => {
+      try {
+        const filename = data.filename
+          .replace('%dossiersource%', folder.split('/').pop())
+          .replace('%dateiso%', dateIso);
+        let subTree;
+        step(`Préparation du dossier : ${folder}`, () => {
+          const maxDepth = (data.depth === -1) ? Infinity : data.level + data.depth;
+          subTree = getSubTree(tree, folder, maxDepth);
+          subTree = stripEmptyFolders(subTree);
+        }, send);
+
+        const doc = new pdf.Document({ font: Helvetica });
+
+        // If asked: Generate the cover page (if asked: don't forget to add the bookmark)
+        if (data.cover) step('Génération de la couverture', () => true, send);
+
+        // If asked: Generate the change log (if asked: don't forget to add the bookmark)
+        if (data.changelog) step('Génération du journal des modifications', () => true, send);
+
+        // merge each files into the pdf (if asked: don't forget to add the bookmark)
+        subTree.map((item) => {
+          step(`Traitement de l'élément : ${item.name}`, () => true, send);
+          return true;
+        });
+
+        doc.pageBreak();
+
+        // save the file into the output folder
+        await stepAsync(
+          `Enregistrement du fichier : ${filename}.pdf`,
+          () => new Promise(async (resolve, reject) => {
+            try {
+              // Deduplicate the filepath
+              const path = deduplicatePdfPath(`${data.output}/${filename}.pdf`);
+              const write = fs.createWriteStream(path);
+              doc.pipe(write);
+              await doc.end();
+              write.on('finish', resolve);
+            } catch (error) {
+              reject(error);
+            }
+          }),
+          send,
+        );
+      } catch (error) {
+        /* eslint-disable-next-line no-console */
+        console.log(error);
+      }
+    }));
+    step('Suppression du modèle de page vierge', () => {
+      try {
+        fs.removeSync(`${data.output}/_blank.pdf`);
+      } catch (error) {
+        /* eslint-disable-next-line no-console */
+        console.log(error);
+      }
+    }, send, true);
+    step('Traitement terminé', () => true, send, true, true);
   } catch (error) {
     /* eslint-disable-next-line */
     console.log(error);
+    step(`Le traitement a échoué : ${error}`, () => true, send, true, true);
   }
 };
 
 module.exports = {
-  aggregate,
   crawlFolder,
   getFoldersToAggregate,
   getSubTree,
   stripEmptyFolders,
+  makeEmptyPdf,
+  deduplicatePdfPath,
+  aggregate,
 };

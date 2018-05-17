@@ -1,7 +1,7 @@
 const selectDirectory = require('./dialog');
 const { dialog } = require('electron');
 
-describe.only('Given the selectDirectory function', () => {
+describe('Given the selectDirectory function', () => {
   it('should open electron\'s dialog window', () => {
     selectDirectory(jest.fn(), {});
     expect(dialog.showOpenDialog).toHaveBeenCalled();

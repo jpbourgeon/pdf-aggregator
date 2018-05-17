@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Grid from 'material-ui/Grid';
-import Typo from 'material-ui/Typography';
-import { withStyles } from 'material-ui/styles';
-import { FormControl, FormControlLabel } from 'material-ui/Form';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import Checkbox from 'material-ui/Checkbox';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
+import Grid from '@material-ui/core/Grid';
+import Typo from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import FolderOpen from '@material-ui/icons/FolderOpen';
 import { withContextConsumer } from './store';
 

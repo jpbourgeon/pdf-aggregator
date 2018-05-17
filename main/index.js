@@ -13,9 +13,8 @@ app.on('ready', async () => {
 
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 700,
+    height: 730,
     minWidth: 800,
-    minHeight: 700,
   });
 
   const devPath = 'http://localhost:8000/start';
