@@ -1,15 +1,22 @@
 const fs = require('fs-extra');
 
-const snapshotPdfFiles = (folder) => {
-  const pdfFiles = fs.readdirSync(folder).filter(element => (element.substr(-4) === '.pdf'));
-  const result = [];
-  for (let i = 0; i < pdfFiles.length; i += 1) {
-    result.push(Buffer
-      .from(fs.readFileSync(`${folder}/${pdfFiles[i]}`), { encoding: 'binary' })
-      .toString('base64'));
+const snapshotPdfFiles = async (folder) => {
+  try {
+    let pdfFiles = await fs.readdir(folder);
+    pdfFiles = pdfFiles.filter(element => (element.substr(-4) === '.pdf'));
+    const promises = pdfFiles.map(async (pdf) => {
+      const content = await fs.readFile(`${folder}/${pdf}`);
+      return Buffer
+        .from(content, { encoding: 'binary' })
+        .toString('base64');
+    });
+    const snapshot = await Promise.all(promises);
+    return snapshot.sort();
+  } catch (error) {
+  /* eslint-disable-next-line no-console */
+    console.log(error);
+    return false;
   }
-  return result;
 };
-
 
 module.exports = snapshotPdfFiles;

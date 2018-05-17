@@ -18,12 +18,6 @@ const defaultOptions = {
   bookmarks: true,
 };
 
-beforeEach(async (done) => {
-  // discard the output folder's content
-  await fs.emptyDir(`${testbed}/pdfaggregator/output`);
-  done();
-});
-
 describe('PDF Aggregator', () => {
   describe('the crawlFolder function', () => {
     it('should return a valid snapshot', async () => {
@@ -133,49 +127,75 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('the makeEmptyPdf function', () => {
-    it('should make an empty pdf document to use as a template', async () => {
-      expect.assertions(1);
-      const folder = `${testbed}/pdfaggregator/output`;
-      await PdfAggregator.makeEmptyPdf(folder);
-      const snap = snapshotPdfFiles(folder);
-      expect(snap).toMatchSnapshot();
-    });
-  });
-
   describe('the deduplicatePdfPath function', () => {
     it('should work');
   });
 
-  describe.skip('the aggregate function', () => {
-    it('should work', async () => {
-      await PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
+  describe('Tests that write to the output folder', () => {
+    beforeEach(async (done) => {
+      // discard the output folder's content
+      await fs.emptyDir(`${testbed}/pdfaggregator/output`);
+      done();
     });
 
-    describe('on an empty folder', () => {
-      it('should throw an error with the following config: cover page, change log, outline');
-
-      it('should throw an error with the following config: no cover page, no change log, no outline');
+    afterAll(async (done) => {
+      // discard the output folder's content
+      await fs.emptyDir(`${testbed}/pdfaggregator/output`);
+      done();
     });
 
-    describe('on the root folder with unlimited depth', () => {
-      it('should match the snapshot with the following config: cover page, change log, outline');
-
-      it('should match the snapshot with the following config: no cover page, no change log, no outline');
+    describe('the makeEmptyPdf function', () => {
+      it('should make an empty pdf document to use as a template', async () => {
+        expect.assertions(1);
+        const folder = `${testbed}/pdfaggregator/output`;
+        await PdfAggregator.makeEmptyPdf(folder);
+        const result = await snapshotPdfFiles(folder);
+        expect(result).toMatchSnapshot();
+      });
     });
 
-    describe('on level 1 folders with depth 1', () => {
-      it('should match the snapshot with the following config: cover page, change log, outline');
+    describe('the aggregate function', () => {
+      beforeEach(async (done) => {
+      // discard the output folder's content
+        await fs.emptyDir(`${testbed}/pdfaggregator/output`);
+        done();
+      });
 
-      it('should match the snapshot with the following config: no cover page, no change log, no outline');
+      afterAll(async (done) => {
+      // discard the output folder's content
+        await fs.emptyDir(`${testbed}/pdfaggregator/output`);
+        done();
+      });
+
+      it('should work', async () => {
+        await PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
+      });
+
+      describe('on an empty folder', () => {
+        it('should throw an error with the following config: cover page, change log, outline');
+
+        it('should throw an error with the following config: no cover page, no change log, no outline');
+      });
+
+      describe('on the root folder with unlimited depth', () => {
+        it('should match the snapshot with the following config: cover page, change log, outline');
+
+        it('should match the snapshot with the following config: no cover page, no change log, no outline');
+      });
+
+      describe('on level 1 folders with depth 1', () => {
+        it('should match the snapshot with the following config: cover page, change log, outline');
+
+        it('should match the snapshot with the following config: no cover page, no change log, no outline');
+      });
+
+      describe('on level 1 folders with unlimited depth', () => {
+        it('should match the snapshot with the following config: cover page, change log, outline');
+
+        it('should match the snapshot with the following config: no cover page, no change log, no outline');
+      });
+
+      it('should send localized messages (i18n)');
     });
-
-    describe('on level 1 folders with unlimited depth', () => {
-      it('should match the snapshot with the following config: cover page, change log, outline');
-
-      it('should match the snapshot with the following config: no cover page, no change log, no outline');
-    });
-
-    it('should send localized messages (i18n)');
   });
 });
