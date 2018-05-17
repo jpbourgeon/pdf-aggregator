@@ -10,7 +10,7 @@ const snapshotPdfFiles = async (folder) => {
         .catch(e => console.log(e)); // eslint-disable-line no-console
       content = content
         .toString()
-        .replace(/(\/CreationDate \(D\:)(.*)(\))/, '$1MOCKED_DATE$3');
+        .replace(/(\/CreationDate \(D:)(.*)(\))/, '$1MOCKED_DATE$3');
       return Buffer
         .from(content, { encoding: 'binary' })
         .toString('base64');
