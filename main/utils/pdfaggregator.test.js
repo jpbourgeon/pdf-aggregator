@@ -188,5 +188,4 @@ describe('PDF Aggregator', () => {
 
 describe('todo', () => {
   it('should send localized messages (i18n)');
-  it('should use an alternative to try catch in async mode');
 });
