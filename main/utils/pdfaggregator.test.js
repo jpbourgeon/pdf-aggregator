@@ -1,9 +1,10 @@
 const fs = require('fs-extra');
-const { resolve } = require('app-root-path');
+const resolvePath = require('app-root-path').resolve;
 const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
 const PdfAggregator = require('./pdfaggregator');
 
-const testbed = resolve('main/utils/__testbed__').replace(/\\/g, '/');
+const testbed = resolvePath('main/utils/__testbed__').replace(/\\/g, '/');
+
 const defaultOptions = {
   input: `${testbed}/pdfaggregator/input`,
   level: 0,
@@ -19,7 +20,7 @@ const defaultOptions = {
 };
 
 describe('PDF Aggregator', () => {
-  describe('the crawlFolder function', () => {
+  describe('the async crawlFolder function', () => {
     it('should return a valid snapshot', async () => {
       expect.assertions(1);
       let tree = await PdfAggregator.crawlFolder(defaultOptions.input);
@@ -32,7 +33,7 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('the getFoldersToAggregate function', () => {
+  describe('the async getFoldersToAggregate function', () => {
     it('should throw an error if the tree is empty', () => {
       expect(() => {
         PdfAggregator.getFoldersToAggregate([], defaultOptions);
@@ -104,6 +105,47 @@ describe('PDF Aggregator', () => {
       ], '/file/path/', 3);
       expect(files).toMatchSnapshot();
     });
+
+    describe('the async deduplicatePdfPath function', () => {
+      let nextIteration;
+      let expectedLoops;
+
+      const setupPathExistsMock = (count) => {
+        nextIteration = 0;
+        expectedLoops = count;
+      };
+
+      const mockPathExists = () => new Promise((resolve) => {
+        const currentIteration = nextIteration;
+        nextIteration += 1;
+        if (currentIteration >= expectedLoops) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+
+      it('should return path.pdf if the file doesn\'t exists', async () => {
+        setupPathExistsMock(0);
+        expect.assertions(1);
+        const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists);
+        expect(result).toBe('path.pdf');
+      });
+
+      it('should return path_1.pdf if path.pdf already exists', async () => {
+        setupPathExistsMock(1);
+        expect.assertions(1);
+        const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists);
+        expect(result).toBe('path_1.pdf');
+      });
+
+      it('should return path_3.pdf if the 3 previous files already exist', async () => {
+        setupPathExistsMock(3);
+        expect.assertions(1);
+        const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists);
+        expect(result).toBe('path_3.pdf');
+      });
+    });
   });
 
   describe('the stripEmptyFolders function', () => {
@@ -127,11 +169,9 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('the deduplicatePdfPath function', () => {
-    it('should work');
-  });
-
   describe('Tests that write to the output folder', () => {
+    const outputFolder = `${testbed}/pdfaggregator/output`;
+
     beforeEach(async (done) => {
       // discard the output folder's content
       await fs.emptyDir(`${testbed}/pdfaggregator/output`);
@@ -144,43 +184,46 @@ describe('PDF Aggregator', () => {
       done();
     });
 
-    describe('the makeEmptyPdf function', () => {
+    describe('the async makeEmptyPdf function', () => {
       it('should make an empty pdf document to use as a template', async () => {
         expect.assertions(1);
-        const folder = `${testbed}/pdfaggregator/output`;
-        await PdfAggregator.makeEmptyPdf(folder);
-        const result = await snapshotPdfFiles(folder);
+        await PdfAggregator.makeEmptyPdf(outputFolder);
+        const result = await snapshotPdfFiles(outputFolder);
         expect(result).toMatchSnapshot();
       });
     });
 
-    describe.skip('the aggregate function', () => {
-      it('should work', async () => {
-        await PdfAggregator.aggregate({ ...defaultOptions, level: 0, depth: -1 }, jest.fn());
-      });
-
+    describe('the async aggregate function', () => {
       describe('on an empty folder', () => {
-        it('should throw an error with the following config: cover page, change log, outline');
-
-        it('should throw an error with the following config: no cover page, no change log, no outline');
+        it.only('should match an empty snapshot', async () => {
+          await PdfAggregator.aggregate(
+            {
+              ...defaultOptions,
+              input: `${defaultOptions.input}/Empty_folder`,
+            },
+            jest.fn(),
+          );
+          const result = await snapshotPdfFiles(outputFolder);
+          expect(result).toMatchSnapshot();
+        });
       });
 
       describe('on the root folder with unlimited depth', () => {
-        it('should match the snapshot with the following config: cover page, change log, outline');
+        it('should match the snapshot, with the following config: cover page, change log, outline');
 
-        it('should match the snapshot with the following config: no cover page, no change log, no outline');
+        it('should match the snapshot, with the following config: no cover page, no change log, no outline');
       });
 
       describe('on level 1 folders with depth 1', () => {
-        it('should match the snapshot with the following config: cover page, change log, outline');
+        it('should match the snapshot, with the following config: cover page, change log, outline');
 
-        it('should match the snapshot with the following config: no cover page, no change log, no outline');
+        it('should match the snapshot, with the following config: no cover page, no change log, no outline');
       });
 
       describe('on level 1 folders with unlimited depth', () => {
-        it('should match the snapshot with the following config: cover page, change log, outline');
+        it('should match the snapshot, with the following config: cover page, change log, outline');
 
-        it('should match the snapshot with the following config: no cover page, no change log, no outline');
+        it('should match the snapshot, with the following config: no cover page, no change log, no outline');
       });
     });
   });

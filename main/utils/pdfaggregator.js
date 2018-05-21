@@ -20,10 +20,10 @@ const stepAsync = async (taskName, task, send, errorIsFatal = false, isLast = fa
   try {
     setCurrentTask(send, taskName);
     await task()
-      .catch(e => console.log(e)); // eslint-disable-line no-console
+      .catch(e => console.log(`${taskName}: ${e.message}`)); // eslint-disable-line no-console
     addLogEntry(send, taskName, false, isLast);
-  } catch (error) {
-    addLogEntry(send, `${taskName} (${error})`, true, errorIsFatal);
+  } catch (e) {
+    addLogEntry(send, `${taskName}: ${e.message}`, true, errorIsFatal);
   }
 };
 
@@ -32,8 +32,8 @@ const step = (taskName, task, send, errorIsFatal = false, isLast = false) => {
     setCurrentTask(send, taskName);
     task();
     addLogEntry(send, taskName, false, isLast);
-  } catch (error) {
-    addLogEntry(send, `${taskName} (${error})`, true, errorIsFatal);
+  } catch (e) {
+    addLogEntry(send, `${taskName}: ${e.message}`, true, errorIsFatal);
   }
 };
 
@@ -41,7 +41,7 @@ const crawlFolder = async (path) => {
   let tree;
   if (path !== '') {
     tree = await getTree({ root: path, entryType: 'both', fileFilter: '*.pdf' })
-      .catch(e => console.log(e)); // eslint-disable-line no-console
+      .catch(e => console.log(`getTree: ${e.message}`)); // eslint-disable-line no-console
   } else {
     tree = [];
   }
@@ -89,21 +89,21 @@ const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
   const write = fs.createWriteStream(`${folder}/_blank.pdf`);
   doc.pipe(write);
   await doc.end()
-    .catch(e => console.log(e)); // eslint-disable-line no-console
+    .catch(e => console.log(`makeEmptyPdf > doc.end: ${e.message}`)); // eslint-disable-line no-console
   write.on('finish', resolve);
   write.on('error', reject);
 });
 
-const deduplicatePdfPath = (path) => {
-  let result = path.substring(0, path.length - 4);
-  if (fs.pathExistsSync(`${result}.pdf`)) {
-    let i = 1;
-    while (fs.pathExistsSync(`${path}_${i}.pdf`)) {
-      i += 1;
-    }
-    result = `${result}_${i}`;
-  }
-  result = `${result}.pdf`;
+const deduplicatePdfPath = async (path, pathExistsDI = fs.pathExists) => {
+  const file = path.substring(0, path.length - 4);
+  let i = 0;
+  while (await pathExistsDI(`${file}${(i > 0) ? `_${i}` : ''}.pdf`) // eslint-disable-line no-await-in-loop
+    .catch((e) => {
+      console.log(`pathExists: ${e.message}`); // eslint-disable-line no-console
+      return false;
+    })
+  ) i += 1;
+  const result = `${file}${(i > 0) ? `_${i}` : ''}.pdf`;
   return result;
 };
 
@@ -114,14 +114,14 @@ const aggregate = async (data, send) => {
     // Prepare the empty template
     await stepAsync('Création du modèle de page vierge', async () => {
       await makeEmptyPdf(data.output)
-        .catch(e => console.log(e)); // eslint-disable-line no-console
+        .catch(e => console.log(`makeEmptyPdf: ${e.message}`)); // eslint-disable-line no-console
     }, send, true);
 
     // Read the input tree
     let tree;
     await stepAsync('Lecture du dossier source', async () => {
       tree = await crawlFolder(data.input)
-        .catch(e => console.log(e)); // eslint-disable-line no-console
+        .catch(e => console.log(`crawlFolder: ${e.message}`)); // eslint-disable-line no-console
     }, send, true);
 
     // Get the list of folders to aggregate
@@ -133,24 +133,31 @@ const aggregate = async (data, send) => {
 
     // Process each folder that will be aggregated
     await Promise.all(foldersToAggregate.map(async (folder) => {
-      const filename = data.filename
-        .replace('%dossiersource%', folder.split('/').pop())
-        .replace('%dateiso%', dateIso);
+      // Prepare the input folder
       let subTree;
-
-      // Prepare the folder
-      step(`Préparation du dossier : ${folder}`, () => {
+      step(`Préparation du dossier source : ${folder}`, () => {
         const maxDepth = (data.depth === -1) ? Infinity : data.level + data.depth;
         subTree = getSubTree(tree, folder, maxDepth);
         subTree = stripEmptyFolders(subTree);
       }, send);
 
+      // Prepare the output filename
+      let filename;
+      step('Calcul du nom du fichier cible', () => {
+        filename = data.filename
+          .replace('%dossiersource%', folder.split('/').pop())
+          .replace('%dateiso%', dateIso);
+      }, send);
+
       const doc = new pdf.Document({ font: Helvetica });
 
-      // If asked: Generate the cover page (if asked: don't forget to add the bookmark)
+      // If asked: generate the cover page (if asked: don't forget to add the bookmark)
       if (data.cover) step('Génération de la couverture', () => true, send);
 
-      // If asked: Generate the change log (if asked: don't forget to add the bookmark)
+      // If asked: generate the table of content (if asked: don't forget to add the bookmark and the pages numbers)
+      if (data.changelog) step('Génération du journal des modifications', () => true, send);
+
+      // If asked: generate the change log (if asked: don't forget to add the bookmark)
       if (data.changelog) step('Génération du journal des modifications', () => true, send);
 
       // merge each files into the pdf (if asked: don't forget to add the bookmark)
@@ -165,31 +172,31 @@ const aggregate = async (data, send) => {
       await stepAsync(
         `Enregistrement du fichier : ${filename}.pdf`,
         () => new Promise(async (resolve, reject) => {
-          // Deduplicate the filepath
-          const path = deduplicatePdfPath(`${data.output}/${filename}.pdf`);
+          const path = await deduplicatePdfPath(`${data.output}/${filename}.pdf`)
+            .catch(e => console.log(`deduplicatePdfPath: ${e.message}`)); // eslint-disable-line no-console
           const write = fs.createWriteStream(path);
           doc.pipe(write);
           await doc.end()
-            .catch(e => console.log(e)); // eslint-disable-line no-console
+            .catch(e => console.log(`aggregate > doc.end: ${e.message}`)); // eslint-disable-line no-console
           write.on('finish', resolve);
           write.on('error', reject);
         }),
         send,
-      ).catch(e => console.log(e)); // eslint-disable-line no-console
+      );
     }));
-
-    // Remove the empty template
-    await stepAsync('Suppression du modèle de page vierge', async () => {
-      await fs.remove(`${data.output}/_blank.pdf`)
-        .catch(e => console.log(e)); // eslint-disable-line no-console
-    }, send, true);
 
     // Final step
     step('Traitement terminé', () => true, send, true, true);
   } catch (e) {
-    console.log(e); // eslint-disable-line no-console
-    step(`Le traitement a échoué (${e})`, () => true, send, true, true);
+    console.log(`pdfAggregator: ${e.message}`); // eslint-disable-line no-console
+    step(`Le traitement a échoué: ${e.message}`, () => true, send, true, true);
   }
+
+  // Remove the empty template
+  await stepAsync('Suppression du modèle de page vierge', async () => {
+    await fs.remove(`${data.output}/_blank.pdf`)
+      .catch(e => console.log(`aggregate > fs.remove: ${e.message}`)); // eslint-disable-line no-console
+  }, send, true);
 };
 
 module.exports = {

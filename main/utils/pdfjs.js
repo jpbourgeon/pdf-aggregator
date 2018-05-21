@@ -16,7 +16,7 @@ const makeBlank = async () => new Promise(async (resolve, reject) => {
   const write = fs.createWriteStream(`${testbed}/output/_blank.pdf`);
   doc.pipe(write);
   await doc.end()
-    .catch(e => console.log(e)); // eslint-disable-line no-console
+    .catch(e => console.log(`makeBlank > doc.end: ${e.message}`)); // eslint-disable-line no-console
   write.on('finish', resolve);
   write.on('reject', reject);
 });
@@ -33,7 +33,7 @@ const makeFile1 = async () => new Promise(async (resolve, reject) => {
   const write = fs.createWriteStream(`${testbed}/output/file1.pdf`);
   doc.pipe(write);
   await doc.end()
-    .catch(e => console.log(e)); // eslint-disable-line no-console
+    .catch(e => console.log(`makeFile1 > doc.end: ${e.message}`)); // eslint-disable-line no-console
   write.on('finish', resolve);
   write.on('error', reject);
 });
@@ -48,17 +48,20 @@ const makeFile2 = async () => new Promise(async (resolve, reject) => {
   const write = fs.createWriteStream(`${testbed}/output/file2.pdf`);
   doc.pipe(write);
   await doc.end()
-    .catch(e => console.log(e)); // eslint-disable-line no-console
+    .catch(e => console.log(`makeFile2 > doc.end: ${e.message}`)); // eslint-disable-line no-console
   write.on('finish', resolve);
   write.on('error', reject);
 });
 
 // // Main file
 const generateMainFile = async () => new Promise(async (resolve, reject) => {
+  const empty = await fs.readFile(`${testbed}/output/_blank.pdf`)
+    .catch(e => console.log(`generateMainFile empty > fs.readFile: ${e.message}`)); // eslint-disable-line no-console
   const pdfEmpty = new pdf.ExternalDocument(empty);
   const doc = new pdf.Document({ font: Helvetica });
   // Page 1 : cover
-  const image = fs.readFileSync(`${testbed}/logo.jpg`);
+  const image = await fs.readFile(`${testbed}/logo.jpg`)
+    .catch(e => console.log(`generateMainFile image > fs.readFile: ${e.message}`)); // eslint-disable-line no-console
   const logo = new pdf.Image(image);
   doc.text();
   doc.destination('Première page');
@@ -100,7 +103,8 @@ const generateMainFile = async () => new Promise(async (resolve, reject) => {
   addRow('Pages 3-5', 'Page 3', '13/05/2018');
 
   // Fusions : pages 3-5 + destination on the first page
-  const file1 = fs.readFileSync(`${testbed}/output/file1.pdf`);
+  const file1 = await fs.readFile(`${testbed}/output/file1.pdf`)
+    .catch(e => console.log(`generateMainFile file1 > fs.readFile: ${e.message}`)); // eslint-disable-line no-console
   const pdfFile1 = new pdf.ExternalDocument(file1);
   doc.setTemplate(pdfFile1);
   doc.text();
@@ -113,7 +117,8 @@ const generateMainFile = async () => new Promise(async (resolve, reject) => {
 
 
   // Fusion : page 6 + destination on the first page
-  const file2 = fs.readFileSync(`${testbed}/output/file2.pdf`);
+  const file2 = await fs.readFile(`${testbed}/output/file2.pdf`)
+    .catch(e => console.log(`generateMainFile file2 > fs.readFile: ${e.message}`)); // eslint-disable-line no-console
   const pdfFile2 = new pdf.ExternalDocument(file2);
   doc.setTemplate(pdfFile2);
   doc.text();
@@ -133,7 +138,7 @@ const generateMainFile = async () => new Promise(async (resolve, reject) => {
   const write = fs.createWriteStream(`${testbed}/output/pdfjs.pdf`);
   doc.pipe(write);
   await doc.end()
-    .catch(e => console.log(e)); // eslint-disable-line no-console
+    .catch(e => console.log(`generateMainFile doc.end: ${e.message}`)); // eslint-disable-line no-console
   write.on('finish', resolve);
   write.on('error', reject);
 });
@@ -149,7 +154,7 @@ const main = async () => {
     await generateMainFile();
     await fs.remove(`${testbed}/output/_blank.pdf`);
   } catch (e) {
-    console.log(e); // eslint-disable-line no-console
+    console.log(`main: ${e.message}`); // eslint-disable-line no-console
   }
 };
 
