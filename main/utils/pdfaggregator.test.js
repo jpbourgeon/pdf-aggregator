@@ -346,7 +346,7 @@ describe('PDF Aggregator', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it.only('should match the snapshot with a changelog', async () => {
+      it('should match the snapshot with a changelog', async () => {
         const output = `${defaultOptions.output}/changelog`;
         await PdfAggregator.aggregate(
           {
