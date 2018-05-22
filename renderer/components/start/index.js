@@ -90,7 +90,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="depth" shrink>Profondeur (-1 = illimité)</InputLabel>
+            <InputLabel htmlFor="depth" shrink>Profondeur 0 = illimité)</InputLabel>
             <Input
               className={classes.formControl}
               id="depth"
@@ -218,8 +218,8 @@ const RenderView = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={state.data.bookmarks}
-                  onChange={e => actions.handleChange('bookmarks', e, 'checked')}
+                  checked={state.data.documentOutline}
+                  onChange={e => actions.handleChange('documentOutline', e, 'checked')}
                 />
               }
               label="Signets"

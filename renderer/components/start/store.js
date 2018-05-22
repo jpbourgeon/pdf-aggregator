@@ -26,10 +26,10 @@ const defaultState = {
     title: '%dossiersource%',
     subtitle: '%date%',
     level: 0,
-    depth: -1,
+    depth: 0,
     cover: true,
     changelog: true,
-    bookmarks: true,
+    documentOutline: true,
   },
 };
 
@@ -124,7 +124,9 @@ class ContextProvider extends React.Component {
     if (data.filename === '') return false;
     if (data.title === '') return false;
     if (Number.isNaN(parseInt(data.level, 10))) return false;
+    if (Number.isNaN(parseInt(data.depth, 10))) return false;
     if (parseInt(data.level, 10) < 0) return false;
+    if (parseInt(data.depth, 10) < 0) return false;
     return true;
   }
 

@@ -160,8 +160,9 @@ describe('Given the start store ContextProvider component', () => {
         filename: '%dossiersource%_%dateiso%',
         title: '%dossiersource%%ligne%%datefr%',
         level: 0,
+        depth: 0,
         changelog: true,
-        bookmarks: true,
+        documentOutline: true,
       },
     });
 
@@ -204,6 +205,7 @@ describe('Given the start store ContextProvider component', () => {
         expect(result).toBeFalsy();
       });
     });
+
     it('should return false if level is not a number', () => {
       const state = makeData();
       state.data.level = 'value';
@@ -214,9 +216,29 @@ describe('Given the start store ContextProvider component', () => {
       });
     });
 
+    it('should return false if depth is not a number', () => {
+      const state = makeData();
+      state.data.depth = 'value';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
     it('should return false if level is a negative integer', () => {
       const state = makeData();
-      state.data.level = '-1';
+      state.data.level = '-5';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return false if depth is a negative integer', () => {
+      const state = makeData();
+      state.data.depth = '-5';
       let result;
       instance.setState({ ...state }, () => {
         result = instance.isDataValid();
