@@ -1,4 +1,4 @@
-main/utils/__testbed__/*/output
+main/utils/__testbed__/**/output
 
 # build output
 renderer/out
