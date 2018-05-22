@@ -3,21 +3,57 @@ const resolvePath = require('app-root-path').resolve;
 const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
 const PdfAggregator = require('./pdfaggregator');
 
+jest.setTimeout(10000); // Give some slack to the filesystem operations
+
 const testbed = resolvePath('main/utils/__testbed__').replace(/\\/g, '/');
 
 const defaultOptions = {
   input: `${testbed}/pdfaggregator/input`,
   level: 0,
-  depth: -1,
+  depth: 0,
   output: `${testbed}/pdfaggregator/output`,
-  filename: '%dossiersource%_%dateiso%',
-  cover: true,
+  filename: 'testFile',
+  cover: false,
   logo: `${testbed}/pdfaggregator/logo/image.jpg`,
   title: '%dossiersource%',
-  subtitle: 'Version : %date%%ligne%Auteur : jpbourgeon',
-  changelog: true,
-  bookmarks: true,
+  subtitle: 'Version : %dateiso%%ligne%Auteur : jpbourgeon',
+  changelog: false,
+  documentOutline: false,
+  toc: false,
+  pageNumbers: false,
 };
+
+const outputFolders = [
+  'changelog',
+  'cover01',
+  'cover02',
+  'makeEmptyPdf',
+  'merge01',
+  'merge02',
+  'merge03',
+  'merge04',
+  'outline',
+  'pageNumbers',
+  'toc',
+];
+
+const resetOutputFolders = async () => {
+  // discard the output folders content
+  try {
+    const promises = [];
+    for (let i = 0; i < outputFolders.length; i += 1) {
+      promises.push(fs.emptyDir(`${defaultOptions.output}/${outputFolders[i]}`));
+    }
+  } catch (e) {
+    console.log(`fs.emptyDir: ${e.message}`); // eslint-disable-line no-console
+  }
+};
+
+beforeAll(async (done) => {
+  await resetOutputFolders()
+    .catch(e => console.log(`beforeAll resetOutputFolders: ${e.message}`)); // eslint-disable-line no-console
+  done();
+});
 
 describe('PDF Aggregator', () => {
   describe('the async crawlFolder function', () => {
@@ -169,61 +205,187 @@ describe('PDF Aggregator', () => {
     });
   });
 
+  describe('the fillPlaceholders function', () => {
+    it('should not modify an input with unknown placeholders', () => {
+      const input = 'an input with %unknown% %placeholders%';
+      const result = PdfAggregator.fillPlaceholders(input, defaultOptions.input, 'MOCKED_DATE');
+      expect(result).toBe('an input with %unknown% %placeholders%');
+    });
+
+    it('should replace %dossiersource% or %inputfolder% by the input folder\'s name', () => {
+      const input = '%dossiersource%|%inputfolder%';
+      const result = PdfAggregator.fillPlaceholders(input, defaultOptions.input, 'MOCKED_DATE');
+      expect(result).toBe('input|input');
+    });
+
+    it('should replace %dateiso% or %isodate% by the ISO date', () => {
+      const input = '%dateiso%|%isodate%';
+      const result = PdfAggregator.fillPlaceholders(input, defaultOptions.input, 'MOCKED_DATE');
+      expect(result).toBe('MOCKED_DATE|MOCKED_DATE');
+    });
+
+    it('should replace %ligne% or %line% by \\n', () => {
+      const input = 'ligne 1%ligne%ligne 2%line%ligne 3';
+      const result = PdfAggregator.fillPlaceholders(input, defaultOptions.input, 'MOCKED_DATE');
+      expect(result).toBe('ligne 1\nligne 2\nligne 3');
+    });
+  });
+
   describe('Tests that write to the output folder', () => {
-    const outputFolder = `${testbed}/pdfaggregator/output`;
-
-    beforeEach(async (done) => {
-      // discard the output folder's content
-      await fs.emptyDir(`${testbed}/pdfaggregator/output`);
-      done();
-    });
-
-    afterAll(async (done) => {
-      // discard the output folder's content
-      await fs.emptyDir(`${testbed}/pdfaggregator/output`);
-      done();
-    });
-
     describe('the async makeEmptyPdf function', () => {
       it('should make an empty pdf document to use as a template', async () => {
+        const output = `${defaultOptions.output}/makeEmptyPdf`;
         expect.assertions(1);
-        await PdfAggregator.makeEmptyPdf(outputFolder);
-        const result = await snapshotPdfFiles(outputFolder);
+        await PdfAggregator.makeEmptyPdf(output);
+        const result = await snapshotPdfFiles(output);
         expect(result).toMatchSnapshot();
       });
     });
 
     describe('the async aggregate function', () => {
-      describe('on an empty folder', () => {
-        it.only('should match an empty snapshot', async () => {
-          await PdfAggregator.aggregate(
-            {
-              ...defaultOptions,
-              input: `${defaultOptions.input}/Empty_folder`,
-            },
-            jest.fn(),
-          );
-          const result = await snapshotPdfFiles(outputFolder);
-          expect(result).toMatchSnapshot();
-        });
+      it('should match an empty snapshot on an empty folder', async () => {
+        const output = `${defaultOptions.output}/merge01`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            input: `${defaultOptions.input}/Empty_folder`,
+            output,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
       });
 
-      describe('on the root folder with unlimited depth', () => {
-        it('should match the snapshot, with the following config: cover page, change log, outline');
-
-        it('should match the snapshot, with the following config: no cover page, no change log, no outline');
+      it('should match the snapshot on the root folder with unlimited depth', async () => {
+        const output = `${defaultOptions.output}/merge02`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
       });
 
-      describe('on level 1 folders with depth 1', () => {
-        it('should match the snapshot, with the following config: cover page, change log, outline');
-
-        it('should match the snapshot, with the following config: no cover page, no change log, no outline');
+      it('should match the snapshot on level 1 folders with unlimited depth', async () => {
+        const output = `${defaultOptions.output}/merge03`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            level: 1,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
       });
 
-      describe('on level 1 folders with unlimited depth', () => {
-        it('should match the snapshot, with the following config: cover page, change log, outline');
+      it('should match the snapshot on level 1 folders with depth 1', async () => {
+        const output = `${defaultOptions.output}/merge04`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            level: 1,
+            depth: 1,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
+      });
 
-        it('should match the snapshot, with the following config: no cover page, no change log, no outline');
+      it('should match the snapshot with a full cover page', async () => {
+        const output = `${defaultOptions.output}/cover01`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            cover: true,
+            title: 'Title: %dossiersource%',
+            subtitle: 'Author: xxx%ligne%Version: yyy',
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
+      });
+
+      it('should match the snapshot with a cover page with empty logo, title and subtitle', async () => {
+        const output = `${defaultOptions.output}/cover02`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            cover: true,
+            logo: '',
+            title: '',
+            subtitle: '',
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
+      });
+
+      it('should match the snapshot with a document outline', async () => {
+        const output = `${defaultOptions.output}/outline`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            documentOutline: true,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
+      });
+
+      it('should match the snapshot with a changelog', async () => {
+        const output = `${defaultOptions.output}/changelog`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            changelog: true,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
+      });
+
+      it('should match the snapshot with page numbers', async () => {
+        const output = `${defaultOptions.output}/pageNumbers`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            pageNumbers: true,
+          },
+          jest.fn(),
+        );
+        const result = await snapshotPdfFiles(output);
+        expect(result).toMatchSnapshot();
+      });
+
+      it('should match the snapshot with a table of content', async () => {
+        const output = `${defaultOptions.output}/toc`;
+        await PdfAggregator.aggregate(
+          {
+            ...defaultOptions,
+            output,
+            toc: true,
+          },
+          jest.fn(),
+        );
+        // const result = await snapshotPdfFiles(output);
+        // expect(result).toMatchSnapshot();
       });
     });
   });
