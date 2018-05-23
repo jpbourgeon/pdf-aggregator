@@ -4,50 +4,50 @@ exports[`PDF Aggregator the async aggregate function should match an empty snaps
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on level 1 folders with depth 1 1`] = `
 Array [
-  "gT42ooj1Utw6FFC3bgqG5YVjTY4=",
+  "QA6fTCRxjCgruSmaRI9VwSEAP2g=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on level 1 folders with unlimited depth 1`] = `
 Array [
-  "48QUZbPTZj4quAkSvcgCsIelImY=",
-  "9m5lbMgpX8hR5WlSpTVNtK1szuY=",
+  "8riVfU8nZmW7jBGc75Ezcfegm3E=",
+  "EBKRgVuItSEKlyD/Afm8b3xo2Pc=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on the root folder with unlimited depth 1`] = `
 Array [
-  "TaNEXfMYewFIikzsmx+yl9yjRIE=",
+  "SmL+/gHuAKN37vR4apCzWhyaGRg=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a changelog 1`] = `
 Array [
-  "jhHkGzAikmBi60KVZ7RMQzS6Dbo=",
+  "CiXZKKiHR/iAEN1o+m4GNZ0tc40=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a cover page with empty logo, title and subtitle 1`] = `
 Array [
-  "dVF2OabpDWGUNLqeOOzKL/oUqZY=",
+  "DlnBeB/8ukqkDLMMi58Hh/x8IvY=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a document outline 1`] = `
 Array [
-  "D8IPzygYXe2Gn24bnlcF/eaNT0U=",
+  "mlfbj2UolktsV89tYJJLX7L40KQ=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a full cover page 1`] = `
 Array [
-  "yvGIFdAVLes1asyCnBLeOKI2CO0=",
+  "IWHNJ9la6Bn+pTzgx39/uDKl1+I=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with page numbers 1`] = `
 Array [
-  "NvJBb19oXstY5NNCH/H3ykWPwy4=",
+  "0f62ylqDgg+UzXn8Z0mRNyKsxbI=",
 ]
 `;
 

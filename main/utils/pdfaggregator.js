@@ -5,7 +5,6 @@ const HelveticaBold = require('pdfjs/font/Helvetica-Bold');
 const { getTree } = require('./gettree');
 
 const formattedDate = new Date().toISOString().substr(0, 10);
-const mockedDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
 
 const setCurrentTask = (send, label) => {
   send('set-current-task', label);
@@ -85,14 +84,8 @@ const stripEmptyFolders = (tree) => {
   return strippedTree;
 };
 
-const makeEmptyPdf = async (folder, isTest = false) => new Promise(async (resolve, reject) => {
+const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
   const doc = new pdf.Document({ font: Helvetica });
-  if (isTest) {
-    doc.info.id = '__MOCKED_ID__';
-    doc.info.producer = '__MOCKED_PRODUCER__';
-    doc.info.creationDate = mockedDate;
-    console.log(mockedDate);
-  }
   doc.text();
   const write = fs.createWriteStream(`${folder}/_blank.pdf`);
   doc.pipe(write);
@@ -126,12 +119,12 @@ const fillPlaceholders = (field, inputFolder, isoDate) => {
   return result;
 };
 
-const aggregate = async (data, send, isTest = false) => {
+const aggregate = async (data, send) => {
   try {
     // Prepare the empty template
     let pdfEmpty;
     await stepAsync('Création du modèle de page vierge', async () => {
-      await makeEmptyPdf(data.output, isTest)
+      await makeEmptyPdf(data.output)
         .catch(e => console.log(`makeEmptyPdf: ${e.message}`)); // eslint-disable-line no-console
       const empty = await fs.readFile(`${data.output}/_blank.pdf`)
         .catch(e => console.log(`aggregate empty > fs.readFile: ${e.message}`)); // eslint-disable-line no-console
@@ -169,12 +162,6 @@ const aggregate = async (data, send, isTest = false) => {
 
       if (subTree.length !== 0) {
         const doc = new pdf.Document({ font: Helvetica, fontSize: 11 });
-        if (isTest) {
-          doc.info.id = '__MOCKED_ID__';
-          doc.info.producer = '__MOCKED_PRODUCER__';
-          doc.info.creationDate = mockedDate;
-          console.log(doc.info.creationDate);
-        }
 
         // Cover page
         if (data.cover) {
@@ -324,11 +311,6 @@ const aggregate = async (data, send, isTest = false) => {
               }
               for (let j = 2; j <= pdfFile.pageCount; j += 1) {
                 const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
-                if (isTest) {
-                  otherPage.info.id = '__MOCKED_ID__';
-                  otherPage.info.producer = '__MOCKED_PRODUCER__';
-                  otherPage.info.creationDate = mockedDate;
-                }
                 otherPage.addPageOf(j, pdfFile);
                 const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
                 const extOtherPage = new pdf.ExternalDocument(otherPageDoc);

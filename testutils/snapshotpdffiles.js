@@ -15,7 +15,6 @@ const snapshotPdfFiles = async (folder) => {
       .replace(/(\/ID \[)(.*)(\])/, '$1ID$3')
       .replace(/(\/Producer \()(.*)(\))/, '$1PRODUCER$3')
       .replace(/(\/CreationDate \()(.*)(\))/, '$1DATE$3');
-    console.log(content);
     return crypto.createHash('sha1').update(content).digest('base64');
   });
 
