@@ -4,8 +4,6 @@ const Helvetica = require('pdfjs/font/Helvetica');
 const HelveticaBold = require('pdfjs/font/Helvetica-Bold');
 const { getTree } = require('./gettree');
 
-const formattedDate = new Date().toISOString().substr(0, 10);
-
 const setCurrentTask = (send, label) => {
   send('set-current-task', label);
 };
@@ -119,7 +117,7 @@ const fillPlaceholders = (field, inputFolder, isoDate) => {
   return result;
 };
 
-const aggregate = async (data, send) => {
+const aggregate = async (data, send, isTest = false) => {
   try {
     // Prepare the empty template
     let pdfEmpty;
@@ -152,6 +150,10 @@ const aggregate = async (data, send) => {
 
     // Process each folder that will be aggregated
     await Promise.all(foldersToAggregate.map(async (folder) => {
+      // compute a date
+      let formattedDate = new Date().toISOString().substr(0, 10);
+      if (isTest) formattedDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0)).toISOString().substr(0, 10);
+
       // Prepare the input folder
       let subTree;
       step(`Préparation du dossier source : ${folder}`, () => {
@@ -159,6 +161,7 @@ const aggregate = async (data, send) => {
         subTree = getSubTree(tree, folder, maxDepth);
         subTree = stripEmptyFolders(subTree);
       }, send);
+      if (isTest) subTree = subTree.map(item => ({ ...item, lastModified: new Date(Date.UTC(0, 0, 0, 0, 0, 0)) }), []);
 
       if (subTree.length !== 0) {
         const doc = new pdf.Document({ font: Helvetica, fontSize: 11 });

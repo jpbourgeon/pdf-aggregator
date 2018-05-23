@@ -39,12 +39,12 @@ const outputFolders = [
 
 beforeAll(async (done) => {
   try {
-    await fs.emptyDir(`${defaultOptions.output}`)
-      .catch(e => console.log(`fs.emptyDir: ${e.message}`)); // eslint-disable-line no-console
+    await fs.emptyDir(`${defaultOptions.output}`);
+    const promises = [];
     for (let i = 0; i < outputFolders.length; i += 1) {
-      await fs.ensureDir(`${defaultOptions.output}/${outputFolders[i]}`) // eslint-disable-line no-await-in-loop
-        .catch(e => console.log(`fs.emptyDir: ${e.message}`)); // eslint-disable-line no-console
+      promises.push(fs.ensureDir(`${defaultOptions.output}/${outputFolders[i]}`));
     }
+    await Promise.all(promises);
   } catch (e) {
     console.log(`beforeAll: ${e.message}`); // eslint-disable-line no-console
   }
@@ -247,6 +247,7 @@ describe('PDF Aggregator', () => {
           output,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -260,6 +261,7 @@ describe('PDF Aggregator', () => {
           output,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -274,6 +276,7 @@ describe('PDF Aggregator', () => {
           level: 1,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -289,6 +292,7 @@ describe('PDF Aggregator', () => {
           depth: 1,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -305,6 +309,7 @@ describe('PDF Aggregator', () => {
           subtitle: 'Author: xxx%ligne%Version: yyy',
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -322,6 +327,7 @@ describe('PDF Aggregator', () => {
           subtitle: '',
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -336,6 +342,7 @@ describe('PDF Aggregator', () => {
           documentOutline: true,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -350,6 +357,7 @@ describe('PDF Aggregator', () => {
           changelog: true,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -364,6 +372,7 @@ describe('PDF Aggregator', () => {
           pageNumbers: true,
         },
         jest.fn(),
+        true,
       );
       const result = await snapshotPdfFiles(output);
       expect(result).toMatchSnapshot();
@@ -378,6 +387,7 @@ describe('PDF Aggregator', () => {
           toc: true,
         },
         jest.fn(),
+        true,
       );
       // const result = await snapshotPdfFiles(output);
       // expect(result).toMatchSnapshot();
