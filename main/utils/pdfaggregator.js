@@ -84,11 +84,14 @@ const stripEmptyFolders = (tree) => {
   return strippedTree;
 };
 
-const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
+const makeEmptyPdf = async (folder, isTest = false) => new Promise(async (resolve, reject) => {
   const doc = new pdf.Document({ font: Helvetica });
+  if (isTest) {
+    doc.info.id = '__MOCKED_ID__';
+    doc.info.producer = '__MOCKED_PRODUCER__';
+    doc.info.creationDate = new Date(0, 0, 0, 0, 0, 0, 0);
+  }
   doc.text();
-  doc.info.id = '_blank';
-  doc.info.producer = 'pdf-aggregator: _blank template';
   const write = fs.createWriteStream(`${folder}/_blank.pdf`);
   doc.pipe(write);
   await doc.end()
@@ -121,12 +124,12 @@ const fillPlaceholders = (field, inputFolder, isoDate) => {
   return result;
 };
 
-const aggregate = async (data, send) => {
+const aggregate = async (data, send, isTest = false) => {
   try {
     // Prepare the empty template
     let pdfEmpty;
     await stepAsync('Création du modèle de page vierge', async () => {
-      await makeEmptyPdf(data.output)
+      await makeEmptyPdf(data.output, isTest)
         .catch(e => console.log(`makeEmptyPdf: ${e.message}`)); // eslint-disable-line no-console
       const empty = await fs.readFile(`${data.output}/_blank.pdf`)
         .catch(e => console.log(`aggregate empty > fs.readFile: ${e.message}`)); // eslint-disable-line no-console
@@ -147,7 +150,9 @@ const aggregate = async (data, send) => {
     let foldersToAggregate;
     step(
       'Récupération des dossiers à fusionner',
-      () => { foldersToAggregate = getFoldersToAggregate(tree, data); }, send, true,
+      () => { foldersToAggregate = getFoldersToAggregate(tree, data); },
+      send,
+      true,
     );
 
     // Process each folder that will be aggregated
@@ -162,13 +167,10 @@ const aggregate = async (data, send) => {
 
       if (subTree.length !== 0) {
         const doc = new pdf.Document({ font: Helvetica, fontSize: 11 });
-
-        // Page numbers
-        if (data.pageNumbers) {
-          step('Numérotation des pages', () => {
-            const footer = doc.footer();
-            footer.pageNumber((curr, total) => `${curr} / ${total}`, { textAlign: 'center' });
-          }, send);
+        if (isTest) {
+          doc.info.id = '__MOCKED_ID__';
+          doc.info.producer = '__MOCKED_PRODUCER__';
+          doc.info.creationDate = new Date(0, 0, 0, 0, 0, 0, 0);
         }
 
         // Cover page
@@ -199,8 +201,48 @@ const aggregate = async (data, send) => {
           }, send);
         }
 
+        // Page numbers
+        if (data.pageNumbers) {
+          step('Numérotation des pages', () => {
+            const footer = doc.footer();
+            footer.pageNumber(
+              (curr, total) => (`${curr} / ${total}`),
+              { textAlign: 'center' },
+            );
+          }, send);
+        }
+
         // Generate the table of content (if asked: don't forget to add the bookmark)
-        if (data.toc) step('Génération de la table des matières', () => true, send);
+        if (data.toc) {
+          step('Génération de la table des matières', () => {
+            if (data.cover) doc.pageBreak();
+            doc.text();
+            doc.destination('%changelog%');
+            if (data.documentOutline) doc.outline('Journal des modifications', '%changelog%');
+            doc.text('Table des matières\n\n', {
+              font: HelveticaBold,
+              fontSize: 18,
+            });
+            const table = doc.table({
+              widths: [null, 3 * pdf.cm],
+              borderHorizontalWidths: i => ((i < 2) ? 1 : 0.1),
+              padding: 5,
+            });
+            const header = table.header({
+              font: HelveticaBold,
+              marginTop: 5,
+              backgroundColor: '0x666666',
+              color: '0xffffff',
+            });
+            header.cell('Document');
+            header.cell('Page', { textAlign: 'right' });
+            const addRow = (name, destination, page) => {
+              const row = table.row();
+              row.cell().text(name, { goTo: destination });
+              row.cell().text(page, { goTo: destination, textAlign: 'right' });
+            };
+          }, send);
+        }
 
         // Changelog
         if (data.changelog) {
@@ -279,6 +321,11 @@ const aggregate = async (data, send) => {
               }
               for (let j = 2; j <= pdfFile.pageCount; j += 1) {
                 const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
+                if (isTest) {
+                  otherPage.info.id = '__MOCKED_ID__';
+                  otherPage.info.producer = '__MOCKED_PRODUCER__';
+                  otherPage.info.creationDate = new Date(0, 0, 0, 0, 0, 0, 0);
+                }
                 otherPage.addPageOf(j, pdfFile);
                 const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
                 const extOtherPage = new pdf.ExternalDocument(otherPageDoc);

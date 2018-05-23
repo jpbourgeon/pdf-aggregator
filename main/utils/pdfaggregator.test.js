@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 const resolvePath = require('app-root-path').resolve;
-const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles').hash;
-const encode = require('./__testutils__/snapshotpdffiles').encode;
+const snapshotPdfFiles = require('../../testutils/snapshotpdffiles');
 const PdfAggregator = require('./pdfaggregator');
 
 jest.setTimeout(10000); // Give some slack to the filesystem operations
@@ -232,164 +231,170 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('Tests that write to the output folder', () => {
-    describe('the async makeEmptyPdf function', () => {
-      it('should make an empty pdf document to use as a template', async () => {
-        const output = `${defaultOptions.output}/makeEmptyPdf`;
-        expect.assertions(1);
-        await PdfAggregator.makeEmptyPdf(output);
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+  describe('the async makeEmptyPdf function', () => {
+    it('should make an empty pdf document to use as a template', async () => {
+      const output = `${defaultOptions.output}/makeEmptyPdf`;
+      expect.assertions(1);
+      await PdfAggregator.makeEmptyPdf(output, true);
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
+  });
+
+  describe('the async aggregate function', () => {
+    it('should match an empty snapshot on an empty folder', async () => {
+      const output = `${defaultOptions.output}/merge01`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          input: `${defaultOptions.input}/Empty_folder`,
+          output,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
     });
 
-    describe('the async aggregate function', () => {
-      it('should match an empty snapshot on an empty folder', async () => {
-        const output = `${defaultOptions.output}/merge01`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            input: `${defaultOptions.input}/Empty_folder`,
-            output,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot on the root folder with unlimited depth', async () => {
+      const output = `${defaultOptions.output}/merge02`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot on the root folder with unlimited depth', async () => {
-        const output = `${defaultOptions.output}/merge02`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot on level 1 folders with unlimited depth', async () => {
+      const output = `${defaultOptions.output}/merge03`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          level: 1,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot on level 1 folders with unlimited depth', async () => {
-        const output = `${defaultOptions.output}/merge03`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            level: 1,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot on level 1 folders with depth 1', async () => {
+      const output = `${defaultOptions.output}/merge04`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          level: 1,
+          depth: 1,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot on level 1 folders with depth 1', async () => {
-        const output = `${defaultOptions.output}/merge04`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            level: 1,
-            depth: 1,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot with a full cover page', async () => {
+      const output = `${defaultOptions.output}/cover01`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          cover: true,
+          title: 'Title: %dossiersource%',
+          subtitle: 'Author: xxx%ligne%Version: yyy',
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot with a full cover page', async () => {
-        const output = `${defaultOptions.output}/cover01`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            cover: true,
-            title: 'Title: %dossiersource%',
-            subtitle: 'Author: xxx%ligne%Version: yyy',
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot with a cover page with empty logo, title and subtitle', async () => {
+      const output = `${defaultOptions.output}/cover02`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          cover: true,
+          logo: '',
+          title: '',
+          subtitle: '',
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot with a cover page with empty logo, title and subtitle', async () => {
-        const output = `${defaultOptions.output}/cover02`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            cover: true,
-            logo: '',
-            title: '',
-            subtitle: '',
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot with a document outline', async () => {
+      const output = `${defaultOptions.output}/outline`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          documentOutline: true,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot with a document outline', async () => {
-        const output = `${defaultOptions.output}/outline`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            documentOutline: true,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot with a changelog', async () => {
+      const output = `${defaultOptions.output}/changelog`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          changelog: true,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it('should match the snapshot with a changelog', async () => {
-        const output = `${defaultOptions.output}/changelog`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            changelog: true,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        expect(result).toMatchSnapshot();
-      });
+    it('should match the snapshot with page numbers', async () => {
+      const output = `${defaultOptions.output}/pageNumbers`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          pageNumbers: true,
+        },
+        jest.fn(),
+        true,
+      );
+      const result = await snapshotPdfFiles(output);
+      expect(result).toMatchSnapshot();
+    });
 
-      it.only('should match the snapshot with page numbers', async () => {
-        const output = `${defaultOptions.output}/pageNumbers`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            pageNumbers: true,
-          },
-          jest.fn(),
-        );
-        const result = await snapshotPdfFiles(output);
-        const encRes = await encode(output);
-        expect(result).toMatchSnapshot();
-        expect(encRes).toMatchSnapshot();
-      });
-
-      // it('should match the snapshot with a table of content', async () => {
-      //   const output = `${defaultOptions.output}/toc`;
-      //   await PdfAggregator.aggregate(
-      //     {
-      //       ...defaultOptions,
-      //       output,
-      //       toc: true,
-      //     },
-      //     jest.fn(),
-      //   );
+    it('should match the snapshot with a table of content', async () => {
+      const output = `${defaultOptions.output}/toc`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          toc: true,
+        },
+        jest.fn(),
+        true,
+      );
       // const result = await snapshotPdfFiles(output);
       // expect(result).toMatchSnapshot();
-      // });
     });
   });
 });
