@@ -1,7 +1,7 @@
 const { resolve } = require('app-root-path');
 const { encode, hash } = require('./snapshotpdffiles');
 
-const testbed = resolve('main/utils/__testbed__/snapshotpdffiles');
+const testbed = resolve('testutils/__testbed__/snapshotpdffiles');
 
 describe('The test utility function encode', () => {
   it('should return an empty array from a folder without pdf files', async () => {
