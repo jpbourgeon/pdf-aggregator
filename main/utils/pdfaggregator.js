@@ -91,6 +91,7 @@ const makeEmptyPdf = async (folder, isTest = false) => new Promise(async (resolv
     doc.info.id = '__MOCKED_ID__';
     doc.info.producer = '__MOCKED_PRODUCER__';
     doc.info.creationDate = mockedDate;
+    console.log(mockedDate);
   }
   doc.text();
   const write = fs.createWriteStream(`${folder}/_blank.pdf`);
