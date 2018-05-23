@@ -55,6 +55,12 @@ beforeAll(async (done) => {
   done();
 });
 
+// afterAll(async (done) => {
+//   await fs.emptyDir(defaultOptions.output)
+//     .catch(e => console.log(`afterAll fs.emptyDir: ${e.message}`)); // eslint-disable-line no-console
+//   done();
+// });
+
 describe('PDF Aggregator', () => {
   describe('the async crawlFolder function', () => {
     it('should return a valid snapshot', async () => {
@@ -232,7 +238,7 @@ describe('PDF Aggregator', () => {
   });
 
   describe('the async makeEmptyPdf function', () => {
-    it('should make an empty pdf document to use as a template', async () => {
+    it.only('should make an empty pdf document to use as a template', async () => {
       const output = `${defaultOptions.output}/makeEmptyPdf`;
       expect.assertions(1);
       await PdfAggregator.makeEmptyPdf(output, true);
