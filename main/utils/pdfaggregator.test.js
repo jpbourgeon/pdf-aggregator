@@ -374,19 +374,19 @@ describe('PDF Aggregator', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('should match the snapshot with a table of content', async () => {
-        const output = `${defaultOptions.output}/toc`;
-        await PdfAggregator.aggregate(
-          {
-            ...defaultOptions,
-            output,
-            toc: true,
-          },
-          jest.fn(),
-        );
-        // const result = await snapshotPdfFiles(output);
-        // expect(result).toMatchSnapshot();
-      });
+      // it('should match the snapshot with a table of content', async () => {
+      //   const output = `${defaultOptions.output}/toc`;
+      //   await PdfAggregator.aggregate(
+      //     {
+      //       ...defaultOptions,
+      //       output,
+      //       toc: true,
+      //     },
+      //     jest.fn(),
+      //   );
+      // const result = await snapshotPdfFiles(output);
+      // expect(result).toMatchSnapshot();
+      // });
     });
   });
 });
