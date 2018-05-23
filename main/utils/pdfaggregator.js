@@ -5,6 +5,7 @@ const HelveticaBold = require('pdfjs/font/Helvetica-Bold');
 const { getTree } = require('./gettree');
 
 const formattedDate = new Date().toISOString().substr(0, 10);
+const mockedDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
 
 const setCurrentTask = (send, label) => {
   send('set-current-task', label);
@@ -89,7 +90,7 @@ const makeEmptyPdf = async (folder, isTest = false) => new Promise(async (resolv
   if (isTest) {
     doc.info.id = '__MOCKED_ID__';
     doc.info.producer = '__MOCKED_PRODUCER__';
-    doc.info.creationDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+    doc.info.creationDate = mockedDate;
   }
   doc.text();
   const write = fs.createWriteStream(`${folder}/_blank.pdf`);
@@ -170,7 +171,8 @@ const aggregate = async (data, send, isTest = false) => {
         if (isTest) {
           doc.info.id = '__MOCKED_ID__';
           doc.info.producer = '__MOCKED_PRODUCER__';
-          doc.info.creationDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+          doc.info.creationDate = mockedDate;
+          console.log(doc.info.creationDate);
         }
 
         // Cover page
@@ -324,7 +326,7 @@ const aggregate = async (data, send, isTest = false) => {
                 if (isTest) {
                   otherPage.info.id = '__MOCKED_ID__';
                   otherPage.info.producer = '__MOCKED_PRODUCER__';
-                  otherPage.info.creationDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+                  otherPage.info.creationDate = mockedDate;
                 }
                 otherPage.addPageOf(j, pdfFile);
                 const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop

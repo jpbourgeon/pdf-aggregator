@@ -37,22 +37,19 @@ const outputFolders = [
   'toc',
 ];
 
-const resetOutputFolders = async () => {
+const resetOutputFolders = () => {
   // discard the output folders content
   try {
-    const promises = [];
     for (let i = 0; i < outputFolders.length; i += 1) {
-      promises.push(fs.emptyDir(`${defaultOptions.output}/${outputFolders[i]}`));
+      fs.emptyDirSync(`${defaultOptions.output}/${outputFolders[i]}`);
     }
   } catch (e) {
-    console.log(`fs.emptyDir: ${e.message}`); // eslint-disable-line no-console
+    console.log(`fs.emptyDirSync: ${e.message}`); // eslint-disable-line no-console
   }
 };
 
-beforeAll(async (done) => {
-  await resetOutputFolders()
-    .catch(e => console.log(`beforeAll resetOutputFolders: ${e.message}`)); // eslint-disable-line no-console
-  done();
+beforeAll(() => {
+  resetOutputFolders();
 });
 
 describe('PDF Aggregator', () => {
