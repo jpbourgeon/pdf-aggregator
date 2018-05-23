@@ -29,7 +29,7 @@ describe('The test utility function encode', () => {
   });
 });
 
-describe.only('The test utility function hash', () => {
+describe('The test utility function hash', () => {
   it('should return an empty array from a folder without pdf files', async () => {
     expect.assertions(2);
     const folderSnapshot = await hash(testbed)
