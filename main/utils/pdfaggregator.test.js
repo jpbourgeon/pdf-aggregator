@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const resolvePath = require('app-root-path').resolve;
 const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles').hash;
+const encode = require('./__testutils__/snapshotpdffiles').encode;
 const PdfAggregator = require('./pdfaggregator');
 
 jest.setTimeout(10000); // Give some slack to the filesystem operations
@@ -360,7 +361,7 @@ describe('PDF Aggregator', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('should match the snapshot with page numbers', async () => {
+      it.only('should match the snapshot with page numbers', async () => {
         const output = `${defaultOptions.output}/pageNumbers`;
         await PdfAggregator.aggregate(
           {
@@ -371,7 +372,9 @@ describe('PDF Aggregator', () => {
           jest.fn(),
         );
         const result = await snapshotPdfFiles(output);
+        const encRes = await encode(output);
         expect(result).toMatchSnapshot();
+        expect(encRes).toMatchSnapshot();
       });
 
       // it('should match the snapshot with a table of content', async () => {
