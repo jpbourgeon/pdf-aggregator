@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const resolvePath = require('app-root-path').resolve;
-const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles');
+const snapshotPdfFiles = require('./__testutils__/snapshotpdffiles').hash;
 const PdfAggregator = require('./pdfaggregator');
 
 jest.setTimeout(10000); // Give some slack to the filesystem operations
