@@ -39,8 +39,10 @@ const outputFolders = [
 
 beforeAll(async (done) => {
   try {
+    await fs.emptyDir(`${defaultOptions.output}`)
+      .catch(e => console.log(`fs.emptyDir: ${e.message}`)); // eslint-disable-line no-console
     for (let i = 0; i < outputFolders.length; i += 1) {
-      await fs.emptyDir(`${defaultOptions.output}/${outputFolders[i]}`) // eslint-disable-line no-await-in-loop
+      await fs.ensureDir(`${defaultOptions.output}/${outputFolders[i]}`) // eslint-disable-line no-await-in-loop
         .catch(e => console.log(`fs.emptyDir: ${e.message}`)); // eslint-disable-line no-console
     }
   } catch (e) {
