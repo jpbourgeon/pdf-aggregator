@@ -55,12 +55,6 @@ beforeAll(async (done) => {
   done();
 });
 
-// afterAll(async (done) => {
-//   await fs.emptyDir(defaultOptions.output)
-//     .catch(e => console.log(`afterAll fs.emptyDir: ${e.message}`)); // eslint-disable-line no-console
-//   done();
-// });
-
 describe('PDF Aggregator', () => {
   describe('the async crawlFolder function', () => {
     it('should return a valid snapshot', async () => {

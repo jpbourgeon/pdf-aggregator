@@ -89,9 +89,8 @@ const makeEmptyPdf = async (folder, isTest = false) => new Promise(async (resolv
   if (isTest) {
     doc.info.id = '__MOCKED_ID__';
     doc.info.producer = '__MOCKED_PRODUCER__';
-    doc.info.creationDate = new Date(0, 0, 0, 0, 0, 0, 0);
+    doc.info.creationDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
   }
-  console.log(doc.info.creationDate);
   doc.text();
   const write = fs.createWriteStream(`${folder}/_blank.pdf`);
   doc.pipe(write);
@@ -171,7 +170,7 @@ const aggregate = async (data, send, isTest = false) => {
         if (isTest) {
           doc.info.id = '__MOCKED_ID__';
           doc.info.producer = '__MOCKED_PRODUCER__';
-          doc.info.creationDate = new Date(0, 0, 0, 0, 0, 0, 0);
+          doc.info.creationDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
         }
 
         // Cover page
@@ -237,11 +236,11 @@ const aggregate = async (data, send, isTest = false) => {
             });
             header.cell('Document');
             header.cell('Page', { textAlign: 'right' });
-            const addRow = (name, destination, page) => {
-              const row = table.row();
-              row.cell().text(name, { goTo: destination });
-              row.cell().text(page, { goTo: destination, textAlign: 'right' });
-            };
+            // const addRow = (name, destination, page) => {
+            //   const row = table.row();
+            //   row.cell().text(name, { goTo: destination });
+            //   row.cell().text(page, { goTo: destination, textAlign: 'right' });
+            // };
           }, send);
         }
 
@@ -325,7 +324,7 @@ const aggregate = async (data, send, isTest = false) => {
                 if (isTest) {
                   otherPage.info.id = '__MOCKED_ID__';
                   otherPage.info.producer = '__MOCKED_PRODUCER__';
-                  otherPage.info.creationDate = new Date(0, 0, 0, 0, 0, 0, 0);
+                  otherPage.info.creationDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
                 }
                 otherPage.addPageOf(j, pdfFile);
                 const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
