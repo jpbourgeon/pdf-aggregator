@@ -32,7 +32,8 @@
       "**/__testbed__": true,
       "**/__snapshots__": true,
       "**/__mocks__": true,
-      "**/test-results": true
+      "**/test-results": true,
+      "db.json": true
     },
     "workbench.activityBar.visible": false,
     "workbench.colorTheme": "Cobalt2",
