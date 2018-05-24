@@ -477,7 +477,7 @@ describe('PDF Aggregator', () => {
       expect(result).toMatchSnapshot();
     });
 
-    it.only('should match the snapshot with every available formatting options activated', async () => {
+    it('should match the snapshot with every available formatting options activated', async () => {
       const output = `${defaultOptions.output}/allIn`;
       await PdfAggregator.aggregate(
         {
