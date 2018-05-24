@@ -4,6 +4,9 @@ const Helvetica = require('pdfjs/font/Helvetica');
 const HelveticaBold = require('pdfjs/font/Helvetica-Bold');
 const { getTree } = require('./gettree');
 
+let currentDate = new Date();
+const mockedDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+
 const setCurrentTask = (send, label) => {
   send('set-current-task', label);
 };
@@ -61,9 +64,11 @@ const getFoldersToAggregate = (tree = [], data) => {
   return folders;
 };
 
-const getSubTree = (tree, folder, maxDepth = Infinity) => {
+const getSubTree = (tree, folder, maxDepth = Infinity, mockDate = false) => {
   const files = tree.reduce((result, item) => {
-    if (item.fullPath.startsWith(folder) && item.depth <= maxDepth) result.push(item);
+    const element = item;
+    if (mockDate) element.lastModified = mockedDate;
+    if (item.fullPath.startsWith(folder) && item.depth <= maxDepth) result.push(element);
     return result;
   }, []);
   if (files.length === 0) throw new Error('There is no file to aggregate');
@@ -82,17 +87,6 @@ const stripEmptyFolders = (tree) => {
   return strippedTree;
 };
 
-const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
-  const doc = new pdf.Document({ font: Helvetica });
-  doc.text();
-  const write = fs.createWriteStream(`${folder}/_blank.pdf`);
-  doc.pipe(write);
-  await doc.end()
-    .catch(e => console.log(`makeEmptyPdf > doc.end: ${e.message}`)); // eslint-disable-line no-console
-  write.on('finish', resolve);
-  write.on('error', reject);
-});
-
 const deduplicatePdfPath = async (path, pathExistsDI = fs.pathExists) => {
   const file = path.substring(0, path.length - 4);
   let i = 0;
@@ -106,19 +100,48 @@ const deduplicatePdfPath = async (path, pathExistsDI = fs.pathExists) => {
   return result;
 };
 
-const fillPlaceholders = (field, inputFolder, isoDate) => {
+const fillPlaceholders = (field, inputFolder, when) => {
   const result = field
     .replace('%dossiersource%', inputFolder.split('/').pop())
     .replace('%inputfolder%', inputFolder.split('/').pop())
-    .replace('%dateiso%', isoDate)
-    .replace('%isodate%', isoDate)
+    .replace('%dateiso%', when.toISOString().substr(0, 10))
+    .replace('%isodate%', when.toISOString().substr(0, 10))
     .replace('%ligne%', '\n')
     .replace('%line%', '\n');
   return result;
 };
 
+const calculatePages = (itemsNumber, itemsOnFirstPage = 29, itemsOnOtherPages = 31) => {
+  if (itemsNumber < 0 || Number.isNaN(parseInt(itemsNumber, 10))) throw new Error('Invalid itemsNumber');
+  if (itemsNumber === 0 || itemsNumber <= itemsOnFirstPage) return 1;
+  const div = Math.trunc((itemsNumber - itemsOnFirstPage) / 31);
+  let rem = (itemsNumber - itemsOnFirstPage) % itemsOnOtherPages;
+  if (rem > 0) rem = 1;
+  return (1 + div + rem);
+};
+
+const countPages = async (fullPath) => {
+  const file = await fs.readFile(fullPath)
+    // eslint-disable-next-line no-console
+    .catch(e => console.log(`count Pages > fs.readFile: ${e.message}`));
+  const pdfFile = new pdf.ExternalDocument(file);
+  return pdfFile.pageCount;
+};
+
+const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
+  const doc = new pdf.Document({ font: Helvetica });
+  doc.text();
+  const write = fs.createWriteStream(`${folder}/_blank.pdf`);
+  doc.pipe(write);
+  await doc.end()
+    .catch(e => console.log(`makeEmptyPdf > doc.end: ${e.message}`)); // eslint-disable-line no-console
+  write.on('finish', resolve);
+  write.on('error', reject);
+});
+
 const aggregate = async (data, send, isTest = false) => {
   try {
+    if (isTest) currentDate = mockedDate;
     // Prepare the empty template
     let pdfEmpty;
     await stepAsync('Création du modèle de page vierge', async () => {
@@ -150,18 +173,13 @@ const aggregate = async (data, send, isTest = false) => {
 
     // Process each folder that will be aggregated
     await Promise.all(foldersToAggregate.map(async (folder) => {
-      // compute a date
-      let formattedDate = new Date().toISOString().substr(0, 10);
-      if (isTest) formattedDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0)).toISOString().substr(0, 10);
-
       // Prepare the input folder
       let subTree;
       step(`Préparation du dossier source : ${folder}`, () => {
         const maxDepth = (data.depth <= 0) ? Infinity : data.level + data.depth;
-        subTree = getSubTree(tree, folder, maxDepth);
+        subTree = getSubTree(tree, folder, maxDepth, isTest);
         subTree = stripEmptyFolders(subTree);
       }, send);
-      if (isTest) subTree = subTree.map(item => ({ ...item, lastModified: new Date(Date.UTC(0, 0, 0, 0, 0, 0)) }), []);
 
       if (subTree.length !== 0) {
         const doc = new pdf.Document({ font: Helvetica, fontSize: 11 });
@@ -181,12 +199,12 @@ const aggregate = async (data, send, isTest = false) => {
                 align: 'center',
               });
             }
-            doc.text(fillPlaceholders(data.title, data.input, formattedDate), {
+            doc.text(fillPlaceholders(data.title, data.input, currentDate), {
               font: HelveticaBold,
               fontSize: 48,
               textAlign: 'center',
             });
-            doc.text(fillPlaceholders(data.subtitle, data.input, formattedDate), {
+            doc.text(fillPlaceholders(data.subtitle, data.input, currentDate), {
               font: HelveticaBold,
               fontSize: 24,
               textAlign: 'center',
@@ -207,11 +225,11 @@ const aggregate = async (data, send, isTest = false) => {
 
         // Generate the table of content (if asked: don't forget to add the bookmark)
         if (data.toc) {
-          step('Génération de la table des matières', () => {
+          await stepAsync('Génération de la table des matières', async () => {
             if (data.cover) doc.pageBreak();
             doc.text();
-            doc.destination('%changelog%');
-            if (data.documentOutline) doc.outline('Journal des modifications', '%changelog%');
+            doc.destination('%toc%');
+            if (data.documentOutline) doc.outline('Table des matières', '%toc%');
             doc.text('Table des matières\n\n', {
               font: HelveticaBold,
               fontSize: 18,
@@ -227,13 +245,34 @@ const aggregate = async (data, send, isTest = false) => {
               backgroundColor: '0x666666',
               color: '0xffffff',
             });
-            header.cell('Document');
+            header.cell('Contenu');
             header.cell('Page', { textAlign: 'right' });
-            // const addRow = (name, destination, page) => {
-            //   const row = table.row();
-            //   row.cell().text(name, { goTo: destination });
-            //   row.cell().text(page, { goTo: destination, textAlign: 'right' });
-            // };
+            const addRow = (name, destination, page = '') => {
+              const row = table.row();
+              row.cell().text(name, { goTo: destination });
+              row.cell().text(page, { goTo: destination, textAlign: 'right' });
+            };
+            let pageNumber = 1;
+            if (data.cover) pageNumber += 1;
+            pageNumber += calculatePages(subTree.length);
+            if (data.changelog) {
+              addRow('Journal des modifications', '%changelog%', pageNumber.toString());
+              pageNumber += calculatePages(subTree.filter(item => (item.type === 'file')).length);
+            }
+            const foldersBuffer = [];
+            for (let i = 0; i < subTree.length; i += 1) {
+              const item = subTree[i];
+              if (item.type === 'directory') {
+                foldersBuffer.push(item);
+              } else {
+                while (foldersBuffer.length !== 0) {
+                  const folderItem = foldersBuffer.pop();
+                  addRow(folderItem.name, item.name, pageNumber.toString());
+                }
+                addRow(item.name.substr(0, item.name.length - 4), item.name, pageNumber.toString());
+                pageNumber += await countPages(item.fullPath); // eslint-disable-line no-await-in-loop
+              }
+            }
           }, send);
         }
 
@@ -328,7 +367,7 @@ const aggregate = async (data, send, isTest = false) => {
         }
 
         // save the file into the output folder
-        const filename = fillPlaceholders(data.filename, data.input, formattedDate);
+        const filename = fillPlaceholders(data.filename, data.input, currentDate);
         await stepAsync(
           `Enregistrement du fichier : ${filename}.pdf`,
           () => new Promise(async (resolve, reject) => {
@@ -367,8 +406,10 @@ module.exports = {
   getFoldersToAggregate,
   getSubTree,
   stripEmptyFolders,
-  makeEmptyPdf,
   deduplicatePdfPath,
   fillPlaceholders,
+  calculatePages,
+  countPages,
+  makeEmptyPdf,
   aggregate,
 };

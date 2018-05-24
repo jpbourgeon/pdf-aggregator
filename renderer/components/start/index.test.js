@@ -29,9 +29,3 @@ describe('The renderView component of the start page', () => {
     expect(result).toMatchSnapshot();
   });
 });
-
-describe('todo', () => {
-  it('should have a page number option');
-  it('should have a toc option');
-  it('should be localized (react-i18n + i18next-electron-language-detector)');
-});

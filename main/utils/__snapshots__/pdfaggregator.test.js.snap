@@ -41,7 +41,19 @@ Array [
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a full cover page 1`] = `
 Array [
-  "IWHNJ9la6Bn+pTzgx39/uDKl1+I=",
+  "Jf3KuaeNjSxizNQFcXyO+SRLjf4=",
+]
+`;
+
+exports[`PDF Aggregator the async aggregate function should match the snapshot with a table of content 1`] = `
+Array [
+  "VpgOU40JjMpb0TlfDb8+SuV7Zc0=",
+]
+`;
+
+exports[`PDF Aggregator the async aggregate function should match the snapshot with every available formatting options activated 1`] = `
+Array [
+  "7uNb9ZdKpIi/O13wjIfM015bWr0=",
 ]
 `;
 

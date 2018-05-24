@@ -17,7 +17,8 @@ describe('Given the result store ContextProvider component', () => {
     it('should call the method setCurrentTask', async () => {
       expect.assertions(1);
       instance.setCurrentTask = jest.fn();
-      await instance.componentDidMount();
+      await instance.componentDidMount()
+        .catch(e => console.log(`componentDidMount: ${e.message}`)); // eslint-disable-line no-console
       expect(instance.setCurrentTask).toHaveBeenCalled();
     });
 
@@ -31,7 +32,8 @@ describe('Given the result store ContextProvider component', () => {
     it('should call the method addLogEntry', async () => {
       expect.assertions(1);
       instance.addLogEntry = jest.fn();
-      await instance.componentDidMount();
+      await instance.componentDidMount()
+        .catch(e => console.log(`componentDidMount: ${e.message}`)); // eslint-disable-line no-console
       expect(instance.addLogEntry).toHaveBeenCalled();
     });
   });
@@ -65,7 +67,8 @@ describe('Given the result store ContextProvider component', () => {
     it('should initialise the store with the data provided', async () => {
       expect.assertions(1);
       const data = { input: 'hello world' };
-      await instance.initStore(() => data);
+      await instance.initStore(() => data)
+        .catch(e => console.log(`instance.initStore: ${e.message}`)); // eslint-disable-line no-console
       expect(instance.state.data).toEqual(data);
     });
   });
