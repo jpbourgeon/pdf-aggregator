@@ -43,3 +43,6 @@ jobs:
       - run: npm test
       # push lockfile to repo
       - run: greenkeeper-lockfile-upload
+      # push lockfile to repo
+      - store_test_results:
+          path: test-results/jest
