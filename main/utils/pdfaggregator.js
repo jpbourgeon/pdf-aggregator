@@ -209,6 +209,7 @@ const aggregate = async (data, send, isTest = false) => {
               fontSize: 24,
               textAlign: 'center',
             });
+            if (!data.pageNumbers && (data.toc || data.changelog)) doc.pageBreak();
           }, send);
         }
 
@@ -226,7 +227,6 @@ const aggregate = async (data, send, isTest = false) => {
         // Generate the table of content (if asked: don't forget to add the bookmark)
         if (data.toc) {
           await stepAsync('Génération de la table des matières', async () => {
-            if (data.cover) doc.pageBreak();
             doc.text();
             doc.destination('%toc%');
             if (data.documentOutline) doc.outline('Table des matières', '%toc%');
@@ -273,13 +273,13 @@ const aggregate = async (data, send, isTest = false) => {
                 pageNumber += await countPages(item.fullPath); // eslint-disable-line no-await-in-loop
               }
             }
+            if (data.changelog) doc.pageBreak();
           }, send);
         }
 
         // Changelog
         if (data.changelog) {
           step('Génération du journal des modifications', () => {
-            if (data.cover || data.toc) doc.pageBreak();
             doc.text();
             doc.destination('%changelog%');
             if (data.documentOutline) doc.outline('Journal des modifications', '%changelog%');

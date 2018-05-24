@@ -477,17 +477,17 @@ describe('PDF Aggregator', () => {
       expect(result).toMatchSnapshot();
     });
 
-    it('should match the snapshot with every available formatting options activated', async () => {
+    it.only('should match the snapshot with every available formatting options activated', async () => {
       const output = `${defaultOptions.output}/allIn`;
       await PdfAggregator.aggregate(
         {
           ...defaultOptions,
           output,
           cover: true,
+          pageNumbers: true,
           toc: true,
           changelog: true,
           documentOutline: true,
-          pageNumbers: true,
         },
         jest.fn(),
         true,
