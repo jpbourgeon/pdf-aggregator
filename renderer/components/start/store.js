@@ -75,7 +75,7 @@ class ContextProvider extends React.Component {
       this.currentWindow,
       this.foldersOptions,
     );
-    const data = { ...this.state.data, [field]: path };
+    const data = { ...this.state.data, [field]: path.replace(/\\/g, '/') };
     this.setState({ data });
   }
 
@@ -84,7 +84,7 @@ class ContextProvider extends React.Component {
       this.currentWindow,
       this.imagesOptions,
     );
-    const data = { ...this.state.data, logo: path };
+    const data = { ...this.state.data, logo: path.replace(/\\/g, '/') };
     this.setState({ data });
   }
 

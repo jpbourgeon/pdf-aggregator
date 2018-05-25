@@ -97,6 +97,10 @@ describe('Given the start store ContextProvider component', () => {
   });
 
   describe('the method setFolder', () => {
+    beforeEach(() => {
+      instance.openDialog = jest.fn().mockReturnValueOnce('\\path\\');
+    });
+
     it('should open the native folder picker', () => {
       instance.setFolder('input');
       expect(instance.openDialog).toHaveBeenCalledWith(
@@ -106,13 +110,16 @@ describe('Given the start store ContextProvider component', () => {
     });
 
     it('should save the selected path to the provided field of the state\'s data property', () => {
-      instance.openDialog = jest.fn().mockReturnValueOnce('/path/');
       instance.setFolder('input');
       expect(instance.state.data.input).toBe('/path/');
     });
   });
 
   describe('the method setLogo', () => {
+    beforeEach(() => {
+      instance.openDialog = jest.fn().mockReturnValueOnce('/path/to/image.jpg');
+    });
+
     it('should open the native file picker', () => {
       instance.setLogo();
       expect(instance.openDialog).toHaveBeenCalledWith(
@@ -122,7 +129,6 @@ describe('Given the start store ContextProvider component', () => {
     });
 
     it('should save the selected path to the provided field of the state\'s data property', () => {
-      instance.openDialog = jest.fn().mockReturnValueOnce('/path/to/image.jpg');
       instance.setLogo();
       expect(instance.state.data.logo).toBe('/path/to/image.jpg');
     });
