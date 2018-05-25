@@ -9,12 +9,21 @@ const onData = (entry, arr) => {
   } else {
     depth = parentDir.split('/').length + 1;
   }
+  let type;
+  if (entry.stat.isFile()) type = 'file';
+  if (entry.stat.isDirectory()) type = 'directory';
+  if (entry.stat.isBlockDevice()) type = 'blockDevice';
+  if (entry.stat.isCharacterDevice()) type = 'characterDevice';
+  if (entry.stat.isSymbolicLink()) type = 'symbolicLink';
+  if (entry.stat.isFIFO()) type = 'FIFO';
+  if (entry.stat.isSocket()) type = 'socket';
   arr.push({
     depth,
-    parentDir,
-    name: entry.name,
     fullPath,
     lastModified: entry.stat.mtime,
+    name: entry.name,
+    parentDir,
+    type,
   });
 };
 
@@ -22,6 +31,11 @@ const onEnd = (err, arr, resolve, reject) => {
   if (err) {
     reject(err);
   } else {
+    arr.sort((a, b) => {
+      if (a.fullPath < b.fullPath) return -1;
+      if (a.fullPath > b.fullPath) return 1;
+      return 0;
+    });
     resolve(arr);
   }
 };

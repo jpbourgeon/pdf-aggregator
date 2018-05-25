@@ -56,7 +56,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="level"
           shrink={true}
         >
-          Agréger au niveau
+          Niveau (0 = racine)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           className={[MockFunction]}
@@ -73,14 +73,14 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="depth"
           shrink={true}
         >
-          Profondeur (-1 = illimité)
+          Profondeur (0 = illimitée)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           className={[MockFunction]}
           id="depth"
           onChange={[Function]}
           type="number"
-          value={-1}
+          value={0}
         />
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
@@ -129,7 +129,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
         />
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
-        className={undefined}
+        className={[MockFunction]}
       >
         <WithStyles(FormControlLabel)
           control={
@@ -181,7 +181,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="title"
           shrink={true}
         >
-          Titre (options : %dossiersource%, %date%, %ligne%)
+          Titre (options : %dossiersource%, %dateiso%, %ligne%)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           id="title"
@@ -199,13 +199,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="subtitle"
           shrink={true}
         >
-          Sous-titre (options : %dossiersource%, %date%, %ligne%)
+          Sous-titre (options : %dossiersource%, %dateiso%, %ligne%)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           id="subtitle"
           onChange={[Function]}
           type="text"
-          value="%date%"
+          value="%dateiso%"
         />
       </WithStyles(FormControl)>
       <br />
@@ -229,6 +229,28 @@ exports[`The renderView component of the start page should render correctly 1`] 
             />
           }
           label="Signets"
+        />
+      </WithStyles(FormControl)>
+      <WithStyles(FormControl)
+        className={undefined}
+      >
+        <WithStyles(FormControlLabel)
+          control={
+            <WithStyles(Checkbox)
+              checked={true}
+              onChange={[Function]}
+            />
+          }
+          label="Table des matières"
+        />
+        <WithStyles(FormControlLabel)
+          control={
+            <WithStyles(Checkbox)
+              checked={true}
+              onChange={[Function]}
+            />
+          }
+          label="Numérotation des pages"
         />
       </WithStyles(FormControl)>
       <div>

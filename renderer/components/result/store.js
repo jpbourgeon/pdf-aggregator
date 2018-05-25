@@ -6,12 +6,16 @@ import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
 
 let remote;
-let db;
 let openItem;
+let db;
+let aggregate;
+let send;
 if (typeof window !== 'undefined') {
   ({ remote } = electron);
   ({ openItem } = shell);
   db = remote.require('./utils/database');
+  ({ aggregate } = remote.require('./utils/pdfaggregator'));
+  ({ send } = remote.getCurrentWebContents());
 }
 
 const Context = React.createContext();
@@ -36,6 +40,8 @@ class ContextProvider extends React.Component {
     this.state = { ...this.defaultState };
     this.db = db;
     this.openItem = openItem;
+    this.aggregate = aggregate;
+    this.send = send;
 
     if (typeof window !== 'undefined') {
       ipcRenderer.on('set-current-task', (event, arg) => {
@@ -47,38 +53,44 @@ class ContextProvider extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setCurrentTask('Initialisation');
-    this.initStore(this.db.getState);
+    await this.initStore(this.db.getState);
     this.addLogEntry({
       date: new Date(),
       isError: false,
       isLast: false,
       label: 'Initialisation',
     });
-    // this.aggregatePdf(this.state.data);
+    this.aggregate(this.state.data, this.send);
   }
 
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners('set-current-task');
+    ipcRenderer.removeAllListeners('add-log-entry');
+  }
 
-  /* eslint-disable-next-line */
-  goHome(event) {
+  setCurrentTask(label) {
+    this.setState({ currentTask: label });
+  }
+
+  goHome(event) { // eslint-disable-line class-methods-use-this
     event.preventDefault();
     Router.push('/start', '/start');
   }
 
   initStore(getStateFn) {
-    const data = getStateFn();
-    if (!deepEqual(data, {})) {
-      this.setState({ data });
-    }
+    return new Promise((resolve) => {
+      const data = getStateFn();
+      if (!deepEqual(data, {})) {
+        this.setState({ data }, () => { resolve(); });
+      }
+      resolve();
+    });
   }
 
   openOutputFolder(fullPath) {
     this.openItem(fullPath);
-  }
-
-  setCurrentTask(label) {
-    this.setState({ currentTask: label });
   }
 
   addLogEntry(entry) {

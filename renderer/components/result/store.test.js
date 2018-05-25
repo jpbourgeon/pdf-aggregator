@@ -13,22 +13,27 @@ describe('Given the result store ContextProvider component', () => {
     ({ instance } = renderer.root);
   });
 
-  describe('the lifecycle method componentDidMount', () => {
-    it('should call the method setCurrentTask', () => {
+  describe('the async lifecycle method componentDidMount', () => {
+    it('should call the method setCurrentTask', async () => {
+      expect.assertions(1);
       instance.setCurrentTask = jest.fn();
-      instance.componentDidMount();
+      await instance.componentDidMount()
+        .catch(e => console.log(`componentDidMount: ${e.message}`)); // eslint-disable-line no-console
       expect(instance.setCurrentTask).toHaveBeenCalled();
     });
 
     it('should call the method initStore', () => {
+      expect.assertions(1);
       instance.initStore = jest.fn();
       instance.componentDidMount();
       expect(instance.initStore).toHaveBeenCalled();
     });
 
-    it('should call the method addLogEntry', () => {
+    it('should call the method addLogEntry', async () => {
+      expect.assertions(1);
       instance.addLogEntry = jest.fn();
-      instance.componentDidMount();
+      await instance.componentDidMount()
+        .catch(e => console.log(`componentDidMount: ${e.message}`)); // eslint-disable-line no-console
       expect(instance.addLogEntry).toHaveBeenCalled();
     });
   });
@@ -58,10 +63,12 @@ describe('Given the result store ContextProvider component', () => {
     });
   });
 
-  describe('the method initStore', () => {
-    it('should initialise the store with the data provided', () => {
+  describe('the async method initStore', () => {
+    it('should initialise the store with the data provided', async () => {
+      expect.assertions(1);
       const data = { input: 'hello world' };
-      instance.initStore(() => data);
+      await instance.initStore(() => data)
+        .catch(e => console.log(`instance.initStore: ${e.message}`)); // eslint-disable-line no-console
       expect(instance.state.data).toEqual(data);
     });
   });

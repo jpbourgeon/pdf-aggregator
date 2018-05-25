@@ -31,14 +31,18 @@ jobs:
           - v1-dependencies-
       # greenkeeper-lockfile update
       - run: sudo npm install greenkeeper-lockfile@1 -g
-      - run: sudo npm install
+      # install deps
+      - run: sudo npm install --unsafe-perm=true --allow-root
       - run: greenkeeper-lockfile-update
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
+      # run tests
       - run: npm test
       # push lockfile to repo
       - run: greenkeeper-lockfile-upload
+      # push lockfile to repo
+      - store_test_results:
+          path: test-results/jest

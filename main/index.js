@@ -9,13 +9,12 @@ const { resolve } = require('app-root-path');
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
-  await prepareNext('./renderer');
-
+  await prepareNext('./renderer')
+    .catch(e => console.log(`electron app on ready > prepareNext: ${e.message}`)); // eslint-disable-line no-console
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 650,
+    height: 750,
     minWidth: 800,
-    minHeight: 650,
   });
 
   const devPath = 'http://localhost:8000/start';
@@ -41,4 +40,3 @@ app.on('ready', async () => {
 
 // Quit the app once all windows are closed
 app.on('window-all-closed', app.quit);
-

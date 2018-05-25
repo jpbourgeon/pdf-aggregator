@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Grid from 'material-ui/Grid';
-import Typo from 'material-ui/Typography';
-import { withStyles } from 'material-ui/styles';
-import { FormControl, FormControlLabel } from 'material-ui/Form';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import Checkbox from 'material-ui/Checkbox';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import FolderOpen from 'material-ui-icons/FolderOpen';
+import Grid from '@material-ui/core/Grid';
+import Typo from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import FolderOpen from '@material-ui/icons/FolderOpen';
 import { withContextConsumer } from './store';
 
 const styles = theme => ({
@@ -21,7 +24,7 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   item: {
-    maxWidth: 800,
+    maxWidth: 750,
   },
   title: {
     marginBottom: theme.spacing.unit,
@@ -29,6 +32,11 @@ const styles = theme => ({
   formControl: {
     marginBottom: theme.spacing.unit,
     width: '100%',
+  },
+  mediumFormControl: {
+    marginBottom: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: '45%',
   },
   smallFormControl: {
     marginBottom: theme.spacing.unit,
@@ -76,7 +84,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="level" shrink>Agréger au niveau</InputLabel>
+            <InputLabel htmlFor="level" shrink>Niveau (0 = racine)</InputLabel>
             <Input
               className={classes.formControl}
               id="level"
@@ -87,7 +95,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="depth" shrink>Profondeur (-1 = illimité)</InputLabel>
+            <InputLabel htmlFor="depth" shrink>Profondeur (0 = illimitée)</InputLabel>
             <Input
               className={classes.formControl}
               id="depth"
@@ -130,7 +138,7 @@ const RenderView = (props) => {
             />
           </FormControl>
 
-          <FormControl className={classes.FormControl}>
+          <FormControl className={classes.formControl}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -173,7 +181,7 @@ const RenderView = (props) => {
           })}
           >
             <InputLabel htmlFor="title" shrink>
-              Titre (options : %dossiersource%, %date%, %ligne%)
+              Titre (options : %dossiersource%, %dateiso%, %ligne%)
             </InputLabel>
             <Input
               id="title"
@@ -189,7 +197,7 @@ const RenderView = (props) => {
           })}
           >
             <InputLabel htmlFor="subtitle" shrink>
-              Sous-titre (options : %dossiersource%, %date%, %ligne%)
+              Sous-titre (options : %dossiersource%, %dateiso%, %ligne%)
             </InputLabel>
             <Input
               id="subtitle"
@@ -201,7 +209,7 @@ const RenderView = (props) => {
 
           <br />
 
-          <FormControl className={classes.FormControl}>
+          <FormControl className={classes.mediumFormControl}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -215,11 +223,33 @@ const RenderView = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={state.data.bookmarks}
-                  onChange={e => actions.handleChange('bookmarks', e, 'checked')}
+                  checked={state.data.documentOutline}
+                  onChange={e => actions.handleChange('documentOutline', e, 'checked')}
                 />
               }
               label="Signets"
+            />
+          </FormControl>
+
+          <FormControl className={classes.mediumFormControl}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.data.toc}
+                  onChange={e => actions.handleChange('toc', e, 'checked')}
+                />
+              }
+              label="Table des matières"
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.data.pageNumbers}
+                  onChange={e => actions.handleChange('pageNumbers', e, 'checked')}
+                />
+              }
+              label="Numérotation des pages"
             />
           </FormControl>
 

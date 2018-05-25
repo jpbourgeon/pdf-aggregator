@@ -97,6 +97,10 @@ describe('Given the start store ContextProvider component', () => {
   });
 
   describe('the method setFolder', () => {
+    beforeEach(() => {
+      instance.openDialog = jest.fn().mockReturnValueOnce('\\path\\');
+    });
+
     it('should open the native folder picker', () => {
       instance.setFolder('input');
       expect(instance.openDialog).toHaveBeenCalledWith(
@@ -106,13 +110,16 @@ describe('Given the start store ContextProvider component', () => {
     });
 
     it('should save the selected path to the provided field of the state\'s data property', () => {
-      instance.openDialog = jest.fn().mockReturnValueOnce('/path/');
       instance.setFolder('input');
       expect(instance.state.data.input).toBe('/path/');
     });
   });
 
   describe('the method setLogo', () => {
+    beforeEach(() => {
+      instance.openDialog = jest.fn().mockReturnValueOnce('/path/to/image.jpg');
+    });
+
     it('should open the native file picker', () => {
       instance.setLogo();
       expect(instance.openDialog).toHaveBeenCalledWith(
@@ -122,7 +129,6 @@ describe('Given the start store ContextProvider component', () => {
     });
 
     it('should save the selected path to the provided field of the state\'s data property', () => {
-      instance.openDialog = jest.fn().mockReturnValueOnce('/path/to/image.jpg');
       instance.setLogo();
       expect(instance.state.data.logo).toBe('/path/to/image.jpg');
     });
@@ -160,8 +166,9 @@ describe('Given the start store ContextProvider component', () => {
         filename: '%dossiersource%_%dateiso%',
         title: '%dossiersource%%ligne%%datefr%',
         level: 0,
+        depth: 0,
         changelog: true,
-        bookmarks: true,
+        documentOutline: true,
       },
     });
 
@@ -204,6 +211,7 @@ describe('Given the start store ContextProvider component', () => {
         expect(result).toBeFalsy();
       });
     });
+
     it('should return false if level is not a number', () => {
       const state = makeData();
       state.data.level = 'value';
@@ -214,9 +222,29 @@ describe('Given the start store ContextProvider component', () => {
       });
     });
 
+    it('should return false if depth is not a number', () => {
+      const state = makeData();
+      state.data.depth = 'value';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
     it('should return false if level is a negative integer', () => {
       const state = makeData();
-      state.data.level = '-1';
+      state.data.level = '-5';
+      let result;
+      instance.setState({ ...state }, () => {
+        result = instance.isDataValid();
+        expect(result).toBeFalsy();
+      });
+    });
+
+    it('should return false if depth is a negative integer', () => {
+      const state = makeData();
+      state.data.depth = '-5';
       let result;
       instance.setState({ ...state }, () => {
         result = instance.isDataValid();

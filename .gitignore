@@ -1,3 +1,5 @@
+main/utils/__testbed__/**/output
+test-results
 # build output
 renderer/out
 renderer/.next

@@ -24,12 +24,14 @@ const defaultState = {
     logo: '',
     filename: '%dossiersource%_%dateiso%',
     title: '%dossiersource%',
-    subtitle: '%date%',
+    subtitle: '%dateiso%',
     level: 0,
-    depth: -1,
+    depth: 0,
     cover: true,
     changelog: true,
-    bookmarks: true,
+    documentOutline: true,
+    pageNumbers: true,
+    toc: true,
   },
 };
 
@@ -42,7 +44,7 @@ const foldersOptions = {
 const imagesOptions = {
   title: 'Choisissez une image',
   filters: [
-    { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+    { name: 'Images', extensions: ['jpg', 'pdf'] },
   ],
   properties: ['openFile'],
   buttonLabel: 'Valider',
@@ -75,7 +77,7 @@ class ContextProvider extends React.Component {
       this.currentWindow,
       this.foldersOptions,
     );
-    const data = { ...this.state.data, [field]: path };
+    const data = { ...this.state.data, [field]: path.replace(/\\/g, '/') };
     this.setState({ data });
   }
 
@@ -84,7 +86,7 @@ class ContextProvider extends React.Component {
       this.currentWindow,
       this.imagesOptions,
     );
-    const data = { ...this.state.data, logo: path };
+    const data = { ...this.state.data, logo: path.replace(/\\/g, '/') };
     this.setState({ data });
   }
 
@@ -124,12 +126,13 @@ class ContextProvider extends React.Component {
     if (data.filename === '') return false;
     if (data.title === '') return false;
     if (Number.isNaN(parseInt(data.level, 10))) return false;
+    if (Number.isNaN(parseInt(data.depth, 10))) return false;
     if (parseInt(data.level, 10) < 0) return false;
+    if (parseInt(data.depth, 10) < 0) return false;
     return true;
   }
 
-  /* eslint-disable-next-line */
-  submit(event) {
+  submit(event) { // eslint-disable-line class-methods-use-this
     event.preventDefault();
     Router.push('/result', '/result');
   }

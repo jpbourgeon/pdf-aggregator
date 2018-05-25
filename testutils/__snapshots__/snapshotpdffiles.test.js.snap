@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The test utility function snapshotPdfFiles should return an empty array from a folder without pdf files 1`] = `Array []`;
+
+exports[`The test utility function snapshotPdfFiles should snapshotPdfFiles a folder with a single pdf file into an array with one element 1`] = `
+Array [
+  "fSBPshpGgJUeUEPU957Ddwr6Eoc=",
+]
+`;
+
+exports[`The test utility function snapshotPdfFiles should snapshotPdfFiles a folder with multiple pdf files into an array 1`] = `
+Array [
+  "1hF12PEM24LRd1M1VOyGq7K1YfI=",
+  "fRlatOrKKEs4Dpy5Pzt3woQojIw=",
+  "fSBPshpGgJUeUEPU957Ddwr6Eoc=",
+]
+`;

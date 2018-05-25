@@ -9,7 +9,14 @@ describe('The utility library', () => {
         fullPath: '',
         name: '',
         stat: {
-          mtime: new Date(),
+          mtime: jest.fn(),
+          isFile: () => jest.fn(),
+          isDirectory: () => jest.fn(),
+          isBlockDevice: () => jest.fn(),
+          isCharacterDevice: () => jest.fn(),
+          isSymbolicLink: () => jest.fn(),
+          isFIFO: () => jest.fn(),
+          isSocket: () => jest.fn(),
         },
       };
     });

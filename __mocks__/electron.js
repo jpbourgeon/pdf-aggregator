@@ -3,6 +3,11 @@ const electron = {
     require: (module) => {
       // default mock for './utils/dialog' './utils/gettree'
       let mock = jest.fn();
+      if (module === './utils/pdfaggregator') {
+        mock = {
+          aggregate: jest.fn(),
+        };
+      }
       if (module === './utils/database') {
         mock = {
           getState: jest.fn().mockReturnValue({}),
@@ -13,6 +18,9 @@ const electron = {
       return mock;
     },
     getCurrentWindow: jest.fn(),
+    getCurrentWebContents: () => ({
+      send: jest.fn(),
+    }),
   },
   dialog: {
     showOpenDialog: jest.fn(),
