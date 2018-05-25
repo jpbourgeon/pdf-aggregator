@@ -24,7 +24,7 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   item: {
-    maxWidth: 800,
+    maxWidth: 750,
   },
   title: {
     marginBottom: theme.spacing.unit,
@@ -41,6 +41,7 @@ const styles = theme => ({
   },
   expansionPanel: {
     marginTop: 0,
+    padding: theme.spacing.unit,
   },
 });
 
