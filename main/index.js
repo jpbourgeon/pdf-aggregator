@@ -13,7 +13,7 @@ app.on('ready', async () => {
     .catch(e => console.log(`electron app on ready > prepareNext: ${e.message}`)); // eslint-disable-line no-console
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 730,
+    height: 750,
     minWidth: 800,
   });
 
