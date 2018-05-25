@@ -39,6 +39,7 @@
     "workbench.colorTheme": "Cobalt2",
     "workbench.iconTheme": "vs-seti",
     "workbench.startupEditor": "none",
+    "workbench.editor.labelFormat": "short",
     "telemetry.enableTelemetry": false,
     "telemetry.enableCrashReporter": false,
     "LineCount.showStatusBarItem": false,
