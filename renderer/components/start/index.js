@@ -24,7 +24,7 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   item: {
-    maxWidth: 800,
+    maxWidth: 750,
   },
   title: {
     marginBottom: theme.spacing.unit,
@@ -32,6 +32,11 @@ const styles = theme => ({
   formControl: {
     marginBottom: theme.spacing.unit,
     width: '100%',
+  },
+  mediumFormControl: {
+    marginBottom: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: '45%',
   },
   smallFormControl: {
     marginBottom: theme.spacing.unit,
@@ -79,7 +84,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="level" shrink>Agréger au niveau</InputLabel>
+            <InputLabel htmlFor="level" shrink>Niveau (0 = racine)</InputLabel>
             <Input
               className={classes.formControl}
               id="level"
@@ -90,7 +95,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="depth" shrink>Profondeur 0 = illimité)</InputLabel>
+            <InputLabel htmlFor="depth" shrink>Profondeur (0 = illimitée)</InputLabel>
             <Input
               className={classes.formControl}
               id="depth"
@@ -133,7 +138,7 @@ const RenderView = (props) => {
             />
           </FormControl>
 
-          <FormControl className={classes.FormControl}>
+          <FormControl className={classes.formControl}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -176,7 +181,7 @@ const RenderView = (props) => {
           })}
           >
             <InputLabel htmlFor="title" shrink>
-              Titre (options : %dossiersource%, %date%, %ligne%)
+              Titre (options : %dossiersource%, %dateiso%, %ligne%)
             </InputLabel>
             <Input
               id="title"
@@ -192,7 +197,7 @@ const RenderView = (props) => {
           })}
           >
             <InputLabel htmlFor="subtitle" shrink>
-              Sous-titre (options : %dossiersource%, %date%, %ligne%)
+              Sous-titre (options : %dossiersource%, %dateiso%, %ligne%)
             </InputLabel>
             <Input
               id="subtitle"
@@ -204,7 +209,7 @@ const RenderView = (props) => {
 
           <br />
 
-          <FormControl className={classes.FormControl}>
+          <FormControl className={classes.mediumFormControl}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -223,6 +228,28 @@ const RenderView = (props) => {
                 />
               }
               label="Signets"
+            />
+          </FormControl>
+
+          <FormControl className={classes.mediumFormControl}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.data.toc}
+                  onChange={e => actions.handleChange('toc', e, 'checked')}
+                />
+              }
+              label="Table des matières"
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={state.data.pageNumbers}
+                  onChange={e => actions.handleChange('pageNumbers', e, 'checked')}
+                />
+              }
+              label="Numérotation des pages"
             />
           </FormControl>
 

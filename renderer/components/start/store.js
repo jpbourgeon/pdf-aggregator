@@ -24,12 +24,14 @@ const defaultState = {
     logo: '',
     filename: '%dossiersource%_%dateiso%',
     title: '%dossiersource%',
-    subtitle: '%date%',
+    subtitle: '%dateiso%',
     level: 0,
     depth: 0,
     cover: true,
     changelog: true,
     documentOutline: true,
+    pageNumbers: true,
+    toc: true,
   },
 };
 
