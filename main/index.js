@@ -6,11 +6,11 @@ const { BrowserWindow, app } = require('electron');
 const isDev = require('electron-is-dev');
 const prepareNext = require('electron-next');
 const { resolve } = require('app-root-path');
+const debug = require('debug')('app:main/index.js');
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
-  await prepareNext('./renderer')
-    .catch(e => console.log(`electron app on ready > prepareNext: ${e.message}`)); // eslint-disable-line no-console
+  await prepareNext('./renderer').catch(e => debug(e));
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 750,
