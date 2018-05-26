@@ -1,3 +1,4 @@
+const debug = require('debug')('app:utils/pdfaggregator.test.js');
 const fs = require('fs-extra');
 const resolvePath = require('app-root-path').resolve;
 const snapshotPdfFiles = require('../../testutils/snapshotpdffiles');
@@ -46,7 +47,7 @@ beforeAll(async (done) => {
     }
     await Promise.all(promises);
   } catch (e) {
-    console.log(`beforeAll: ${e.message}`); // eslint-disable-line no-console
+    debug(e);
   }
   done();
 });
@@ -55,8 +56,7 @@ describe('PDF Aggregator', () => {
   describe('the async crawlFolder function', () => {
     it('should return a valid snapshot', async () => {
       expect.assertions(1);
-      let tree = await PdfAggregator.crawlFolder(defaultOptions.input)
-        .catch(e => console.log(`crawlFolder test: ${e.message}`)); // eslint-disable-line no-console
+      let tree = await PdfAggregator.crawlFolder(defaultOptions.input).catch(e => debug(e));
       tree = tree.map(element => ({
         ...element,
         fullPath: `[MOCKED_OS_SPECIFIC_PATH]${element.fullPath.split('__testbed__')[1]}`,
@@ -68,16 +68,14 @@ describe('PDF Aggregator', () => {
 
   describe('the async getFoldersToAggregate function', () => {
     it('should throw an error if the tree is empty', () => {
-      expect(() => {
-        PdfAggregator.getFoldersToAggregate([], defaultOptions);
-      }).toThrowError('There is no folder to aggregate');
+      const foldersToAggregate = PdfAggregator.getFoldersToAggregate([], defaultOptions);
+      expect(foldersToAggregate).toEqual([]);
     });
 
     it('should return the input folder\'s path for level 0', async () => {
       expect.assertions(1);
       const expectedValue = [defaultOptions.input.split('__testbed__')[1]];
-      const tree = await PdfAggregator.crawlFolder(defaultOptions.input)
-        .catch(e => console.log(`getFoldersToAggregate test 01: ${e.message}`)); // eslint-disable-line no-console
+      const tree = await PdfAggregator.crawlFolder(defaultOptions.input).catch(e => debug(e));
       const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, defaultOptions)
         .map(element => element.split('__testbed__')[1], []);
       expect(foldersToAggregate).toEqual(expectedValue);
@@ -85,8 +83,7 @@ describe('PDF Aggregator', () => {
 
     it('should match the snapshot of the folders at level 1', async () => {
       expect.assertions(1);
-      const tree = await PdfAggregator.crawlFolder(defaultOptions.input)
-        .catch(e => console.log(`getFoldersToAggregate test 02: ${e.message}`)); // eslint-disable-line no-console
+      const tree = await PdfAggregator.crawlFolder(defaultOptions.input).catch(e => debug(e));
       const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: 1 })
         .map(element => `[MOCKED_OS_SPECIFIC_PATH]${element.split('__testbed__')[1]}`, []);
       expect(foldersToAggregate).toMatchSnapshot();
@@ -96,8 +93,7 @@ describe('PDF Aggregator', () => {
       'should match the snapshot of the folders at the tree\'s max depth, if the level provided is greater than it',
       async () => {
         expect.assertions(1);
-        const tree = await PdfAggregator.crawlFolder(defaultOptions.input)
-          .catch(e => console.log(`getFoldersToAggregate test 03: ${e.message}`)); // eslint-disable-line no-console
+        const tree = await PdfAggregator.crawlFolder(defaultOptions.input).catch(e => debug(e));
         const foldersToAggregate = PdfAggregator.getFoldersToAggregate(tree, { ...defaultOptions, level: Infinity })
           .map(element => `[MOCKED_OS_SPECIFIC_PATH]${element.split('__testbed__')[1]}`, []);
         expect(foldersToAggregate).toMatchSnapshot();
@@ -157,24 +153,21 @@ describe('PDF Aggregator', () => {
     it('should return path.pdf if the file doesn\'t exists', async () => {
       setupPathExistsMock(0);
       expect.assertions(1);
-      const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists)
-        .catch(e => console.log(`deduplicatePdfPath test 01: ${e.message}`)); // eslint-disable-line no-console
+      const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists).catch(e => debug(e));
       expect(result).toBe('path.pdf');
     });
 
     it('should return path_1.pdf if path.pdf already exists', async () => {
       setupPathExistsMock(1);
       expect.assertions(1);
-      const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists)
-        .catch(e => console.log(`deduplicatePdfPath test 02: ${e.message}`)); // eslint-disable-line no-console
+      const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists).catch(e => debug(e));
       expect(result).toBe('path_1.pdf');
     });
 
     it('should return path_3.pdf if the 3 previous files already exist', async () => {
       setupPathExistsMock(3);
       expect.assertions(1);
-      const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists)
-        .catch(e => console.log(`deduplicatePdfPath test 03: ${e.message}`)); // eslint-disable-line no-console
+      const result = await PdfAggregator.deduplicatePdfPath('path.pdf', mockPathExists).catch(e => debug(e));
       expect(result).toBe('path_3.pdf');
     });
   });
@@ -276,7 +269,7 @@ describe('PDF Aggregator', () => {
       expect.assertions(1);
       const result = await PdfAggregator
         .countPages(`${defaultOptions.input}/Folder_01/Folder_01_Subfolder_01/Folder_01_Subfolder_01_File_01.pdf`)
-        .catch(e => console.log(`countPages test: ${e.message}`)); // eslint-disable-line no-console
+        .catch(e => debug(e));
       expect(result).toBe(1);
     });
 
@@ -284,7 +277,7 @@ describe('PDF Aggregator', () => {
       expect.assertions(1);
       const result = await PdfAggregator
         .countPages(`${defaultOptions.input}/Folder_01/Folder_01_Subfolder_01/Folder_01_Subfolder_01_File_02.pdf`)
-        .catch(e => console.log(`countPages test: ${e.message}`)); // eslint-disable-line no-console
+        .catch(e => debug(e));
       expect(result).toBe(2);
     });
   });
@@ -293,10 +286,8 @@ describe('PDF Aggregator', () => {
     it('should make an empty pdf document to use as a template', async () => {
       const output = `${defaultOptions.output}/makeEmptyPdf`;
       expect.assertions(1);
-      await PdfAggregator.makeEmptyPdf(output)
-        .catch(e => console.log(`makeEmptyPdf test > makeEmptyPdf: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`makeEmptyPdf test > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      await PdfAggregator.makeEmptyPdf(output).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
   });
@@ -312,10 +303,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 01 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 01 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -328,10 +317,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 02 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 02 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -345,10 +332,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 03 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 03 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -363,10 +348,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 04 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 04 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -382,10 +365,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 05 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 05 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -402,10 +383,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 06 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 06 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -419,10 +398,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 07 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 07 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -436,10 +413,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 08 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 08 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -453,10 +428,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 09 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 09 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -470,10 +443,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 10 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 10 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
 
@@ -491,10 +462,8 @@ describe('PDF Aggregator', () => {
         },
         jest.fn(),
         true,
-      )
-        .catch(e => console.log(`aggregate test 11 > aggregate: ${e.message}`)); // eslint-disable-line no-console
-      const result = await snapshotPdfFiles(output)
-        .catch(e => console.log(`aggregate test 11 > snapshot: ${e.message}`)); // eslint-disable-line no-console
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
   });

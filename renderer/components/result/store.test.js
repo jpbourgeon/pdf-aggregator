@@ -1,3 +1,4 @@
+const debug = require('debug')('app:result/store.test.js');
 const React = require('react');
 const TestRenderer = require('react-test-renderer');
 const Router = require('next/router').default;
@@ -17,8 +18,7 @@ describe('Given the result store ContextProvider component', () => {
     it('should call the method setCurrentTask', async () => {
       expect.assertions(1);
       instance.setCurrentTask = jest.fn();
-      await instance.componentDidMount()
-        .catch(e => console.log(`componentDidMount: ${e.message}`)); // eslint-disable-line no-console
+      await instance.componentDidMount().catch(e => debug(e));
       expect(instance.setCurrentTask).toHaveBeenCalled();
     });
 
@@ -32,8 +32,7 @@ describe('Given the result store ContextProvider component', () => {
     it('should call the method addLogEntry', async () => {
       expect.assertions(1);
       instance.addLogEntry = jest.fn();
-      await instance.componentDidMount()
-        .catch(e => console.log(`componentDidMount: ${e.message}`)); // eslint-disable-line no-console
+      await instance.componentDidMount().catch(e => debug(e));
       expect(instance.addLogEntry).toHaveBeenCalled();
     });
   });
@@ -67,8 +66,7 @@ describe('Given the result store ContextProvider component', () => {
     it('should initialise the store with the data provided', async () => {
       expect.assertions(1);
       const data = { input: 'hello world' };
-      await instance.initStore(() => data)
-        .catch(e => console.log(`instance.initStore: ${e.message}`)); // eslint-disable-line no-console
+      await instance.initStore(() => data).catch(e => debug(e));
       expect(instance.state.data).toEqual(data);
     });
   });
