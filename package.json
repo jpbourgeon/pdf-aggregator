@@ -35,16 +35,16 @@
     "next": "^5.1.0",
     "pdfjs": "^2.0.0-alpha.8",
     "prop-types": "^15.6.1",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
     "react-jss": "^8.4.0",
     "readdirp": "^2.1.0",
     "styled-jsx": "^2.2.6"
   },
   "devDependencies": {
-    "cross-env": "^5.1.4",
-    "electron": "^2.0.1",
-    "electron-builder": "^20.11.1",
+    "cross-env": "^5.1.6",
+    "electron": "^2.0.2",
+    "electron-builder": "^20.15.0",
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.12.0",
@@ -52,7 +52,7 @@
     "eslint-plugin-react": "^7.7.0",
     "jest": "^22.4.3",
     "jest-junit": "^4.0.0",
-    "react-test-renderer": "^16.3.2"
+    "react-test-renderer": "^16.4.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
