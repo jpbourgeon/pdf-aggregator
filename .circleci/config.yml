@@ -20,6 +20,7 @@ jobs:
       - run:
           name: Update npm and grant rights
           command: |
+            npm config get prefix
             sudo npm i npm -g
             sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
       - run: npm config get prefix
