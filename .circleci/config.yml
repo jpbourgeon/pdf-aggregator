@@ -22,6 +22,7 @@ jobs:
           command: |
             npm config get prefix
             sudo npm i npm -g
+            sudo mkdir /root/.npm
             sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
             sudo chown -R $(whoami) /root/.npm/*
       - run: npm config get prefix
