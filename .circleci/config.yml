@@ -21,6 +21,10 @@ jobs:
           name: "Checking Versions"
           command: |
             sudo npm i npm@latest -g
+            mkdir ~/.npm-global
+            npm config set prefix '~/.npm-global'
+            export PATH=~/.npm-global/bin:$PATH
+            source ~/.profile
             node --version
             npm --version
       - checkout
