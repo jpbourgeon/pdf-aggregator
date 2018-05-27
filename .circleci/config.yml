@@ -15,9 +15,7 @@ jobs:
       # - image: circleci/mongo:3.4.4
 
     working_directory: ~/repo
-
-    environment:
-       BASH_ENV: ~/.bashrc
+       
     steps:
       - run:
           name: "Checking Versions"
