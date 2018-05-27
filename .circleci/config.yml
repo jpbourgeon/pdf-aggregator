@@ -17,7 +17,12 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - run: sudo npm i npm -g
+      - run:
+          name: Update npm and grant rights
+          command: |
+            sudo npm i npm -g
+            sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+      - run: npm config get prefix
       - run:
           name: "Checking Versions"
           command: |
