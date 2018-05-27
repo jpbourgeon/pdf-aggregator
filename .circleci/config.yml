@@ -20,7 +20,7 @@ jobs:
       - run:
           name: "Checking Versions"
           command: |
-            npm i npm@latest -g
+            sudo npm i npm@latest -g
             node --version
             npm --version
       - checkout
