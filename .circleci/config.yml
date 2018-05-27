@@ -20,12 +20,8 @@ jobs:
       - run:
           name: "Checking Versions"
           command: |
-            sudo curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV 
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install 8.11.2
-            # sudo npm i npm@latest -g
+            sudo npm i npm@latest -g
+            sudo chmod +x /root/.npm
             # mkdir ~/.npm-global
             # npm config set prefix '~/.npm-global'
             # echo 'export PATH=~/.npm-global/bin:$PATH' >> $BASH_ENV 
