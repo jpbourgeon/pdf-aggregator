@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:8.11.2
+      - image: circleci/node:8.11.1
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -17,13 +17,6 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - run:
-          name: Update npm and grant rights
-          command: |
-            npm config get prefix
-            sudo npm i npm -g
-            sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
-            sudo chown -R $(whoami) /root
       - run:
           name: "Checking Versions"
           command: |
