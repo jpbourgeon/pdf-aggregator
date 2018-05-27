@@ -20,6 +20,7 @@ jobs:
       - run:
           name: "Checking Versions"
           command: |
+            sudo brew upgrade git
             sudo npm i npm@latest -g
             mkdir ~/.npm-global
             npm config set prefix '~/.npm-global'
