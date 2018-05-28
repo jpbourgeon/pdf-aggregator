@@ -21,12 +21,6 @@ jobs:
           name: "Checking Versions"
           command: |
             sudo npm i npm@latest -g
-            sudo chmod +x /root/.npm
-            # mkdir ~/.npm-global
-            # npm config set prefix '~/.npm-global'
-            # echo 'export PATH=~/.npm-global/bin:$PATH' >> $BASH_ENV 
-            # source ~/.profile
-            # npm config get prefix
             node --version
             npm --version
       - checkout
@@ -38,8 +32,8 @@ jobs:
           - v1-dependencies-
       # greenkeeper-lockfile update
       - run: sudo npm install greenkeeper-lockfile@1 -g
-      # install deps
-      - run: sudo npm install --unsafe-perm=true --allow-root
+      # install deps - without sudo
+      - run: npm install --unsafe-perm=true --allow-root
       - run: greenkeeper-lockfile-update
       - save_cache:
           paths:
