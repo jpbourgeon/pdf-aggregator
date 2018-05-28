@@ -30,12 +30,10 @@ exports[`The renderView component of the result page should render correctly 1`]
     </WithStyles(Button)>
   </div>
   <WithStyles(GridWrapper)
-    className={undefined}
     container={true}
     spacing={24}
   >
     <WithStyles(GridWrapper)
-      className={undefined}
       item={true}
       xs={12}
     >
@@ -48,9 +46,7 @@ exports[`The renderView component of the result page should render correctly 1`]
         >
           Traitement en cours
         </span>
-        <span
-          className={undefined}
-        >
+        <span>
           Traitement terminé
         </span>
         <WithStyles(Button)
@@ -58,13 +54,10 @@ exports[`The renderView component of the result page should render correctly 1`]
         return fn.apply(this, arguments);
       } undefined"
           color="default"
-          onClick={undefined}
           size="small"
           variant="raised"
         >
-          <pure(Home)
-            className={undefined}
-          />
+          <pure(Home) />
           Nouveau
         </WithStyles(Button)>
         <WithStyles(Button)
@@ -77,9 +70,7 @@ exports[`The renderView component of the result page should render correctly 1`]
           type="submit"
           variant="raised"
         >
-          <pure(FolderOpen)
-            className={undefined}
-          />
+          <pure(FolderOpen) />
           Dossier cible
         </WithStyles(Button)>
       </WithStyles(Typography)>
@@ -88,7 +79,6 @@ exports[`The renderView component of the result page should render correctly 1`]
         hidden={false}
       />
       <WithStyles(ExpansionPanel)
-        className={undefined}
         color="primary"
         defaultExpanded={true}
         elevation={0}
@@ -106,9 +96,7 @@ exports[`The renderView component of the result page should render correctly 1`]
               Opération en cours : 
               -
             </span>
-            <span
-              className={undefined}
-            >
+            <span>
               Journal des opérations
             </span>
           </WithStyles(Typography)>
