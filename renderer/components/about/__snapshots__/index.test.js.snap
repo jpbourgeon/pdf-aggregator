@@ -15,12 +15,12 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="headline"
         >
-          data.name
+          name
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="subheading"
         >
-          Une application de bureau pour fusionner des arborescences de documents PDF
+          description
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="body1"
@@ -32,9 +32,10 @@ exports[`The renderView component of the about modal should render correctly 1`]
         >
           Auteur : 
           <a
-            href="mailto:jeanphilippe.bourgeon@gmail.com"
+            href="mailto:email"
+            target="_blank"
           >
-            Jean-Philippe Bourgeon
+            author
           </a>
         </WithStyles(Typography)>
         <WithStyles(Typography)
@@ -42,7 +43,8 @@ exports[`The renderView component of the about modal should render correctly 1`]
         >
           Dépôt : 
           <a
-            href="https://github.com/jpbourgeon/pdf-aggregator"
+            href="github"
+            target="_blank"
           >
             Github
           </a>
@@ -51,16 +53,18 @@ exports[`The renderView component of the about modal should render correctly 1`]
           variant="body1"
         >
           Version : 
-          data.version
+          version
            (
           <a
-            href="https://github.com/jpbourgeon/pdf-aggregator/releases"
+            href="releases"
+            target="_blank"
           >
             Notes de version
           </a>
            | 
           <a
-            href="https://raw.githubusercontent.com/jpbourgeon/pdf-aggregator/master/LICENSE.txt"
+            href="license"
+            target="_blank"
           >
             License
           </a>

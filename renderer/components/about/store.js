@@ -13,7 +13,7 @@ const defaultState = {
     github: 'https://github.com/jpbourgeon/pdf-aggregator',
     author: 'Jean-Philippe Bourgeon',
     email: 'jeanphilippe.bourgeon@gmail.com',
-    license: 'https://raw.githubusercontent.com/jpbourgeon/pdf-aggregator/master/LICENSE.txt',
+    license: 'https://opensource.org/licenses/CECILL-2.1',
   },
   open: false,
 };

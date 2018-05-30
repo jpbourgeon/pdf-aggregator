@@ -8,14 +8,14 @@ describe('The renderView component of the about modal', () => {
       aboutState: {
         open: false,
         data: {
-          name: 'data.name',
-          description: 'Une application de bureau pour fusionner des arborescences de documents PDF',
-          version: 'data.version',
-          releases: 'https://github.com/jpbourgeon/pdf-aggregator/releases',
-          github: 'https://github.com/jpbourgeon/pdf-aggregator',
-          author: 'Jean-Philippe Bourgeon',
-          email: 'jeanphilippe.bourgeon@gmail.com',
-          license: 'https://raw.githubusercontent.com/jpbourgeon/pdf-aggregator/master/LICENSE.txt',
+          name: 'name',
+          description: 'description',
+          version: 'version',
+          releases: 'releases',
+          github: 'github',
+          author: 'author',
+          email: 'email',
+          license: 'license',
         },
       },
       aboutActions: {

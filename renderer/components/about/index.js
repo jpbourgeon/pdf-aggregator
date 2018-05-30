@@ -47,12 +47,14 @@ const AboutRenderView = (props) => {
             <Typo variant="subheading">{aboutState.data.description}</Typo>
             <Typo variant="body1">&nbsp;</Typo>
             <Typo variant="body1">
-              Auteur : <a href={`mailto:${aboutState.data.email}`}>{aboutState.data.author}</a>
+              Auteur : <a href={`mailto:${aboutState.data.email}`} target="_blank">{aboutState.data.author}</a>
             </Typo>
-            <Typo variant="body1">Dépôt : <a href={aboutState.data.github}>Github</a></Typo>
+            <Typo variant="body1">Dépôt : <a href={aboutState.data.github} target="_blank">Github</a></Typo>
             <Typo variant="body1">
-            Version : {aboutState.data.version} (<a href={aboutState.data.releases}>Notes de version</a>&nbsp;|&nbsp;
-              <a href={aboutState.data.license}>License</a>)
+            Version : {aboutState.data.version} (
+              <a href={aboutState.data.releases} target="_blank">Notes de version</a>&nbsp;|&nbsp;
+              <a href={aboutState.data.license} target="_blank">License</a>
+            )
             </Typo>
             <div className={classes.actions}>
               <Button
