@@ -20,8 +20,10 @@ import Home from '@material-ui/icons/Home';
 import Error from '@material-ui/icons/Error';
 import Check from '@material-ui/icons/CheckCircle';
 import Save from '@material-ui/icons/Save';
-// import HelpOutline from '@material-ui/icons/HelpOutline';
+import HelpOutline from '@material-ui/icons/HelpOutline';
 import { withContextConsumer } from './store';
+import About from '../about';
+import { withAboutContextConsumer } from '../about/store';
 
 const styles = theme => ({
   root: {
@@ -77,10 +79,11 @@ const formatLog = (log, classes) => log.map((item, index) => (
 
 const RenderView = (props) => {
   const {
-    state, classes, actions,
+    state, classes, actions, aboutActions,
   } = props;
   return (
     <div className={classes.root}>
+      <About />
       <div className={(state.ui.isDev) ? '' : classes.hidden}>
         <Button onClick={() => actions.switchBool('job.isDone')}>
           isDone ({JSON.stringify(state.job.isDone)})
@@ -97,9 +100,9 @@ const RenderView = (props) => {
           <Typo variant="display1" className={classes.title}>
             <span className={(state.job.isDone) ? classes.hidden : ''}>Traitement en cours</span>
             <span className={(state.job.isDone) ? '' : classes.hidden}>Traitement terminé</span>
-            {/* <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={() => true}>
+            <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={aboutActions.open}>
               <HelpOutline />
-            </IconButton> */}
+            </IconButton>
           </Typo>
         </Grid>
         <Grid item xs={12} className={classes.item}>
@@ -196,9 +199,11 @@ RenderView.propTypes = {
   classes: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
+  aboutActions: PropTypes.object.isRequired,
 };
 
-const ViewWithContextConsumer = withContextConsumer(RenderView);
+const ViewWithAboutContextConsumer = withAboutContextConsumer(RenderView);
+const ViewWithContextConsumer = withContextConsumer(ViewWithAboutContextConsumer);
 const View = withStyles(styles)(ViewWithContextConsumer);
 
 export { View as default, RenderView };

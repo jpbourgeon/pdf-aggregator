@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The renderView component of the about modal should render correctly 1`] = `
+<React.Fragment>
+  <WithStyles(Modal)
+    aria-describedby="simple-modal-description"
+    aria-labelledby="simple-modal-title"
+    onClose={[MockFunction]}
+    open={false}
+  >
+    <WithStyles(Paper)
+      className={Object {}}
+    >
+      <WithStyles(CardContent)>
+        <WithStyles(Typography)
+          variant="headline"
+        >
+          name
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="subheading"
+        >
+          description
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+           
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          Auteur : 
+          <a
+            href="mailto:email"
+            target="_blank"
+          >
+            author
+          </a>
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          Dépôt : 
+          <a
+            href="github"
+            target="_blank"
+          >
+            Github
+          </a>
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          Version : 
+          version
+           (
+          <a
+            href="releases"
+            target="_blank"
+          >
+            Notes de version
+          </a>
+           | 
+          <a
+            href="license"
+            target="_blank"
+          >
+            License
+          </a>
+          )
+        </WithStyles(Typography)>
+        <div>
+          <WithStyles(Button)
+            onClick={[MockFunction]}
+            size="small"
+            variant="raised"
+          >
+            Fermer
+          </WithStyles(Button)>
+        </div>
+      </WithStyles(CardContent)>
+    </WithStyles(Paper)>
+  </WithStyles(Modal)>
+</React.Fragment>
+`;

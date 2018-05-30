@@ -6,6 +6,7 @@ const { BrowserWindow, app } = require('electron');
 const isDev = require('electron-is-dev');
 const prepareNext = require('electron-next');
 const { resolve } = require('app-root-path');
+const { shell } = require('electron');
 const debug = require('debug')('app:main/index.js');
 
 // Prepare the renderer once the app is ready
@@ -34,6 +35,15 @@ app.on('ready', async () => {
     mainWindow.setMenu(null);
     mainWindow.setResizable(true);
   }
+
+  const handleRedirect = (e, href) => {
+    if (href !== mainWindow.webContents.getURL()) {
+      e.preventDefault();
+      shell.openExternal(href);
+    }
+  };
+  mainWindow.webContents.on('will-navigate', handleRedirect);
+  mainWindow.webContents.on('new-window', handleRedirect);
 
   mainWindow.loadURL(url);
 });
