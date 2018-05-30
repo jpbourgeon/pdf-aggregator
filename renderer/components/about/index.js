@@ -6,19 +6,26 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Paper';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import { withAboutContextConsumer } from './store';
 
-const styles = () => ({
+const styles = theme => ({
   paper: {
     margin: 'auto',
     position: 'absolute',
-    maxWidth: '50%',
-    maxHeight: '33%',
+    width: 500,
+    height: 250,
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
+  },
+  actions: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    textAlign: 'right',
+    padding: theme.spacing.unit * 2,
   },
 });
 
@@ -47,16 +54,16 @@ const AboutRenderView = (props) => {
             Version : {aboutState.data.version} (<a href={aboutState.data.releases}>Notes de version</a>&nbsp;|&nbsp;
               <a href={aboutState.data.license}>License</a>)
             </Typo>
-          </CardContent>
-          <CardActions>
-            <Button
-              size="small"
-              variant="raised"
-              onClick={aboutActions.close}
-            >
+            <div className={classes.actions}>
+              <Button
+                size="small"
+                variant="raised"
+                onClick={aboutActions.close}
+              >
                 Fermer
-            </Button>
-          </CardActions>
+              </Button>
+            </div>
+          </CardContent>
         </Card>
       </Modal>
     </React.Fragment>

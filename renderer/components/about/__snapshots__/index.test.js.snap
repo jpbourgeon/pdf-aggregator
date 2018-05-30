@@ -66,16 +66,16 @@ exports[`The renderView component of the about modal should render correctly 1`]
           </a>
           )
         </WithStyles(Typography)>
+        <div>
+          <WithStyles(Button)
+            onClick={[MockFunction]}
+            size="small"
+            variant="raised"
+          >
+            Fermer
+          </WithStyles(Button)>
+        </div>
       </WithStyles(CardContent)>
-      <WithStyles(CardActions)>
-        <WithStyles(Button)
-          onClick={[MockFunction]}
-          size="small"
-          variant="raised"
-        >
-          Fermer
-        </WithStyles(Button)>
-      </WithStyles(CardActions)>
     </WithStyles(Paper)>
   </WithStyles(Modal)>
 </React.Fragment>
