@@ -128,10 +128,7 @@ class ContextProvider extends React.Component {
     this.setState({ state });
   }
 
-  handleClose(event, reason) {
-    if (reason === 'clickaway') {
-      return;
-    }
+  handleClose() {
     const ui = { ...this.setState };
     ui.snackbarMessage = '';
     ui.openSnackbar = false;

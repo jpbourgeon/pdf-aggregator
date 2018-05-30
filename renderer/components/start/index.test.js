@@ -14,6 +14,9 @@ describe('The renderView component of the start page', () => {
         isDataValid: jest.fn(),
         submit: jest.fn(),
       },
+      aboutActions: {
+        open: jest.fn(),
+      },
       classes: {
         root: jest.fn(),
         title: jest.fn(),

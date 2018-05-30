@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The renderView component of the about modal should render correctly 1`] = `
+<React.Fragment>
+  <WithStyles(Modal)
+    aria-describedby="simple-modal-description"
+    aria-labelledby="simple-modal-title"
+    onClose={[MockFunction]}
+    open={false}
+  >
+    <WithStyles(Paper)
+      className={Object {}}
+    >
+      <WithStyles(CardContent)>
+        <WithStyles(Typography)
+          variant="headline"
+        >
+          data.name
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="subheading"
+        >
+          Une application de bureau pour fusionner des arborescences de documents PDF
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+           
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          Auteur : 
+          <a
+            href="mailto:jeanphilippe.bourgeon@gmail.com"
+          >
+            Jean-Philippe Bourgeon
+          </a>
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          Dépôt : 
+          <a
+            href="https://github.com/jpbourgeon/pdf-aggregator"
+          >
+            Github
+          </a>
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          Version : 
+          data.version
+           (
+          <a
+            href="https://github.com/jpbourgeon/pdf-aggregator/releases"
+          >
+            Notes de version
+          </a>
+           | 
+          <a
+            href="https://raw.githubusercontent.com/jpbourgeon/pdf-aggregator/master/LICENSE.txt"
+          >
+            License
+          </a>
+          )
+        </WithStyles(Typography)>
+      </WithStyles(CardContent)>
+      <WithStyles(CardActions)>
+        <WithStyles(Button)
+          onClick={[MockFunction]}
+          size="small"
+          variant="raised"
+        >
+          Fermer
+        </WithStyles(Button)>
+      </WithStyles(CardActions)>
+    </WithStyles(Paper)>
+  </WithStyles(Modal)>
+</React.Fragment>
+`;

@@ -4,6 +4,7 @@ exports[`The renderView component of the result page should render correctly 1`]
 <div
   className={[MockFunction]}
 >
+  <WithStyles(Component) />
   <div
     className=""
   >
@@ -49,6 +50,13 @@ exports[`The renderView component of the result page should render correctly 1`]
         <span>
           Traitement terminé
         </span>
+        <WithStyles(IconButton)
+          onClick={[MockFunction]}
+          size="small"
+          variant="raised"
+        >
+          <pure(HelpOutline) />
+        </WithStyles(IconButton)>
       </WithStyles(Typography)>
     </WithStyles(GridWrapper)>
     <WithStyles(GridWrapper)

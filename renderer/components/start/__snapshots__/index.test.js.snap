@@ -5,6 +5,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
   className={[MockFunction]}
   onSubmit={[Function]}
 >
+  <WithStyles(Component) />
   <WithStyles(GridWrapper)
     container={true}
     spacing={24}
@@ -18,6 +19,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
         variant="display1"
       >
         Paramètres
+        <WithStyles(IconButton)
+          onClick={[MockFunction]}
+          size="small"
+          variant="raised"
+        >
+          <pure(HelpOutline) />
+        </WithStyles(IconButton)>
       </WithStyles(Typography)>
       <WithStyles(FormControl)
         className={[MockFunction]}
