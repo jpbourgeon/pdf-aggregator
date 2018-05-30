@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import FolderOpen from '@material-ui/icons/FolderOpen';
+// import HelpOutline from '@material-ui/icons/HelpOutline';
 import { withContextConsumer } from './store';
 
 const styles = theme => ({
@@ -47,6 +48,11 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     marginTop: theme.spacing.unit,
   },
+  buttonRight: {
+    marginLeft: theme.spacing.unit,
+    margin: 0,
+    float: 'right',
+  },
   hidden: {
     display: 'none',
   },
@@ -61,8 +67,12 @@ const RenderView = (props) => {
     <form className={classes.root} onSubmit={e => actions.submit(e)}>
       <Grid container spacing={24} className={classes.container}>
         <Grid item xs={12} className={classes.item}>
-          <Typo variant="display1" className={classes.title} >Paramètres</Typo>
-
+          <Typo variant="display1" className={classes.title} >
+            Paramètres
+            {/* <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={() => true}>
+              <HelpOutline />
+            </IconButton> */}
+          </Typo>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="input" shrink>Dossier source</InputLabel>
             <Input

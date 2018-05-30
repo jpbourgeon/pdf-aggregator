@@ -4,15 +4,23 @@ import classNames from 'classnames';
 import Grid from '@material-ui/core/Grid';
 import Typo from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
 import FolderOpen from '@material-ui/icons/FolderOpen';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import Home from '@material-ui/icons/Home';
+import Error from '@material-ui/icons/Error';
+import Check from '@material-ui/icons/CheckCircle';
+import Save from '@material-ui/icons/Save';
+// import HelpOutline from '@material-ui/icons/HelpOutline';
 import { withContextConsumer } from './store';
 
 const styles = theme => ({
@@ -26,24 +34,46 @@ const styles = theme => ({
   item: {
     maxWidth: 750,
   },
-  title: {
-    marginBottom: theme.spacing.unit,
-  },
   leftIcon: {
+    fontSize: 20,
     marginRight: theme.spacing.unit,
   },
   button: {
+    marginRight: theme.spacing.unit,
+  },
+  buttonRight: {
     marginLeft: theme.spacing.unit,
+    margin: 0,
     float: 'right',
   },
   hidden: {
     display: 'none',
   },
-  expansionPanel: {
+  panel: {
     marginTop: 0,
     padding: theme.spacing.unit,
   },
+  primary: {
+    color: theme.palette.primary.main,
+  },
+  secondary: {
+    color: theme.palette.secondary.main,
+  },
+  close: {
+    width: theme.spacing.unit * 4,
+    height: theme.spacing.unit * 4,
+  },
 });
+
+const formatLog = (log, classes) => log.map((item, index) => (
+  // eslint-disable-next-line react/no-array-index-key
+  <ListItem key={index + item.date} dense>
+    <ListItemIcon className={(item.isError) ? classes.secondary : classes.primary}>
+      {(item.isError) ? <Error /> : <Check />}
+    </ListItemIcon>
+    <ListItemText>{item.label}</ListItemText>
+  </ListItem>
+), []);
 
 const RenderView = (props) => {
   const {
@@ -67,54 +97,97 @@ const RenderView = (props) => {
           <Typo variant="display1" className={classes.title}>
             <span className={(state.job.isDone) ? classes.hidden : ''}>Traitement en cours</span>
             <span className={(state.job.isDone) ? '' : classes.hidden}>Traitement terminé</span>
-            <Button
-              size="small"
-              variant="raised"
-              color="default"
-              className={classNames({
-                [classes.button]: true,
-                [classes.hidden]: !state.job.isDone,
-              })}
-              onClick={actions.goHome}
-            >
-              <Home className={classes.leftIcon} />
-              Nouveau
-            </Button>
-            <Button
-              size="small"
-              variant="raised"
-              color={(state.job.hasErrors) ? 'secondary' : 'primary'}
-              className={classNames({
-                [classes.button]: true,
-                [classes.hidden]: !state.job.isDone,
-              })}
-              type="submit"
-              onClick={() => actions.openOutputFolder(state.data.output)}
-            >
-              <FolderOpen className={classes.leftIcon} />
-                  Dossier cible
-            </Button>
+            {/* <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={() => true}>
+              <HelpOutline />
+            </IconButton> */}
           </Typo>
+        </Grid>
+        <Grid item xs={12} className={classes.item}>
+          <Button
+            size="small"
+            variant="raised"
+            color={(state.job.hasErrors) ? 'secondary' : 'primary'}
+            className={classNames({
+              [classes.button]: true,
+              [classes.hidden]: !state.job.isDone,
+            })}
+            type="submit"
+            onClick={() => actions.openOutputFolder(state.data.output)}
+          >
+            <FolderOpen className={classes.leftIcon} />
+                Ouvrir le dossier cible
+          </Button>
+          <Button
+            size="small"
+            variant="raised"
+            color="default"
+            className={classNames({
+              [classes.buttonRight]: true,
+              [classes.hidden]: !state.job.isDone,
+            })}
+            onClick={actions.goHome}
+          >
+            <Home className={classes.leftIcon} />
+            Nouveau traitement
+          </Button>
+        </Grid>
+        <Grid item xs={12} className={classes.item}>
           <LinearProgress hidden={state.job.isDone} color={(state.job.hasErrors) ? 'secondary' : 'primary'} />
-          <ExpansionPanel defaultExpanded elevation={0} color="primary" className={classes.expansionPanel}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <Card elevation={0} color="primary" className={classes.panel}>
+            <CardContent>
               <Typo
-                variant="subheading"
+                variant="title"
                 color={(state.job.hasErrors) ? 'secondary' : 'primary'}
               >
-                <span className={(state.job.isDone) ? classes.hidden : ''}>
-                  Opération en cours : {(state.currentTask) ? state.currentTask : '-'}
-                </span>
-                <span className={(state.job.isDone) ? '' : classes.hidden}>Journal des opérations</span>
+                <div className={(state.job.isDone) ? classes.hidden : ''}>
+                  {(state.currentTask) ? `Opération en cours : ${state.currentTask}` : 'Chargement...'}
+                </div>
+                <div className={(state.job.isDone) ? '' : classes.hidden}>Journal des opérations</div>
+                <br />
+                <Button
+                  size="small"
+                  variant="raised"
+                  className={classNames({
+                    [classes.button]: true,
+                    [classes.hidden]: !state.job.isDone,
+                  })}
+                  onClick={actions.saveLog}
+                >
+                  <Save className={classes.leftIcon} />
+                      Sauver
+                </Button>
               </Typo>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Divider />
-              <pre>{JSON.stringify(state.log, null, 2)}</pre>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </CardContent>
+            <CardContent>
+              <List>{formatLog(state.log, classes)}</List>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={state.ui.openSnackbar}
+        autoHideDuration={3000}
+        onClose={actions.handleClose}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        message={<span id="message-id">{state.ui.snackbarMessage}</span>}
+        action={
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={actions.handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </div>
   );
 };

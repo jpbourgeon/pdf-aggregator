@@ -5,15 +5,19 @@ import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
 
+const debug = require('debug')('app:result/store.js');
+
 let remote;
 let openItem;
 let db;
+let saveJson;
 let aggregate;
 let send;
 if (typeof window !== 'undefined') {
   ({ remote } = electron);
   ({ openItem } = shell);
   db = remote.require('./utils/database');
+  ({ saveJson } = remote.require('./utils/savejson'));
   ({ aggregate } = remote.require('./utils/pdfaggregator'));
   ({ send } = remote.getCurrentWebContents());
 }
@@ -30,6 +34,8 @@ const defaultState = {
   },
   ui: {
     isDev,
+    openSnackbar: false,
+    snackbarMessage: 'Coucou',
   },
 };
 
@@ -39,6 +45,7 @@ class ContextProvider extends React.Component {
     this.defaultState = defaultState;
     this.state = { ...this.defaultState };
     this.db = db;
+    this.saveJson = saveJson;
     this.openItem = openItem;
     this.aggregate = aggregate;
     this.send = send;
@@ -121,6 +128,30 @@ class ContextProvider extends React.Component {
     this.setState({ state });
   }
 
+  handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+    const ui = { ...this.setState };
+    ui.snackbarMessage = '';
+    ui.openSnackbar = false;
+    this.setState({ ui });
+  }
+
+  async saveLog() {
+    const ui = { ...this.state.ui };
+    try {
+      await this.saveJson(`${this.state.data.output}/log.json`, this.state.log).catch(e => debug(e));
+      ui.snackbarMessage = 'Le journal a été sauvegardé dans le dossier cible.';
+      ui.openSnackbar = true;
+      this.setState({ ui });
+    } catch (e) {
+      ui.snackbarMessage = 'Erreur : le journal n\'a pas été sauvegardé.';
+      ui.openSnackbar = true;
+      this.setState({ ui });
+    }
+  }
+
   render() {
     return (
       <Context.Provider
@@ -130,6 +161,8 @@ class ContextProvider extends React.Component {
             goHome: this.goHome.bind(this),
             openOutputFolder: this.openOutputFolder.bind(this),
             switchBool: this.switchBool.bind(this),
+            saveLog: this.saveLog.bind(this),
+            handleClose: this.handleClose.bind(this),
           },
         }}
       >
