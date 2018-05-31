@@ -21,6 +21,7 @@ import Error from '@material-ui/icons/Error';
 import Check from '@material-ui/icons/CheckCircle';
 import Save from '@material-ui/icons/Save';
 import HelpOutline from '@material-ui/icons/HelpOutline';
+import Cancel from '@material-ui/icons/Cancel';
 import { withContextConsumer } from './store';
 import About from '../about';
 import { withAboutContextConsumer } from '../about/store';
@@ -106,6 +107,19 @@ const RenderView = (props) => {
           </Typo>
         </Grid>
         <Grid item xs={12} className={classes.item}>
+          <Button
+            size="small"
+            variant="raised"
+            color="default"
+            className={classNames({
+              [classes.button]: true,
+              [classes.hidden]: state.job.isDone,
+            })}
+            onClick={() => actions.cancelJob()}
+          >
+            <Cancel className={classes.leftIcon} />
+                Annuler
+          </Button>
           <Button
             size="small"
             variant="raised"

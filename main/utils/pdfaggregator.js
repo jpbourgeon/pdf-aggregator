@@ -5,8 +5,19 @@ const Helvetica = require('pdfjs/font/Helvetica');
 const HelveticaBold = require('pdfjs/font/Helvetica-Bold');
 const { getTree } = require('./gettree');
 
+
 let currentDate = new Date();
 const mockedDate = new Date(Date.UTC(0, 0, 0, 0, 0, 0));
+let jobIsTerminated = false;
+
+const terminateJob = () => {
+  jobIsTerminated = true;
+};
+
+const resetJobTerminator = () => {
+  jobIsTerminated = false;
+};
+
 
 const setCurrentTask = (send, label) => {
   send('set-current-task', label);
@@ -21,23 +32,29 @@ const addLogEntry = (send, label, isError = false, isLast = false) => {
   });
 };
 
-const stepAsync = async (taskName, task, send, errorIsFatal = false, isLast = false) => {
+const stepAsync = async (taskName, task, send, errorIsFatal = false, isLast = false, force = false) => {
   try {
     setCurrentTask(send, taskName);
+    if (jobIsTerminated && !force) throw new Error('le traitement a été interrompu par l\'utilisateur');
     await task();
     addLogEntry(send, taskName, false, isLast);
+    return Promise.resolve();
   } catch (e) {
     addLogEntry(send, `${taskName}: ${e.message}`, true, errorIsFatal);
+    if (errorIsFatal || jobIsTerminated) return Promise.reject(e);
+    return Promise.resolve();
   }
 };
 
-const step = (taskName, task, send, errorIsFatal = false, isLast = false) => {
+const step = (taskName, task, send, errorIsFatal = false, isLast = false, force = false) => {
   try {
     setCurrentTask(send, taskName);
+    if (jobIsTerminated && !force) throw new Error('le traitement a été interrompu par l\'utilisateur');
     task();
     addLogEntry(send, taskName, false, isLast);
   } catch (e) {
     addLogEntry(send, `${taskName}: ${e.message}`, true, errorIsFatal);
+    if (errorIsFatal || jobIsTerminated) throw e;
   }
 };
 
@@ -135,16 +152,10 @@ const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
   write.on('error', reject);
 });
 
-const aggregate = async (data, send, isTest = false) => {
+const aggregate = async (data, send, isTest = false, testJobTerminator = false) => {
   try {
     if (isTest) currentDate = mockedDate;
-    // Prepare the empty template
-    let pdfEmpty;
-    await stepAsync('Création du modèle de page vierge', async () => {
-      await makeEmptyPdf(data.output).catch(e => debug(e));
-      const empty = await fs.readFile(`${data.output}/_blank.pdf`).catch(e => debug(e));
-      pdfEmpty = new pdf.ExternalDocument(empty);
-    }, send, true);
+    if (!testJobTerminator) resetJobTerminator();
 
     // Start the job
     step('Début du traitement', () => true, send);
@@ -155,8 +166,16 @@ const aggregate = async (data, send, isTest = false) => {
       tree = await crawlFolder(data.input).catch(e => debug(e));
     }, send, true);
 
+    // Prepare the empty template
+    let pdfEmpty;
+    await stepAsync('Création du modèle de page vierge', async () => {
+      await makeEmptyPdf(data.output).catch(e => debug(e));
+      const empty = await fs.readFile(`${data.output}/_blank.pdf`).catch(e => debug(e));
+      pdfEmpty = new pdf.ExternalDocument(empty);
+    }, send, true);
+
     // Get the list of folders to aggregate
-    let foldersToAggregate;
+    let foldersToAggregate = [];
     step(
       'Récupération des dossiers à fusionner',
       () => { foldersToAggregate = getFoldersToAggregate(tree, data); },
@@ -251,19 +270,17 @@ const aggregate = async (data, send, isTest = false) => {
                 addRow('Journal des modifications', '%changelog%', pageNumber.toString());
                 pageNumber += calculatePages(subTree.filter(item => (item.type === 'file')).length);
               }
-              const foldersBuffer = [];
-              for (let i = 0; i < subTree.length; i += 1) {
-                const item = subTree[i];
-                if (item.type === 'directory') {
-                  foldersBuffer.push(item);
-                } else {
-                  while (foldersBuffer.length !== 0) {
-                    const folderItem = foldersBuffer.pop();
-                    addRow(folderItem.name, item.name, pageNumber.toString());
-                  }
-                  addRow(item.name.substr(0, item.name.length - 4), item.name, pageNumber.toString());
-                  pageNumber += await countPages(item.fullPath); // eslint-disable-line no-await-in-loop
-                }
+              const files = subTree.filter(item => (item.type === 'file'));
+              for (let i = 0; i < files.length; i += 1) {
+                const item = files[i];
+                let label = item.fullPath.substr(data.input.length + 1);
+                label = label.substr(0, label.length - 4);
+                addRow(
+                  label,
+                  item.fullPath,
+                  pageNumber.toString(),
+                );
+                pageNumber += await countPages(item.fullPath); // eslint-disable-line no-await-in-loop
               }
               if (data.changelog) doc.pageBreak();
             }, send);
@@ -297,18 +314,19 @@ const aggregate = async (data, send, isTest = false) => {
                 row.cell().text(name, { goTo: destination });
                 row.cell().text(modified, { goTo: destination, textAlign: 'right' });
               };
-              const files = subTree
-                .filter(item => (item.type === 'file'))
-                .sort((a, b) => {
-                  if (a.lastModified.toISOString() < b.lastModified.toISOString()) return -1;
-                  if (a.lastModified.toISOString() > b.lastModified.toISOString()) return 1;
-                  return 0;
-                });
+              let files = subTree.filter(item => (item.type === 'file'));
+              files = files.sort((a, b) => {
+                if (a.lastModified.toISOString() < b.lastModified.toISOString()) return -1;
+                if (a.lastModified.toISOString() > b.lastModified.toISOString()) return 1;
+                return 0;
+              });
               for (let i = 0; i < files.length; i += 1) {
                 const item = files[i];
+                let label = item.fullPath.substr(data.input.length + 1);
+                label = label.substr(0, label.length - 4);
                 addRow(
-                  item.name.substring(0, item.name.length - 4),
-                  item.name,
+                  label,
+                  item.fullPath,
                   item.lastModified.toISOString().substr(0, 10),
                 );
               }
@@ -316,9 +334,9 @@ const aggregate = async (data, send, isTest = false) => {
           }
 
           // merge files
+          let foldersBuffer = [];
           for (let i = 0; i < subTree.length; i += 1) {
             const item = subTree[i];
-            const foldersBuffer = [];
             // eslint-disable-next-line no-await-in-loop, no-loop-func
             await stepAsync(`Fusion de l'élément ${item.name}`, async () => {
               if (item.type === 'file') {
@@ -327,19 +345,24 @@ const aggregate = async (data, send, isTest = false) => {
                 doc.setTemplate(pdfFile);
                 doc.text();
                 while (foldersBuffer.length !== 0) {
-                  const folderItem = foldersBuffer.pop();
-                  doc.destination(folderItem.name);
-                  if (data.documentOutline) {
-                    doc.outline(
-                      folderItem.name.split('/').pop(),
-                      folderItem.name,
-                      folderItem.parentDir,
-                    );
-                  }
+                  const folderItem = foldersBuffer.shift();
+                  const folderName = folderItem.fullPath.substr(data.input.length + 1);
+                  let folderParent = folderName.split('/');
+                  folderParent.pop();
+                  folderParent = folderParent.join('/');
+                  doc.destination(folderName);
+                  if (data.documentOutline) doc.outline(folderName, folderName, folderParent);
                 }
-                doc.destination(item.name);
+                let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
+                itemParent.pop();
+                itemParent = itemParent.join('/');
+                doc.destination(item.fullPath);
                 if (data.documentOutline) {
-                  doc.outline(item.name.substring(0, item.name.length - 4), item.name, item.parentDir);
+                  doc.outline(
+                    item.name.substr(0, item.name.length - 4),
+                    item.fullPath,
+                    itemParent,
+                  );
                 }
                 for (let j = 2; j <= pdfFile.pageCount; j += 1) {
                   const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
@@ -350,6 +373,7 @@ const aggregate = async (data, send, isTest = false) => {
                   doc.text();
                 }
                 doc.setTemplate(pdfEmpty);
+                foldersBuffer = [];
               } else {
                 foldersBuffer.push(item);
               }
@@ -381,13 +405,13 @@ const aggregate = async (data, send, isTest = false) => {
     }
   } catch (e) {
     debug(e);
-    step(`Le traitement a échoué: ${e.message}`, () => true, send, true, false);
+    step(`Le traitement s'est achevé en erreur: ${e.message}`, () => true, send, false, false);
   }
 
-  // Remove the empty template
+  // Remove the empty template -- by force if the job has been terminated manually
   await stepAsync('Suppression du modèle de page vierge', async () => {
     await fs.remove(`${data.output}/_blank.pdf`).catch(e => debug(e));
-  }, send, false, true);
+  }, send, false, true, true);
 };
 
 module.exports = {
@@ -401,4 +425,7 @@ module.exports = {
   countPages,
   makeEmptyPdf,
   aggregate,
+  terminateJob,
+  step,
+  stepAsync,
 };

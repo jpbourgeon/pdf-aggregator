@@ -66,6 +66,18 @@ exports[`The renderView component of the result page should render correctly 1`]
       <WithStyles(Button)
         className="function () {
         return fn.apply(this, arguments);
+      }"
+        color="default"
+        onClick={[Function]}
+        size="small"
+        variant="raised"
+      >
+        <pure(Cancel) />
+        Annuler
+      </WithStyles(Button)>
+      <WithStyles(Button)
+        className="function () {
+        return fn.apply(this, arguments);
       } undefined"
         color="primary"
         onClick={[Function]}

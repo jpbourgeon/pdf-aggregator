@@ -4,62 +4,64 @@ exports[`PDF Aggregator the async aggregate function should match an empty snaps
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on level 1 folders with depth 1 1`] = `
 Array [
-  "QA6fTCRxjCgruSmaRI9VwSEAP2g=",
+  "CALHG0IfUYfWoTeQ++WDZ58DCqs=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on level 1 folders with unlimited depth 1`] = `
 Array [
-  "8riVfU8nZmW7jBGc75Ezcfegm3E=",
-  "EBKRgVuItSEKlyD/Afm8b3xo2Pc=",
+  "9VFfWTbbc8w+/tD2XW7ue402B/w=",
+  "OznxjVyfdALx0YsBkhRD5J3iynE=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on the root folder with unlimited depth 1`] = `
 Array [
-  "SmL+/gHuAKN37vR4apCzWhyaGRg=",
+  "kJsdeeacwqItTG6vJW6K50lUPM4=",
 ]
 `;
 
+exports[`PDF Aggregator the async aggregate function should match the snapshot when the job is terminated 1`] = `Array []`;
+
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a changelog 1`] = `
 Array [
-  "uFT6y//jt8kYgazo0w9jNLFtdVg=",
+  "xu+hSNKPsFbyOHX5SyQYOHHjwGc=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a cover page with empty logo, title and subtitle 1`] = `
 Array [
-  "DlnBeB/8ukqkDLMMi58Hh/x8IvY=",
+  "09VvKts0JOmf7PZC1+MqPj8T9uc=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a document outline 1`] = `
 Array [
-  "mlfbj2UolktsV89tYJJLX7L40KQ=",
+  "FHc59y0e60sdJoMcdiYAsGJCe4s=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a full cover page 1`] = `
 Array [
-  "Jf3KuaeNjSxizNQFcXyO+SRLjf4=",
+  "PD5wPK1KonhRQ0erqN8by/tkf+A=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a table of content 1`] = `
 Array [
-  "VpgOU40JjMpb0TlfDb8+SuV7Zc0=",
+  "TcKJAs1S5kAECBEFWvv2kaMO0uk=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with every available formatting options activated 1`] = `
 Array [
-  "5gyOzEdIv9bLXujuoFzDf6XskcM=",
+  "djjxiYbJWeKTCiW8fmaMVwIZ94M=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with page numbers 1`] = `
 Array [
-  "0f62ylqDgg+UzXn8Z0mRNyKsxbI=",
+  "NA6+pm17NCSqIptdmgpWPCgtcJU=",
 ]
 `;
 

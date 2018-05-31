@@ -156,7 +156,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="output"
           shrink={true}
         >
-          Logo
+          Logo (Formats acceptés : JPEG, PDF)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           disabled={true}

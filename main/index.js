@@ -6,8 +6,9 @@ const { BrowserWindow, app } = require('electron');
 const isDev = require('electron-is-dev');
 const prepareNext = require('electron-next');
 const { resolve } = require('app-root-path');
-const { shell } = require('electron');
+const { shell, ipcMain } = require('electron');
 const debug = require('debug')('app:main/index.js');
+const { terminateJob } = require('./utils/pdfaggregator');
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -36,6 +37,7 @@ app.on('ready', async () => {
     mainWindow.setResizable(true);
   }
 
+  // Catch external actions and open them outside of electron
   const handleRedirect = (e, href) => {
     if (href !== mainWindow.webContents.getURL()) {
       e.preventDefault();
@@ -44,6 +46,12 @@ app.on('ready', async () => {
   };
   mainWindow.webContents.on('will-navigate', handleRedirect);
   mainWindow.webContents.on('new-window', handleRedirect);
+
+  // Catch interruption calls and pass them to the PDFAggregator functions
+  ipcMain.on('cancel-job', () => {
+    debug('The user asked the termination of the current job');
+    terminateJob();
+  });
 
   mainWindow.loadURL(url);
 });

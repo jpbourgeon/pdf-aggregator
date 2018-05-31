@@ -168,7 +168,7 @@ const RenderView = (props) => {
             [classes.hidden]: !state.data.cover,
           })}
           >
-            <InputLabel htmlFor="output" shrink>Logo</InputLabel>
+            <InputLabel htmlFor="output" shrink>Logo (Formats acceptés : JPEG, PDF)</InputLabel>
             <Input
               id="logo"
               label=""
