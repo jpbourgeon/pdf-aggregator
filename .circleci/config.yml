@@ -49,4 +49,5 @@ jobs:
       - store_test_results:
           path: test-results/jest
       - store_artifacts:
-          path: /tmp/artifacts
+          path: main/utils/_testbed_/pdfaggregator/output
+          destination: pdfaggregator-generated-files
