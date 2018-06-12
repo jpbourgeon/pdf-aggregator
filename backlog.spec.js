@@ -2,6 +2,7 @@ describe('backlog', () => {
   describe('app', () => {
     it('should have a detailed documentation', () => undefined);
     it('should be localized (i18n): ui and main process messages', () => undefined);
+    it('should use template merging for the cover page instead of page generation', () => undefined);
   });
 
   describe('code', () => {
