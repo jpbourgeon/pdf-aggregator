@@ -405,7 +405,7 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
     }
   } catch (e) {
     debug(e);
-    step(`Le traitement s'est achevé en erreur: ${e.message}`, () => true, send, false, false);
+    addLogEntry(send, `Le traitement s'est achevé en erreur: ${e.message}`, true, false);
   }
 
   // Remove the empty template -- by force if the job has been terminated manually
