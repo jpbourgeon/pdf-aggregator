@@ -50,3 +50,4 @@ jobs:
           path: test-results/jest
       - store_artifacts:
           path: main/utils/__testbed__/pdfaggregator/output
+          destination: pdfaggregator-output
