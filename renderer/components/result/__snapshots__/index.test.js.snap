@@ -30,11 +30,11 @@ exports[`The renderView component of the result page should render correctly 1`]
       )
     </WithStyles(Button)>
   </div>
-  <WithStyles(GridWrapper)
+  <WithStyles(Grid)
     container={true}
     spacing={24}
   >
-    <WithStyles(GridWrapper)
+    <WithStyles(Grid)
       item={true}
       xs={12}
     >
@@ -58,11 +58,23 @@ exports[`The renderView component of the result page should render correctly 1`]
           <pure(HelpOutline) />
         </WithStyles(IconButton)>
       </WithStyles(Typography)>
-    </WithStyles(GridWrapper)>
-    <WithStyles(GridWrapper)
+    </WithStyles(Grid)>
+    <WithStyles(Grid)
       item={true}
       xs={12}
     >
+      <WithStyles(Button)
+        className="function () {
+        return fn.apply(this, arguments);
+      }"
+        color="default"
+        onClick={[Function]}
+        size="small"
+        variant="raised"
+      >
+        <pure(Cancel) />
+        Annuler
+      </WithStyles(Button)>
       <WithStyles(Button)
         className="function () {
         return fn.apply(this, arguments);
@@ -85,8 +97,8 @@ exports[`The renderView component of the result page should render correctly 1`]
         <pure(Home) />
         Nouveau traitement
       </WithStyles(Button)>
-    </WithStyles(GridWrapper)>
-    <WithStyles(GridWrapper)
+    </WithStyles(Grid)>
+    <WithStyles(Grid)
       item={true}
       xs={12}
     >
@@ -128,8 +140,8 @@ exports[`The renderView component of the result page should render correctly 1`]
           <WithStyles(List) />
         </WithStyles(CardContent)>
       </WithStyles(Card)>
-    </WithStyles(GridWrapper)>
-  </WithStyles(GridWrapper)>
+    </WithStyles(Grid)>
+  </WithStyles(Grid)>
   <WithStyles(Snackbar)
     ContentProps={
       Object {

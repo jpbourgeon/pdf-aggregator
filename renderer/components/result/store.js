@@ -39,6 +39,10 @@ const defaultState = {
   },
 };
 
+const cancelJob = () => {
+  ipcRenderer.send('cancel-job');
+};
+
 class ContextProvider extends React.Component {
   constructor() {
     super();
@@ -160,6 +164,7 @@ class ContextProvider extends React.Component {
             switchBool: this.switchBool.bind(this),
             saveLog: this.saveLog.bind(this),
             handleClose: this.handleClose.bind(this),
+            cancelJob,
           },
         }}
       >

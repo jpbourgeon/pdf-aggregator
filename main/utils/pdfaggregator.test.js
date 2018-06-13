@@ -36,6 +36,7 @@ const outputFolders = [
   'merge04',
   'outline',
   'pageNumbers',
+  'terminate',
   'toc',
 ];
 
@@ -53,6 +54,18 @@ beforeAll(async (done) => {
 });
 
 describe('PDF Aggregator', () => {
+  describe('the job terminator mechanism', () => {
+    it('should force an async step to throw an error', async () => {
+      PdfAggregator.terminateJob();
+      expect(PdfAggregator.stepAsync('async step', async () => true, jest.fn())).rejects.toThrow();
+    });
+
+    it('should force a sync step to throw an error', () => {
+      PdfAggregator.terminateJob();
+      expect(() => PdfAggregator.step('step', () => true, jest.fn())).toThrow();
+    });
+  });
+
   describe('the async crawlFolder function', () => {
     it('should return a valid snapshot', async () => {
       expect.assertions(1);
@@ -292,7 +305,7 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('the async aggregate function', () => {
+  describe.only('the async aggregate function', () => {
     it('should match an empty snapshot on an empty folder', async () => {
       const output = `${defaultOptions.output}/merge01`;
       await PdfAggregator.aggregate(
@@ -461,6 +474,27 @@ describe('PDF Aggregator', () => {
           documentOutline: true,
         },
         jest.fn(),
+        true,
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should match the snapshot when the job is terminated', async () => {
+      const output = `${defaultOptions.output}/terminate`;
+      PdfAggregator.terminateJob();
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          output,
+          cover: true,
+          pageNumbers: true,
+          toc: true,
+          changelog: true,
+          documentOutline: true,
+        },
+        jest.fn(),
+        true,
         true,
       ).catch(e => debug(e));
       const result = await snapshotPdfFiles(output).catch(e => debug(e));
