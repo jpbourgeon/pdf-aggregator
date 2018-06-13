@@ -305,7 +305,7 @@ describe('PDF Aggregator', () => {
     });
   });
 
-  describe('the async aggregate function', () => {
+  describe.only('the async aggregate function', () => {
     it('should match an empty snapshot on an empty folder', async () => {
       const output = `${defaultOptions.output}/merge01`;
       await PdfAggregator.aggregate(

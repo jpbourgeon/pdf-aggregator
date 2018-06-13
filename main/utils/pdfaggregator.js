@@ -277,7 +277,7 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 label = label.substr(0, label.length - 4);
                 addRow(
                   label,
-                  item.fullPath,
+                  item.fullPath.substr(data.input.length + 1),
                   pageNumber.toString(),
                 );
                 pageNumber += await countPages(item.fullPath); // eslint-disable-line no-await-in-loop
@@ -326,7 +326,7 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 label = label.substr(0, label.length - 4);
                 addRow(
                   label,
-                  item.fullPath,
+                  item.fullPath.substr(data.input.length + 1),
                   item.lastModified.toISOString().substr(0, 10),
                 );
               }
@@ -356,11 +356,11 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
                 itemParent.pop();
                 itemParent = itemParent.join('/');
-                doc.destination(item.fullPath);
+                doc.destination(item.fullPath.substr(data.input.length + 1));
                 if (data.documentOutline) {
                   doc.outline(
                     item.name.substr(0, item.name.length - 4),
-                    item.fullPath,
+                    item.fullPath.substr(data.input.length + 1),
                     itemParent,
                   );
                 }
