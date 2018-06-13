@@ -57,6 +57,12 @@
     "jest-junit": "^5.0.0",
     "react-test-renderer": "^16.4.0"
   },
+  "greenkeeper": {
+    "ignore": [
+      "@babel/core",
+      "babel-core"
+    ]
+  },
   "jest": {
     "testPathIgnorePatterns": [
       "<rootDir>/renderer/out/",
