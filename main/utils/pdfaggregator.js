@@ -4,6 +4,7 @@ const pdf = require('pdfjs');
 const Helvetica = require('pdfjs/font/Helvetica');
 const HelveticaBold = require('pdfjs/font/Helvetica-Bold');
 const { getTree } = require('./gettree');
+const { deduplicatePath } = require('./deduplicatepath.js');
 
 
 let currentDate = new Date();
@@ -101,19 +102,6 @@ const stripEmptyFolders = (tree) => {
     return result;
   }, []);
   return strippedTree;
-};
-
-const deduplicatePdfPath = async (path, pathExistsDI = fs.pathExists) => {
-  const file = path.substring(0, path.length - 4);
-  let i = 0;
-  while (await pathExistsDI(`${file}${(i > 0) ? `_${i}` : ''}.pdf`) // eslint-disable-line no-await-in-loop
-    .catch((e) => {
-      debug(e);
-      return false;
-    })
-  ) i += 1;
-  const result = `${file}${(i > 0) ? `_${i}` : ''}.pdf`;
-  return result;
 };
 
 const fillPlaceholders = (field, inputFolder, when) => {
@@ -385,7 +373,7 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
           await stepAsync(
             `Enregistrement du fichier : ${filename}.pdf`,
             () => new Promise(async (resolve, reject) => {
-              const path = await deduplicatePdfPath(`${data.output}/${filename}.pdf`).catch(e => debug(e));
+              const path = await deduplicatePath(`${data.output}/${filename}.pdf`, '.pdf').catch(e => debug(e));
               const write = fs.createWriteStream(path);
               doc.pipe(write);
               await doc.end().catch(e => debug(e));
@@ -419,7 +407,6 @@ module.exports = {
   getFoldersToAggregate,
   getSubTree,
   stripEmptyFolders,
-  deduplicatePdfPath,
   fillPlaceholders,
   calculatePages,
   countPages,
