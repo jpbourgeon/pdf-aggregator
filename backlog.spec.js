@@ -7,7 +7,6 @@ describe('backlog', () => {
   });
 
   describe('the result pdf file', () => {
-    it('should not merge _blank files generated as template (fix)', () => undefined);
     it('should display better outline entries (allow the same name for multiple entries)', () => undefined);
   });
 });
