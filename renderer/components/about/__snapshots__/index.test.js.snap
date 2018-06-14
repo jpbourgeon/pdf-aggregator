@@ -30,9 +30,10 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="body1"
         >
-          Auteur : 
+          Auteur :
           <a
             href="mailto:email"
+            rel="noopener noreferrer"
             target="_blank"
           >
             author
@@ -41,9 +42,10 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="body1"
         >
-          Dépôt : 
+          Dépôt :
           <a
             href="github"
+            rel="noopener noreferrer"
             target="_blank"
           >
             Github
@@ -57,6 +59,7 @@ exports[`The renderView component of the about modal should render correctly 1`]
            (
           <a
             href="releases"
+            rel="noopener noreferrer"
             target="_blank"
           >
             Notes de version
@@ -64,6 +67,7 @@ exports[`The renderView component of the about modal should render correctly 1`]
            | 
           <a
             href="license"
+            rel="noopener noreferrer"
             target="_blank"
           >
             License
