@@ -65,7 +65,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           Niveau (0 = racine)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
-          className={[MockFunction]}
+          className=""
           id="level"
           onChange={[Function]}
           type="number"
@@ -82,7 +82,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           Profondeur (0 = illimitée)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
-          className={[MockFunction]}
+          className=""
           id="depth"
           onChange={[Function]}
           type="number"
@@ -146,6 +146,16 @@ exports[`The renderView component of the start page should render correctly 1`] 
           }
           label="Page de couverture"
         />
+        <WithStyles(Typography)
+          className=""
+          variant="body1"
+        >
+          Important : placez un fichier 
+          <em>
+            _cover.pdf
+          </em>
+           dans le dossier source. Il sera utilisé comme couverture.
+        </WithStyles(Typography)>
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
         className="function () {
@@ -153,62 +163,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
       }"
       >
         <WithStyles(InputLabel)
-          htmlFor="output"
+          htmlFor="coverpageFooter"
           shrink={true}
         >
-          Logo (Formats acceptés : JPEG, PDF)
+          Pied de page de la couverture (options : %dossiersource%, %dateiso%, %ligne%)
         </WithStyles(InputLabel)>
         <WithStyles(Input)
-          disabled={true}
-          id="logo"
-          label=""
-          startAdornment={
-            <WithStyles(InputAdornment)
-              position="start"
-            >
-              <WithStyles(IconButton)
-                aria-label="Choisir un logo"
-                onClick={[Function]}
-              >
-                <pure(FolderOpen) />
-              </WithStyles(IconButton)>
-            </WithStyles(InputAdornment)>
-          }
-          type="text"
-          value=""
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className="function () {
-        return fn.apply(this, arguments);
-      }"
-      >
-        <WithStyles(InputLabel)
-          htmlFor="title"
-          shrink={true}
-        >
-          Titre (options : %dossiersource%, %dateiso%, %ligne%)
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          id="title"
-          onChange={[Function]}
-          type="text"
-          value="%dossiersource%"
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className="function () {
-        return fn.apply(this, arguments);
-      }"
-      >
-        <WithStyles(InputLabel)
-          htmlFor="subtitle"
-          shrink={true}
-        >
-          Sous-titre (options : %dossiersource%, %dateiso%, %ligne%)
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          id="subtitle"
+          id="coverpageFooter"
           onChange={[Function]}
           type="text"
           value="%dateiso%"

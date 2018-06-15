@@ -58,8 +58,17 @@ const styles = theme => ({
   hidden: {
     display: 'none',
   },
+  coverpageFooterLabel: {
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
+  input: {
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
+  inputLabel: {
+    color: 'rgba(0, 0, 0, 1)',
+    transform: 'scale(0.875) !important',
+  },
 });
-
 
 const RenderView = (props) => {
   const {
@@ -77,12 +86,13 @@ const RenderView = (props) => {
             </IconButton>
           </Typo>
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="input" shrink>Dossier source</InputLabel>
+            <InputLabel htmlFor="input" shrink className={classes.inputLabel}>Dossier source</InputLabel>
             <Input
               id="input"
               type="text"
               value={state.data.input}
               disabled
+              className={classes.input}
               startAdornment={
                 <InputAdornment position="start">
                   <IconButton
@@ -97,9 +107,9 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="level" shrink>Niveau (0 = racine)</InputLabel>
+            <InputLabel htmlFor="level" shrink className={classes.inputLabel}>Niveau (0 = racine)</InputLabel>
             <Input
-              className={classes.formControl}
+              className={classNames([classes.formControl, classes.input])}
               id="level"
               type="number"
               value={state.data.level}
@@ -108,9 +118,9 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="depth" shrink>Profondeur (0 = illimitée)</InputLabel>
+            <InputLabel htmlFor="depth" shrink className={classes.inputLabel}>Profondeur (0 = illimitée)</InputLabel>
             <Input
-              className={classes.formControl}
+              className={classNames([classes.formControl, classes.input])}
               id="depth"
               type="number"
               value={state.data.depth}
@@ -119,13 +129,14 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="output" shrink>Dossier cible</InputLabel>
+            <InputLabel htmlFor="output" shrink className={classes.inputLabel}>Dossier cible</InputLabel>
             <Input
               id="output"
               label=""
               type="text"
               value={state.data.output}
               disabled
+              className={classes.input}
               startAdornment={
                 <InputAdornment position="start">
                   <IconButton
@@ -140,7 +151,7 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="filename" shrink>
+            <InputLabel htmlFor="filename" shrink className={classes.inputLabel}>
               Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
             </InputLabel>
             <Input
@@ -148,6 +159,7 @@ const RenderView = (props) => {
               type="text"
               value={state.data.filename}
               onChange={e => actions.handleChange('filename', e)}
+              className={classes.input}
             />
           </FormControl>
 
@@ -155,68 +167,37 @@ const RenderView = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={state.data.cover}
-                  onChange={e => actions.handleChange('cover', e, 'checked')}
+                  checked={state.data.coverpage}
+                  onChange={e => actions.handleChange('coverpage', e, 'checked')}
                 />
               }
               label="Page de couverture"
             />
+            <Typo
+              variant="body1"
+              className={classNames({
+                [classes.coverpageFooterLabel]: true,
+                [classes.hidden]: !state.data.coverpage,
+              })}
+            >
+            Important : placez un fichier <em>_cover.pdf</em> dans le dossier source. Il sera utilisé comme couverture.
+            </Typo>
           </FormControl>
 
           <FormControl className={classNames({
             [classes.formControl]: true,
-            [classes.hidden]: !state.data.cover,
+            [classes.hidden]: !state.data.coverpage,
           })}
           >
-            <InputLabel htmlFor="output" shrink>Logo (Formats acceptés : JPEG, PDF)</InputLabel>
-            <Input
-              id="logo"
-              label=""
-              type="text"
-              value={state.data.logo}
-              disabled
-              startAdornment={
-                <InputAdornment position="start">
-                  <IconButton
-                    aria-label="Choisir un logo"
-                    onClick={() => actions.setLogo()}
-                  >
-                    <FolderOpen />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-
-          <FormControl className={classNames({
-            [classes.formControl]: true,
-            [classes.hidden]: !state.data.cover,
-          })}
-          >
-            <InputLabel htmlFor="title" shrink>
-              Titre (options : %dossiersource%, %dateiso%, %ligne%)
+            <InputLabel htmlFor="coverpageFooter" shrink className={classes.inputLabel}>
+              Pied de page de la couverture (options : %dossiersource%, %dateiso%, %ligne%)
             </InputLabel>
             <Input
-              id="title"
+              id="coverpageFooter"
               type="text"
-              value={state.data.title}
-              onChange={e => actions.handleChange('title', e)}
-            />
-          </FormControl>
-
-          <FormControl className={classNames({
-            [classes.formControl]: true,
-            [classes.hidden]: !state.data.cover,
-          })}
-          >
-            <InputLabel htmlFor="subtitle" shrink>
-              Sous-titre (options : %dossiersource%, %dateiso%, %ligne%)
-            </InputLabel>
-            <Input
-              id="subtitle"
-              type="text"
-              value={state.data.subtitle}
-              onChange={e => actions.handleChange('subtitle', e)}
+              value={state.data.coverpageFooter}
+              onChange={e => actions.handleChange('coverpageFooter', e)}
+              className={classes.input}
             />
           </FormControl>
 

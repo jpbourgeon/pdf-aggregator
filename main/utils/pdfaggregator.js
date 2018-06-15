@@ -180,42 +180,44 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
           const maxDepth = (data.depth <= 0) ? Infinity : data.level + data.depth;
           subTree = getSubTree(tree, folder, maxDepth, isTest);
           subTree = stripEmptyFolders(subTree);
+          subTree = subTree
+            .filter(item => (item.name.toLowerCase() !== '_blank.pdf' && item.name.toLowerCase() !== '_cover.pdf'));
         }, send);
 
         if (subTree.length !== 0) {
           const doc = new pdf.Document({ font: Helvetica, fontSize: 11 });
 
           // Cover page
-          if (data.cover) {
-            await stepAsync('Génération de la couverture', async () => {
-              doc.text('  ', { fontSize: 96, color: '0xffffff' });
-              if (data.logo) {
-                const image = await fs.readFile(data.logo).catch(e => debug(e));
-                const logo = new pdf.Image(image);
-                doc.image(logo, {
-                  height: logo.height * 0.75, // pixels to points
-                  width: logo.width * 0.75, // pixels to points
-                  align: 'center',
-                });
-              }
-              doc.text(fillPlaceholders(data.title, data.input, currentDate), {
-                font: HelveticaBold,
-                fontSize: 48,
-                textAlign: 'center',
+          if (data.coverpage) {
+            const coverExists = await fs.pathExists(`${data.input}/_cover.pdf`)
+              .catch((e) => {
+                debug(e);
+                return false;
               });
-              doc.text(fillPlaceholders(data.subtitle, data.input, currentDate), {
-                font: HelveticaBold,
-                fontSize: 24,
-                textAlign: 'center',
-              });
-              if (!data.pageNumbers && (data.toc || data.changelog)) doc.pageBreak();
-            }, send);
+            if (coverExists) {
+              await stepAsync('Fusion de la couverture', async () => {
+                const footer = doc.footer();
+                if (data.coverpageFooter) {
+                  footer.text(fillPlaceholders(data.coverpageFooter, data.input, currentDate), { textAlign: 'center' });
+                }
+                const coverFile = await fs.readFile(`${data.input}/_cover.pdf`).catch(e => debug(e));
+                const cover = new pdf.ExternalDocument(coverFile);
+                doc.setTemplate(cover);
+                doc.text();
+              }, send);
+            } else {
+              addLogEntry(
+                send,
+                'La couverture n\'a pas été fusionnée: le fichier _cover.pdf est absent du dossier source.',
+                true,
+              );
+            }
           }
 
           // Page numbers
+          const footer = doc.footer();
           if (data.pageNumbers) {
             step('Numérotation des pages', () => {
-              const footer = doc.footer();
               footer.pageNumber(
                 (curr, total) => (`${curr} / ${total}`),
                 { textAlign: 'center' },
@@ -226,11 +228,12 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
           // Generate the table of content (if asked: don't forget to add the bookmark)
           if (data.toc) {
             await stepAsync('Génération de la table des matières', async () => {
+              doc.setTemplate(pdfEmpty);
               doc.text();
-              doc.destination('%toc%');
-              if (data.documentOutline) doc.outline('Table des matières', '%toc%');
+              doc.destination('__toc__');
+              if (data.documentOutline) doc.outline('Table des matières', '__toc__');
               doc.text('Table des matières\n\n', {
-                font: HelveticaBold,
+                // font: HelveticaBold,
                 fontSize: 18,
               });
               const table = doc.table({
@@ -238,24 +241,24 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 borderHorizontalWidths: i => ((i < 2) ? 1 : 0.1),
                 padding: 5,
               });
-              const header = table.header({
+              const th = table.row({
                 font: HelveticaBold,
                 marginTop: 5,
-                backgroundColor: '0x666666',
-                color: '0xffffff',
+                backgroundColor: 0x666666,
+                color: 0xffffff,
               });
-              header.cell('Contenu');
-              header.cell('Page', { textAlign: 'right' });
+              th.cell('Contenu');
+              th.cell('Page', { textAlign: 'right' });
               const addRow = (name, destination, page = '') => {
-                const row = table.row();
-                row.cell().text(name, { goTo: destination });
-                row.cell().text(page, { goTo: destination, textAlign: 'right' });
+                const tr = table.row();
+                tr.cell().text(name, { goTo: destination });
+                tr.cell().text(page, { goTo: destination, textAlign: 'right' });
               };
               let pageNumber = 1;
-              if (data.cover) pageNumber += 1;
+              if (data.coverpage) pageNumber += 1;
               pageNumber += calculatePages(subTree.length);
               if (data.changelog) {
-                addRow('Journal des modifications', '%changelog%', pageNumber.toString());
+                addRow('Journal des modifications', '__changelog__', pageNumber.toString());
                 pageNumber += calculatePages(subTree.filter(item => (item.type === 'file')).length);
               }
               const files = subTree.filter(item => (item.type === 'file'));
@@ -270,16 +273,16 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 );
                 pageNumber += await countPages(item.fullPath); // eslint-disable-line no-await-in-loop
               }
-              if (data.changelog) doc.pageBreak();
             }, send);
           }
 
           // Changelog
           if (data.changelog) {
             step('Génération du journal des modifications', () => {
+              doc.setTemplate(pdfEmpty);
               doc.text();
-              doc.destination('%changelog%');
-              if (data.documentOutline) doc.outline('Journal des modifications', '%changelog%');
+              doc.destination('__changelog__');
+              if (data.documentOutline) doc.outline('Journal des modifications', '__changelog__');
               doc.text('Journal des modifications\n\n', {
                 font: HelveticaBold,
                 fontSize: 18,
@@ -289,18 +292,18 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 borderHorizontalWidths: i => ((i < 2) ? 1 : 0.1),
                 padding: 5,
               });
-              const header = table.header({
+              const th = table.row({
                 font: HelveticaBold,
                 marginTop: 5,
                 backgroundColor: '0x666666',
                 color: '0xffffff',
               });
-              header.cell('Document');
-              header.cell('Date', { textAlign: 'right' });
+              th.cell('Document');
+              th.cell('Date', { textAlign: 'right' });
               const addRow = (name, destination, modified) => {
-                const row = table.row();
-                row.cell().text(name, { goTo: destination });
-                row.cell().text(modified, { goTo: destination, textAlign: 'right' });
+                const tr = table.row();
+                tr.cell().text(name, { goTo: destination });
+                tr.cell().text(modified, { goTo: destination, textAlign: 'right' });
               };
               let files = subTree.filter(item => (item.type === 'file'));
               files = files.sort((a, b) => {
@@ -327,45 +330,43 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
             const item = subTree[i];
             // eslint-disable-next-line no-await-in-loop, no-loop-func
             await stepAsync(`Fusion de l'élément ${item.name}`, async () => {
-              if (item.name.toLowerCase() !== '_blank.pdf' && item.name.toLowerCase() !== '_cover.pdf') {
-                if (item.type === 'file') {
-                  const file = await fs.readFile(item.fullPath).catch(e => debug(e));
-                  const pdfFile = new pdf.ExternalDocument(file);
-                  doc.setTemplate(pdfFile);
-                  doc.text();
-                  while (foldersBuffer.length !== 0) {
-                    const folderItem = foldersBuffer.shift();
-                    const folderName = folderItem.fullPath.substr(data.input.length + 1);
-                    let folderParent = folderName.split('/');
-                    folderParent.pop();
-                    folderParent = folderParent.join('/');
-                    doc.destination(folderName);
-                    if (data.documentOutline) doc.outline(folderName, folderName, folderParent);
-                  }
-                  let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
-                  itemParent.pop();
-                  itemParent = itemParent.join('/');
-                  doc.destination(item.fullPath.substr(data.input.length + 1));
-                  if (data.documentOutline) {
-                    doc.outline(
-                      item.name.substr(0, item.name.length - 4),
-                      item.fullPath.substr(data.input.length + 1),
-                      itemParent,
-                    );
-                  }
-                  for (let j = 2; j <= pdfFile.pageCount; j += 1) {
-                    const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
-                    otherPage.addPageOf(j, pdfFile);
-                    const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
-                    const extOtherPage = new pdf.ExternalDocument(otherPageDoc);
-                    doc.setTemplate(extOtherPage);
-                    doc.text();
-                  }
-                  doc.setTemplate(pdfEmpty);
-                  foldersBuffer = [];
-                } else {
-                  foldersBuffer.push(item);
+              if (item.type === 'file') {
+                const file = await fs.readFile(item.fullPath).catch(e => debug(e));
+                const pdfFile = new pdf.ExternalDocument(file);
+                doc.setTemplate(pdfFile);
+                doc.text();
+                while (foldersBuffer.length !== 0) {
+                  const folderItem = foldersBuffer.shift();
+                  const folderName = folderItem.fullPath.substr(data.input.length + 1);
+                  let folderParent = folderName.split('/');
+                  folderParent.pop();
+                  folderParent = folderParent.join('/');
+                  doc.destination(folderName);
+                  if (data.documentOutline) doc.outline(folderName, folderName, folderParent);
                 }
+                let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
+                itemParent.pop();
+                itemParent = itemParent.join('/');
+                doc.destination(item.fullPath.substr(data.input.length + 1));
+                if (data.documentOutline) {
+                  doc.outline(
+                    item.name.substr(0, item.name.length - 4),
+                    item.fullPath.substr(data.input.length + 1),
+                    itemParent,
+                  );
+                }
+                for (let j = 2; j <= pdfFile.pageCount; j += 1) {
+                  const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
+                  otherPage.addPageOf(j, pdfFile);
+                  const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
+                  const extOtherPage = new pdf.ExternalDocument(otherPageDoc);
+                  doc.setTemplate(extOtherPage);
+                  doc.text();
+                }
+                doc.setTemplate(pdfEmpty);
+                foldersBuffer = [];
+              } else {
+                foldersBuffer.push(item);
               }
             }, send);
           }
