@@ -25,7 +25,7 @@ exports[`PDF Aggregator the async aggregate function should match the snapshot w
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a changelog 1`] = `
 Array [
-  "4JpLsmqSs/wxRpwGoU5j8QujXN8=",
+  "zl0FLsJzifxRymj1qcyNePBg2xk=",
 ]
 `;
 
@@ -49,13 +49,13 @@ Array [
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a table of content 1`] = `
 Array [
-  "n+6z4y1zFSIY/A5ZAKQlUtMVgoc=",
+  "d9zewFYqFEOvv26FOY6G6XoLjw0=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with every available formatting options activated 1`] = `
 Array [
-  "UHI8YB5ynBR0ThnRK1kic01M6CQ=",
+  "ZE0JjOKFX7YZpTOM98Ml+kQpmb8=",
 ]
 `;
 
@@ -64,6 +64,10 @@ Array [
   "pYPihNRAdluCHiULAHDSS/pRUhQ=",
 ]
 `;
+
+exports[`PDF Aggregator the async aggregate function should not merge pdf files named _blank.pdf 1`] = `Array []`;
+
+exports[`PDF Aggregator the async aggregate function should not merge pdf files named _cover.pdf 1`] = `Array []`;
 
 exports[`PDF Aggregator the async crawlFolder function should return a valid snapshot 1`] = `
 Array [
@@ -178,6 +182,22 @@ Array [
     "name": "Folder_02_Subfolder_02",
     "parentDir": "Folder_02",
     "type": "directory",
+  },
+  Object {
+    "depth": 1,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/_blank.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "_blank.pdf",
+    "parentDir": "",
+    "type": "file",
+  },
+  Object {
+    "depth": 1,
+    "fullPath": "[MOCKED_OS_SPECIFIC_PATH]/pdfaggregator/input/_cover.pdf",
+    "lastModified": "MOCKED_DATE",
+    "name": "_cover.pdf",
+    "parentDir": "",
+    "type": "file",
   },
 ]
 `;

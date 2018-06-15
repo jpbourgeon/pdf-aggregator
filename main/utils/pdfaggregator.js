@@ -327,43 +327,45 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
             const item = subTree[i];
             // eslint-disable-next-line no-await-in-loop, no-loop-func
             await stepAsync(`Fusion de l'élément ${item.name}`, async () => {
-              if (item.type === 'file') {
-                const file = await fs.readFile(item.fullPath).catch(e => debug(e));
-                const pdfFile = new pdf.ExternalDocument(file);
-                doc.setTemplate(pdfFile);
-                doc.text();
-                while (foldersBuffer.length !== 0) {
-                  const folderItem = foldersBuffer.shift();
-                  const folderName = folderItem.fullPath.substr(data.input.length + 1);
-                  let folderParent = folderName.split('/');
-                  folderParent.pop();
-                  folderParent = folderParent.join('/');
-                  doc.destination(folderName);
-                  if (data.documentOutline) doc.outline(folderName, folderName, folderParent);
-                }
-                let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
-                itemParent.pop();
-                itemParent = itemParent.join('/');
-                doc.destination(item.fullPath.substr(data.input.length + 1));
-                if (data.documentOutline) {
-                  doc.outline(
-                    item.name.substr(0, item.name.length - 4),
-                    item.fullPath.substr(data.input.length + 1),
-                    itemParent,
-                  );
-                }
-                for (let j = 2; j <= pdfFile.pageCount; j += 1) {
-                  const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
-                  otherPage.addPageOf(j, pdfFile);
-                  const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
-                  const extOtherPage = new pdf.ExternalDocument(otherPageDoc);
-                  doc.setTemplate(extOtherPage);
+              if (item.name.toLowerCase() !== '_blank.pdf' && item.name.toLowerCase() !== '_cover.pdf') {
+                if (item.type === 'file') {
+                  const file = await fs.readFile(item.fullPath).catch(e => debug(e));
+                  const pdfFile = new pdf.ExternalDocument(file);
+                  doc.setTemplate(pdfFile);
                   doc.text();
+                  while (foldersBuffer.length !== 0) {
+                    const folderItem = foldersBuffer.shift();
+                    const folderName = folderItem.fullPath.substr(data.input.length + 1);
+                    let folderParent = folderName.split('/');
+                    folderParent.pop();
+                    folderParent = folderParent.join('/');
+                    doc.destination(folderName);
+                    if (data.documentOutline) doc.outline(folderName, folderName, folderParent);
+                  }
+                  let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
+                  itemParent.pop();
+                  itemParent = itemParent.join('/');
+                  doc.destination(item.fullPath.substr(data.input.length + 1));
+                  if (data.documentOutline) {
+                    doc.outline(
+                      item.name.substr(0, item.name.length - 4),
+                      item.fullPath.substr(data.input.length + 1),
+                      itemParent,
+                    );
+                  }
+                  for (let j = 2; j <= pdfFile.pageCount; j += 1) {
+                    const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
+                    otherPage.addPageOf(j, pdfFile);
+                    const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
+                    const extOtherPage = new pdf.ExternalDocument(otherPageDoc);
+                    doc.setTemplate(extOtherPage);
+                    doc.text();
+                  }
+                  doc.setTemplate(pdfEmpty);
+                  foldersBuffer = [];
+                } else {
+                  foldersBuffer.push(item);
                 }
-                doc.setTemplate(pdfEmpty);
-                foldersBuffer = [];
-              } else {
-                foldersBuffer.push(item);
               }
             }, send);
           }

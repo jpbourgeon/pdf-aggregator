@@ -35,6 +35,8 @@ const outputFolders = [
   'merge03',
   'merge04',
   'outline',
+  'no-blank-merge',
+  'no-cover-merge',
   'pageNumbers',
   'terminate',
   'toc',
@@ -456,6 +458,54 @@ describe('PDF Aggregator', () => {
         true,
         true,
       ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should not merge pdf files named _blank.pdf', async () => {
+      const output = `${defaultOptions.output}/no-blank-merge`;
+      const copyFiles = [
+        fs.copyFile(`${defaultOptions.input}/File_01.pdf`, `${output}/File_01.pdf`),
+        fs.copyFile(`${defaultOptions.input}/_blank.pdf`, `${output}/_blank.pdf`),
+      ];
+      await Promise.all(copyFiles).catch(e => debug(e));
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          input: output,
+          output,
+        },
+        jest.fn(),
+        true,
+        true,
+      ).catch(e => debug(e));
+      await fs.unlink(`${output}/File_01.pdf`).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should not merge pdf files named _cover.pdf', async () => {
+      const output = `${defaultOptions.output}/no-cover-merge`;
+      const copyFiles = [
+        fs.copyFile(`${defaultOptions.input}/File_01.pdf`, `${output}/File_01.pdf`),
+        fs.copyFile(`${defaultOptions.input}/_cover.pdf`, `${output}/_cover.pdf`),
+      ];
+      await Promise.all(copyFiles).catch(e => debug(e));
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          input: output,
+          output,
+        },
+        jest.fn(),
+        true,
+        true,
+      ).catch(e => debug(e));
+      const unlink = [
+        await fs.unlink(`${output}/_cover.pdf`).catch(e => debug(e)),
+        await fs.unlink(`${output}/File_01.pdf`).catch(e => debug(e)),
+      ];
+      await Promise.all(unlink).catch(e => debug(e));
       const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });
