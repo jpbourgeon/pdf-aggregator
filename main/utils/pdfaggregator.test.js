@@ -14,10 +14,8 @@ const defaultOptions = {
   depth: 0,
   output: `${testbed}/pdfaggregator/output`,
   filename: 'testFile',
-  cover: false,
-  logo: `${testbed}/pdfaggregator/logo/image.jpg`,
-  title: 'Titre: %dossiersource%',
-  subtitle: 'Auteur: xxx%ligne%Version: %dateiso%',
+  coverpage: false,
+  coverpageFooter: '',
   changelog: false,
   documentOutline: false,
   toc: false,
@@ -27,16 +25,15 @@ const defaultOptions = {
 const outputFolders = [
   'allIn',
   'changelog',
-  'cover01',
-  'cover02',
+  'coverpage01',
+  'coverpage02',
+  'coverpage03',
   'makeEmptyPdf',
   'merge01',
   'merge02',
   'merge03',
   'merge04',
   'outline',
-  'no-blank-merge',
-  'no-cover-merge',
   'pageNumbers',
   'terminate',
   'toc',
@@ -327,15 +324,13 @@ describe('PDF Aggregator', () => {
       expect(result).toMatchSnapshot();
     });
 
-    it('should match the snapshot with a full cover page', async () => {
-      const output = `${defaultOptions.output}/cover01`;
+    it('should match the snapshot with a cover page', async () => {
+      const output = `${defaultOptions.output}/coverpage01`;
       await PdfAggregator.aggregate(
         {
           ...defaultOptions,
           output,
-          cover: true,
-          title: 'Title: %dossiersource%',
-          subtitle: 'Author: xxx%ligne%Version: %dateiso%',
+          coverpage: true,
         },
         jest.fn(),
         true,
@@ -344,16 +339,31 @@ describe('PDF Aggregator', () => {
       expect(result).toMatchSnapshot();
     });
 
-    it('should match the snapshot with a cover page with empty logo, title and subtitle', async () => {
-      const output = `${defaultOptions.output}/cover02`;
+    it('should not break if the user asks for a coverpage without an _cover.pdf', async () => {
+      const input = `${defaultOptions.input}/Folder_01`;
+      const output = `${defaultOptions.output}/coverpage02`;
+      await PdfAggregator.aggregate(
+        {
+          ...defaultOptions,
+          input,
+          output,
+          coverpage: true,
+        },
+        jest.fn(),
+        true,
+      ).catch(e => debug(e));
+      const result = await snapshotPdfFiles(output).catch(e => debug(e));
+      expect(result).toMatchSnapshot();
+    });
+
+    it('should match the snapshot with a coverpage footer', async () => {
+      const output = `${defaultOptions.output}/coverpage03`;
       await PdfAggregator.aggregate(
         {
           ...defaultOptions,
           output,
-          cover: true,
-          logo: '',
-          title: '',
-          subtitle: '',
+          coverpage: true,
+          coverpageFooter: 'Auteur: xxx%ligne%Version: %dateiso%',
         },
         jest.fn(),
         true,
@@ -428,7 +438,8 @@ describe('PDF Aggregator', () => {
         {
           ...defaultOptions,
           output,
-          cover: true,
+          coverpage: true,
+          coverpageFooter: 'Auteur: xxx%ligne%Version: %dateiso%',
           pageNumbers: true,
           toc: true,
           changelog: true,
@@ -448,7 +459,8 @@ describe('PDF Aggregator', () => {
         {
           ...defaultOptions,
           output,
-          cover: true,
+          coverpage: true,
+          coverpageFooter: 'Auteur: xxx%ligne%Version: %dateiso%',
           pageNumbers: true,
           toc: true,
           changelog: true,
@@ -458,54 +470,6 @@ describe('PDF Aggregator', () => {
         true,
         true,
       ).catch(e => debug(e));
-      const result = await snapshotPdfFiles(output).catch(e => debug(e));
-      expect(result).toMatchSnapshot();
-    });
-
-    it('should not merge pdf files named _blank.pdf', async () => {
-      const output = `${defaultOptions.output}/no-blank-merge`;
-      const copyFiles = [
-        fs.copyFile(`${defaultOptions.input}/File_01.pdf`, `${output}/File_01.pdf`),
-        fs.copyFile(`${defaultOptions.input}/_blank.pdf`, `${output}/_blank.pdf`),
-      ];
-      await Promise.all(copyFiles).catch(e => debug(e));
-      await PdfAggregator.aggregate(
-        {
-          ...defaultOptions,
-          input: output,
-          output,
-        },
-        jest.fn(),
-        true,
-        true,
-      ).catch(e => debug(e));
-      await fs.unlink(`${output}/File_01.pdf`).catch(e => debug(e));
-      const result = await snapshotPdfFiles(output).catch(e => debug(e));
-      expect(result).toMatchSnapshot();
-    });
-
-    it('should not merge pdf files named _cover.pdf', async () => {
-      const output = `${defaultOptions.output}/no-cover-merge`;
-      const copyFiles = [
-        fs.copyFile(`${defaultOptions.input}/File_01.pdf`, `${output}/File_01.pdf`),
-        fs.copyFile(`${defaultOptions.input}/_cover.pdf`, `${output}/_cover.pdf`),
-      ];
-      await Promise.all(copyFiles).catch(e => debug(e));
-      await PdfAggregator.aggregate(
-        {
-          ...defaultOptions,
-          input: output,
-          output,
-        },
-        jest.fn(),
-        true,
-        true,
-      ).catch(e => debug(e));
-      const unlink = [
-        await fs.unlink(`${output}/_cover.pdf`).catch(e => debug(e)),
-        await fs.unlink(`${output}/File_01.pdf`).catch(e => debug(e)),
-      ];
-      await Promise.all(unlink).catch(e => debug(e));
       const result = await snapshotPdfFiles(output).catch(e => debug(e));
       expect(result).toMatchSnapshot();
     });

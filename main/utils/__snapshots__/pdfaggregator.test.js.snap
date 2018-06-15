@@ -4,20 +4,20 @@ exports[`PDF Aggregator the async aggregate function should match an empty snaps
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on level 1 folders with depth 1 1`] = `
 Array [
-  "eQUmtxpHeN3gk9/FFvFu9BFSky8=",
+  "nisYTgV8v1bXSuTofn+nGnzGuq0=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on level 1 folders with unlimited depth 1`] = `
 Array [
-  "AQAkrwdzx4nvfAkaU30bikTfQZY=",
-  "XZCAiCspi50DdVMuHPPjv9PLRpo=",
+  "eDXKCvddZxocoWySPwcmBAUQKPc=",
+  "fHHjm3B1JRJZD+9wDIyxsXEey+4=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot on the root folder with unlimited depth 1`] = `
 Array [
-  "SntUjhX6B/JMs+FIbzie9sumiGk=",
+  "JxKJtaLOcik/Y+/f2+Uvc9sg43M=",
 ]
 `;
 
@@ -25,37 +25,37 @@ exports[`PDF Aggregator the async aggregate function should match the snapshot w
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a changelog 1`] = `
 Array [
-  "zl0FLsJzifxRymj1qcyNePBg2xk=",
+  "nOFPJK9HHjy5tvhW/I+KsURgXfs=",
 ]
 `;
 
-exports[`PDF Aggregator the async aggregate function should match the snapshot with a cover page with empty logo, title and subtitle 1`] = `
+exports[`PDF Aggregator the async aggregate function should match the snapshot with a cover page 1`] = `
 Array [
-  "ikmBGTXbaVDDbUAqIoX3O3tO5OE=",
+  "JvIXxHvVnXnzYSscPy6utBtct/w=",
+]
+`;
+
+exports[`PDF Aggregator the async aggregate function should match the snapshot with a coverpage footer 1`] = `
+Array [
+  "Kl+5sQkO1lwjz1Rk1ugXeVxpDD4=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a document outline 1`] = `
 Array [
-  "l0hYLxKlEhY+ZJQEKrx0Vb7hxeQ=",
-]
-`;
-
-exports[`PDF Aggregator the async aggregate function should match the snapshot with a full cover page 1`] = `
-Array [
-  "x2gEiQs5wrhBfd2GXSrBahdiZ68=",
+  "7s90G1X9h4BLr7JJlR/yJRR9a58=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a table of content 1`] = `
 Array [
-  "d9zewFYqFEOvv26FOY6G6XoLjw0=",
+  "Pu1qahY6ITPo2g2HXFvWtDDCVI0=",
 ]
 `;
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with every available formatting options activated 1`] = `
 Array [
-  "ZE0JjOKFX7YZpTOM98Ml+kQpmb8=",
+  "wwvLnX1Ff1tRJ2GpbyFM8Nc1GVE=",
 ]
 `;
 
@@ -65,9 +65,11 @@ Array [
 ]
 `;
 
-exports[`PDF Aggregator the async aggregate function should not merge pdf files named _blank.pdf 1`] = `Array []`;
-
-exports[`PDF Aggregator the async aggregate function should not merge pdf files named _cover.pdf 1`] = `Array []`;
+exports[`PDF Aggregator the async aggregate function should not break if the user asks for a coverpage without an _cover.pdf 1`] = `
+Array [
+  "Yc2ilZpMxiGl3xz1VuSh/xj/ZOs=",
+]
+`;
 
 exports[`PDF Aggregator the async crawlFolder function should return a valid snapshot 1`] = `
 Array [
