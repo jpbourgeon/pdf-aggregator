@@ -17,9 +17,9 @@
     "postinstall": "electron-builder install-app-deps",
     "predist": "npm test",
     "pretest": "npm run eslint",
-    "tdd": "cross-env DEBUG=app:* DEBUG_COLORS=1 ELECTRON_IS_DEV=1 jest --watchAll --verbose",
-    "test": "cross-env DEBUG_COLORS=1 ELECTRON_IS_DEV=1 JEST_JUNIT_OUTPUT=\"test-results/jest/results.xml\" jest --ci  --reporters=\"jest-junit\"",
-    "test-report": "cross-env DEBUG_COLORS=1 ELECTRON_IS_DEV=1 jest --coverage --verbose"
+    "tdd": "cross-env DEBUG=app:* DEBUG_COLORS=1 ELECTRON_IS_DEV=1 JEST_JUNIT_OUTPUT=\"test-results/jest/results.xml\" jest --watchAll --verbose",
+    "test": "cross-env ELECTRON_IS_DEV=1 JEST_JUNIT_OUTPUT=\"test-results/jest/results.xml\" jest --ci",
+    "test-report": "cross-env ELECTRON_IS_DEV=1 jest --coverage --verbose"
   },
   "dependencies": {
     "@material-ui/core": "^1.2.1",
@@ -36,8 +36,8 @@
     "next": "^6.0.3",
     "pdfjs": "^2.0.0-alpha.8",
     "prop-types": "^15.6.1",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "react-jss": "^8.5.1",
     "readdirp": "^2.1.0",
     "styled-jsx": "^2.2.6"
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@babel/core": "7.0.0-beta.42",
     "babel-core": "7.0.0-bridge.0",
-    "cross-env": "^5.1.6",
+    "cross-env": "^5.2.0",
     "electron": "^2.0.2",
     "electron-builder": "^20.15.1",
     "eslint": "^4.19.0",
@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.9.1",
     "jest": "^23.1.0",
     "jest-junit": "^5.0.0",
-    "react-test-renderer": "^16.4.0"
+    "react-test-renderer": "^16.4.1"
   },
   "greenkeeper": {
     "ignore": [
@@ -64,6 +64,10 @@
     ]
   },
   "jest": {
+    "reporters": [
+      "default",
+      "jest-junit"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/renderer/out/",
       "<rootDir>/renderer/.next/",
