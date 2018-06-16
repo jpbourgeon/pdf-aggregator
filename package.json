@@ -92,6 +92,7 @@
       "renderer/out"
     ],
     "win": {
+      "icon": "main/public/icon.png",
       "target": [
         "portable",
         "nsis"
