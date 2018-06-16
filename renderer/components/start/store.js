@@ -32,6 +32,10 @@ const defaultState = {
     pageNumbers: true,
     toc: true,
   },
+  ui: {
+    anchorEl: null,
+    message: <span />,
+  },
 };
 
 const foldersOptions = {
@@ -131,6 +135,17 @@ class ContextProvider extends React.Component {
     return true;
   }
 
+  handlePopoverOpen(event, message) {
+    event.preventDefault();
+    const ui = { anchorEl: event.target, message };
+    this.setState({ ui }); // eslint-disable-line react/no-unused-state
+  }
+
+  handlePopoverClose() {
+    const ui = { anchorEl: null, message: <span /> };
+    this.setState({ ui }); // eslint-disable-line react/no-unused-state
+  }
+
   submit(event) { // eslint-disable-line class-methods-use-this
     event.preventDefault();
     Router.push('/result', '/result');
@@ -150,6 +165,8 @@ class ContextProvider extends React.Component {
             resetState: this.resetState.bind(this),
             isDataValid: this.isDataValid.bind(this),
             submit: this.submit.bind(this),
+            handlePopoverOpen: this.handlePopoverOpen.bind(this),
+            handlePopoverClose: this.handlePopoverClose.bind(this),
           },
         }}
       >
