@@ -15,7 +15,7 @@ app.on('ready', async () => {
   await prepareNext('./renderer').catch(e => debug(e));
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 750,
+    height: 700,
     minWidth: 800,
   });
 

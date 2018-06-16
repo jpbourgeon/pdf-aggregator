@@ -20,7 +20,7 @@ import Home from '@material-ui/icons/Home';
 import Error from '@material-ui/icons/Error';
 import Check from '@material-ui/icons/CheckCircle';
 import Save from '@material-ui/icons/Save';
-import HelpOutline from '@material-ui/icons/HelpOutline';
+import Info from '@material-ui/icons/Info';
 import Cancel from '@material-ui/icons/Cancel';
 import { withContextConsumer } from './store';
 import About from '../about';
@@ -102,7 +102,7 @@ const RenderView = (props) => {
             <span className={(state.job.isDone) ? classes.hidden : ''}>Traitement en cours</span>
             <span className={(state.job.isDone) ? '' : classes.hidden}>Traitement terminé</span>
             <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={aboutActions.open}>
-              <HelpOutline />
+              <Info />
             </IconButton>
           </Typo>
         </Grid>

@@ -14,6 +14,8 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import FolderOpen from '@material-ui/icons/FolderOpen';
 import HelpOutline from '@material-ui/icons/HelpOutline';
+import Info from '@material-ui/icons/Info';
+import Popover from '@material-ui/core/Popover';
 import { withContextConsumer } from './store';
 import About from '../about';
 import { withAboutContextConsumer } from '../about/store';
@@ -68,12 +70,49 @@ const styles = theme => ({
     color: 'rgba(0, 0, 0, 1)',
     transform: 'scale(0.875) !important',
   },
+  paper: {
+    padding: theme.spacing.unit,
+  },
+  popover: {
+    pointerEvents: 'none',
+  },
+  helpButton: {
+    color: 'rgba(0, 0, 0, 0.54)',
+    transform: 'scale(0.75) !important',
+    verticalAlign: 'middle',
+    marginLeft: theme.spacing.unit / 2,
+  },
 });
 
 const RenderView = (props) => {
   const {
     state, actions, classes, aboutActions,
   } = props;
+
+  const messages = {
+    level: (
+      <span>0 = niveau racine</span>
+    ),
+    depth: (
+      <span>0 = profondeur illimitée</span>
+    ),
+    options: (
+      <span>
+        <strong>Options</strong><br />
+        %dateiso% : date au format ISO-8601 (AAAA-MM-JJ)<br />
+        %dossiersource% : nom du dossier source<br />
+        %ligne% : passer à la ligne
+      </span>
+    ),
+    coverpage: (
+      <span>
+        <strong>Important</strong><br />
+        Placez un fichier <em>_cover.pdf</em> dans le dossier source.<br />
+        La première page de ce document sera utilisée comme couverture.
+      </span>
+    ),
+  };
+
   return (
     <form className={classes.root} onSubmit={e => actions.submit(e)}>
       <About />
@@ -82,7 +121,7 @@ const RenderView = (props) => {
           <Typo variant="display1" className={classes.title} >
             Paramètres
             <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={aboutActions.open}>
-              <HelpOutline />
+              <Info />
             </IconButton>
           </Typo>
           <FormControl className={classes.formControl}>
@@ -107,7 +146,16 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="level" shrink className={classes.inputLabel}>Niveau (0 = racine)</InputLabel>
+            <InputLabel htmlFor="level" shrink className={classes.inputLabel}>
+              <span>Niveau</span>
+              <HelpOutline
+                className={classes.helpButton}
+                onMouseOver={e => actions.handlePopoverOpen(e, messages.level)}
+                onFocus={e => actions.handlePopoverOpen(e, messages.level)}
+                onMouseOut={actions.handlePopoverClose}
+                onBlur={actions.handlePopoverClose}
+              />
+            </InputLabel>
             <Input
               className={classNames([classes.formControl, classes.input])}
               id="level"
@@ -118,7 +166,16 @@ const RenderView = (props) => {
           </FormControl>
 
           <FormControl className={classes.smallFormControl}>
-            <InputLabel htmlFor="depth" shrink className={classes.inputLabel}>Profondeur (0 = illimitée)</InputLabel>
+            <InputLabel htmlFor="depth" shrink className={classes.inputLabel}>
+              <span>Profondeur</span>
+              <HelpOutline
+                className={classes.helpButton}
+                onMouseOver={e => actions.handlePopoverOpen(e, messages.depth)}
+                onFocus={e => actions.handlePopoverOpen(e, messages.depth)}
+                onMouseOut={actions.handlePopoverClose}
+                onBlur={actions.handlePopoverClose}
+              />
+            </InputLabel>
             <Input
               className={classNames([classes.formControl, classes.input])}
               id="depth"
@@ -152,7 +209,14 @@ const RenderView = (props) => {
 
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="filename" shrink className={classes.inputLabel}>
-              Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
+              <span>Nom de(s) fichier(s) cible(s)</span>
+              <HelpOutline
+                className={classes.helpButton}
+                onMouseOver={e => actions.handlePopoverOpen(e, messages.options)}
+                onFocus={e => actions.handlePopoverOpen(e, messages.options)}
+                onMouseOut={actions.handlePopoverClose}
+                onBlur={actions.handlePopoverClose}
+              />
             </InputLabel>
             <Input
               id="filename"
@@ -171,17 +235,18 @@ const RenderView = (props) => {
                   onChange={e => actions.handleChange('coverpage', e, 'checked')}
                 />
               }
-              label="Page de couverture"
+              label={[
+                <span key="0">Page de couverture</span>,
+                <HelpOutline
+                  key="1"
+                  className={classes.helpButton}
+                  onMouseOver={e => actions.handlePopoverOpen(e, messages.coverpage)}
+                  onFocus={e => actions.handlePopoverOpen(e, messages.coverpage)}
+                  onMouseOut={actions.handlePopoverClose}
+                  onBlur={actions.handlePopoverClose}
+                />,
+              ]}
             />
-            <Typo
-              variant="body1"
-              className={classNames({
-                [classes.coverpageFooterLabel]: true,
-                [classes.hidden]: !state.data.coverpage,
-              })}
-            >
-            Important : placez un fichier <em>_cover.pdf</em> dans le dossier source. Il sera utilisé comme couverture.
-            </Typo>
           </FormControl>
 
           <FormControl className={classNames({
@@ -190,7 +255,14 @@ const RenderView = (props) => {
           })}
           >
             <InputLabel htmlFor="coverpageFooter" shrink className={classes.inputLabel}>
-              Pied de page de la couverture (options : %dossiersource%, %dateiso%, %ligne%)
+              <span>Pied de la page de couverture</span>
+              <HelpOutline
+                className={classes.helpButton}
+                onMouseOver={e => actions.handlePopoverOpen(e, messages.options)}
+                onFocus={e => actions.handlePopoverOpen(e, messages.options)}
+                onMouseOut={actions.handlePopoverClose}
+                onBlur={actions.handlePopoverClose}
+              />
             </InputLabel>
             <Input
               id="coverpageFooter"
@@ -264,6 +336,31 @@ const RenderView = (props) => {
           </div>
         </Grid>
       </Grid>
+
+      <Popover
+        className={classes.popover}
+        classes={{
+          paper: classes.paper,
+        }}
+        open={!!state.ui.anchorEl}
+        anchorEl={state.ui.anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        onClose={actions.handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typo
+          variant="body1"
+          className={classes.coverpageFooterLabel}
+        >{state.ui.message}
+        </Typo>
+      </Popover>
     </form>
   );
 };

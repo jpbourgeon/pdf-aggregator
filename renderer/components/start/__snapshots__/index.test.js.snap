@@ -24,7 +24,7 @@ exports[`The renderView component of the start page should render correctly 1`] 
           size="small"
           variant="raised"
         >
-          <pure(HelpOutline) />
+          <pure(Info) />
         </WithStyles(IconButton)>
       </WithStyles(Typography)>
       <WithStyles(FormControl)
@@ -62,7 +62,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="level"
           shrink={true}
         >
-          Niveau (0 = racine)
+          <span>
+            Niveau
+          </span>
+          <pure(HelpOutline)
+            onFocus={[Function]}
+            onMouseOver={[Function]}
+          />
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           className=""
@@ -79,7 +85,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="depth"
           shrink={true}
         >
-          Profondeur (0 = illimitée)
+          <span>
+            Profondeur
+          </span>
+          <pure(HelpOutline)
+            onFocus={[Function]}
+            onMouseOver={[Function]}
+          />
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           className=""
@@ -125,7 +137,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="filename"
           shrink={true}
         >
-          Nom de(s) fichier(s) cible(s) (options : %dossiersouce%, %dateiso%)
+          <span>
+            Nom de(s) fichier(s) cible(s)
+          </span>
+          <pure(HelpOutline)
+            onFocus={[Function]}
+            onMouseOver={[Function]}
+          />
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           id="filename"
@@ -144,18 +162,18 @@ exports[`The renderView component of the start page should render correctly 1`] 
               onChange={[Function]}
             />
           }
-          label="Page de couverture"
+          label={
+            Array [
+              <span>
+                Page de couverture
+              </span>,
+              <pure(HelpOutline)
+                onFocus={[Function]}
+                onMouseOver={[Function]}
+              />,
+            ]
+          }
         />
-        <WithStyles(Typography)
-          className=""
-          variant="body1"
-        >
-          Important : placez un fichier 
-          <em>
-            _cover.pdf
-          </em>
-           dans le dossier source. Il sera utilisé comme couverture.
-        </WithStyles(Typography)>
       </WithStyles(FormControl)>
       <WithStyles(FormControl)
         className="function () {
@@ -166,7 +184,13 @@ exports[`The renderView component of the start page should render correctly 1`] 
           htmlFor="coverpageFooter"
           shrink={true}
         >
-          Pied de page de la couverture (options : %dossiersource%, %dateiso%, %ligne%)
+          <span>
+            Pied de la page de couverture
+          </span>
+          <pure(HelpOutline)
+            onFocus={[Function]}
+            onMouseOver={[Function]}
+          />
         </WithStyles(InputLabel)>
         <WithStyles(Input)
           id="coverpageFooter"
@@ -237,5 +261,33 @@ exports[`The renderView component of the start page should render correctly 1`] 
       </div>
     </WithStyles(Grid)>
   </WithStyles(Grid)>
+  <WithStyles(Popover)
+    anchorEl={null}
+    anchorOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "bottom",
+      }
+    }
+    classes={
+      Object {
+        "paper": undefined,
+      }
+    }
+    disableRestoreFocus={true}
+    open={false}
+    transformOrigin={
+      Object {
+        "horizontal": "left",
+        "vertical": "top",
+      }
+    }
+  >
+    <WithStyles(Typography)
+      variant="body1"
+    >
+      <span />
+    </WithStyles(Typography)>
+  </WithStyles(Popover)>
 </form>
 `;

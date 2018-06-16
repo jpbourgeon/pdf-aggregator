@@ -55,7 +55,7 @@ exports[`The renderView component of the result page should render correctly 1`]
           size="small"
           variant="raised"
         >
-          <pure(HelpOutline) />
+          <pure(Info) />
         </WithStyles(IconButton)>
       </WithStyles(Typography)>
     </WithStyles(Grid)>
