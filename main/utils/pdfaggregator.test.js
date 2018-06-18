@@ -253,6 +253,35 @@ describe('PDF Aggregator', () => {
     });
   });
 
+  describe('the findParentOutlineId function', () => {
+    const tree = [
+      { fullPath: '' },
+      { fullPath: 'file1.pdf' },
+      { fullPath: '/file/' },
+      { fullPath: '/file/path', outlineId: 1 },
+      { fullPath: '/file/path/file.pdf' },
+      { fullPath: '/file/path/folder1' },
+      { fullPath: '/file/path/folder1/file.pdf' },
+      { fullPath: '/file/path/folder2' },
+      { fullPath: '/file/path/folder2/file1.pdf' },
+      { fullPath: '/file/path/folder2/file2.pdf' },
+      { fullPath: '/file/another/path' },
+      { fullPath: '/file/another/path/file.pdf' },
+    ];
+
+    it('should return the outlineId of the provided item', async () => {
+      expect(PdfAggregator.findParentOutlineId(tree, '/file/path', 9)).toBe(1);
+    });
+
+    it('should return undefined if the provided item has not been found', async () => {
+      expect(PdfAggregator.findParentOutlineId(tree, '/file/path/unknown')).toBe(undefined);
+    });
+
+    it('should return undefined if the parent item has no outlineId', async () => {
+      expect(PdfAggregator.findParentOutlineId(tree, '/file/path/folder2')).toBe(undefined);
+    });
+  });
+
   describe('the async makeEmptyPdf function', () => {
     it('should make an empty pdf document to use as a template', async () => {
       const output = `${defaultOptions.output}/makeEmptyPdf`;

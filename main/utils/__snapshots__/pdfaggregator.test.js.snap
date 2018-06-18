@@ -43,7 +43,7 @@ Array [
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with a document outline 1`] = `
 Array [
-  "7s90G1X9h4BLr7JJlR/yJRR9a58=",
+  "mQXiMANhiqy2tygdqZscFt4Fqiw=",
 ]
 `;
 
@@ -55,7 +55,7 @@ Array [
 
 exports[`PDF Aggregator the async aggregate function should match the snapshot with every available formatting options activated 1`] = `
 Array [
-  "wwvLnX1Ff1tRJ2GpbyFM8Nc1GVE=",
+  "5yCapPRJKC9q1BIK+IPHfLHZsgU=",
 ]
 `;
 
