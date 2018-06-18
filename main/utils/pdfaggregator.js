@@ -130,6 +130,14 @@ const countPages = async (fullPath) => {
   return pdfFile.pageCount;
 };
 
+const findParentOutlineId = (tree, search, start = undefined, skipRoot = 0) => {
+  const _start = (start) || tree.length - 1;
+  for (let i = _start; i >= 0; i -= 1) {
+    if (tree[i].fullPath.substr(skipRoot) === search) return tree[i].outlineId;
+  }
+  return undefined;
+};
+
 const makeEmptyPdf = async folder => new Promise(async (resolve, reject) => {
   const doc = new pdf.Document({ font: Helvetica });
   doc.text();
@@ -337,12 +345,18 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 doc.text();
                 while (foldersBuffer.length !== 0) {
                   const folderItem = foldersBuffer.shift();
-                  const folderName = folderItem.fullPath.substr(data.input.length + 1);
-                  let folderParent = folderName.split('/');
+                  const folderPath = folderItem[0].fullPath.substr(data.input.length + 1);
+                  let folderParent = folderPath.split('/');
                   folderParent.pop();
                   folderParent = folderParent.join('/');
-                  doc.destination(folderName);
-                  if (data.documentOutline) doc.outline(folderName, folderName, folderParent);
+                  doc.destination(folderPath);
+                  if (data.documentOutline) {
+                    subTree[folderItem[1]].outlineId = doc.outline(
+                      folderItem[0].name,
+                      folderPath,
+                      findParentOutlineId(subTree, folderParent, folderItem[1], data.input.length + 1),
+                    );
+                  }
                 }
                 let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
                 itemParent.pop();
@@ -352,7 +366,7 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                   doc.outline(
                     item.name.substr(0, item.name.length - 4),
                     item.fullPath.substr(data.input.length + 1),
-                    itemParent,
+                    findParentOutlineId(subTree, itemParent, i, data.input.length + 1),
                   );
                 }
                 for (let j = 2; j <= pdfFile.pageCount; j += 1) {
@@ -366,7 +380,7 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
                 doc.setTemplate(pdfEmpty);
                 foldersBuffer = [];
               } else {
-                foldersBuffer.push(item);
+                foldersBuffer.push([item, i]);
               }
             }, send);
           }
@@ -413,6 +427,7 @@ module.exports = {
   fillPlaceholders,
   calculatePages,
   countPages,
+  findParentOutlineId,
   makeEmptyPdf,
   aggregate,
   terminateJob,
