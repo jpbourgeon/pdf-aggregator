@@ -22,7 +22,7 @@
     "test-report": "cross-env ELECTRON_IS_DEV=1 jest --coverage --verbose"
   },
   "dependencies": {
-    "@material-ui/core": "^1.2.1",
+    "@material-ui/core": "^1.2.2",
     "@material-ui/icons": "^1.1.0",
     "app-root-path": "^2.0.1",
     "classnames": "^2.2.6",
@@ -34,7 +34,7 @@
     "jss": "^9.8.3",
     "lowdb": "^1.0.0",
     "next": "^6.0.3",
-    "pdfjs": "git+https://github.com/jpbourgeon/pdfjs#allow-outline-entries-with-the-same-name",
+    "pdfjs": "^2.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
