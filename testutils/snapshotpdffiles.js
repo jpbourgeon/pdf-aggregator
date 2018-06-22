@@ -23,4 +23,3 @@ const snapshotPdfFiles = async (folder) => {
 };
 
 module.exports = snapshotPdfFiles;
-
