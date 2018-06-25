@@ -7,13 +7,14 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Paper';
 import CardContent from '@material-ui/core/CardContent';
 import { withAboutContextConsumer } from './store';
+import { withI18nContextConsumer } from '../i18n/store';
 
 const styles = theme => ({
   paper: {
     margin: 'auto',
     position: 'absolute',
     width: 500,
-    height: 250,
+    height: 275,
     top: 0,
     left: 0,
     bottom: 0,
@@ -31,7 +32,7 @@ const styles = theme => ({
 
 const AboutRenderView = (props) => {
   const {
-    aboutState, aboutActions, classes,
+    aboutState, aboutActions, i18nActions: { t9n }, classes,
   } = props;
   return (
     <React.Fragment>
@@ -43,41 +44,47 @@ const AboutRenderView = (props) => {
       >
         <Card className={classes.paper}>
           <CardContent>
-            <Typo variant="headline">{aboutState.data.name}</Typo>
-            <Typo variant="subheading">{aboutState.data.description}</Typo>
+            <Typo variant="headline">{t9n('about.app.name')} {t9n('about.app.version')}</Typo>
+            <Typo variant="subheading">{t9n('about.app.description')}</Typo>
             <Typo variant="body1">&nbsp;</Typo>
             <Typo variant="body1">
-              Auteur :
               <a
-                href={`mailto:${aboutState.data.email}`}
+                href={t9n('about.app.help.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >{aboutState.data.author}
-              </a>
-            </Typo>
-            <Typo variant="body1">Dépôt :
-              <a
-                href={aboutState.data.github}
-                target="_blank"
-                rel="noopener noreferrer"
-              >Github
+              >{t9n('about.app.help.label')}
               </a>
             </Typo>
             <Typo variant="body1">
-            Version : {aboutState.data.version} (
               <a
-                href={aboutState.data.releases}
+                href={t9n('about.app.github.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >Notes de version
+              >{t9n('about.app.github.label')}
+              </a>
+            </Typo>
+            <Typo variant="body1">
+              <a
+                href={t9n('about.app.releases.url')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >{t9n('about.app.releases.label')}
+              </a>
+            </Typo>
+            <Typo variant="body1">&nbsp;</Typo>
+            <Typo variant="body1">
+              <a
+                href={t9n('about.app.license.url')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >{t9n('about.app.license.label')}
               </a>&nbsp;|&nbsp;
               <a
-                href={aboutState.data.license}
+                href={t9n('about.author.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >License
+              >{t9n('about.author.label')}
               </a>
-            )
             </Typo>
             <div className={classes.actions}>
               <Button
@@ -85,7 +92,7 @@ const AboutRenderView = (props) => {
                 variant="raised"
                 onClick={aboutActions.close}
               >
-                Fermer
+                {t9n('about.close')}
               </Button>
             </div>
           </CardContent>
@@ -96,12 +103,14 @@ const AboutRenderView = (props) => {
 };
 
 AboutRenderView.propTypes = {
-  aboutActions: PropTypes.object.isRequired,
   aboutState: PropTypes.object.isRequired,
+  aboutActions: PropTypes.object.isRequired,
+  i18nActions: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
 const ViewWithContextConsumer = withAboutContextConsumer(AboutRenderView);
-const About = withStyles(styles)(ViewWithContextConsumer);
+const ViewWithI18nConsumer = withI18nContextConsumer(ViewWithContextConsumer);
+const About = withStyles(styles)(ViewWithI18nConsumer);
 
 export { About as default, AboutRenderView };
