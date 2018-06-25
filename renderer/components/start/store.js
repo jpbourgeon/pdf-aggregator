@@ -3,6 +3,7 @@ import React from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
+import { t9n } from '../i18n/store';
 
 let remote;
 let openDialog;
@@ -17,16 +18,18 @@ if (typeof window !== 'undefined') {
 
 const Context = React.createContext();
 
+const filename = t9n('start.state.defaults.filename');
+const coverpageFooter = t9n('start.state.defaults.coverpageFooter');
 const defaultState = {
   data: {
     input: '',
     output: '',
     logo: '',
-    filename: '%dossiersource%_%dateiso%',
+    filename,
     level: 0,
     depth: 0,
     coverpage: true,
-    coverpageFooter: '%dateiso%',
+    coverpageFooter,
     changelog: true,
     documentOutline: true,
     pageNumbers: true,
@@ -38,21 +41,6 @@ const defaultState = {
   },
 };
 
-const foldersOptions = {
-  title: 'Choisissez un dossier',
-  properties: ['openDirectory'],
-  buttonLabel: 'Valider',
-};
-
-const imagesOptions = {
-  title: 'Choisissez une image',
-  filters: [
-    { name: 'Images', extensions: ['jpg', 'pdf'] },
-  ],
-  properties: ['openFile'],
-  buttonLabel: 'Valider',
-};
-
 class ContextProvider extends React.Component {
   constructor() {
     super();
@@ -60,8 +48,6 @@ class ContextProvider extends React.Component {
     this.state = { ...this.defaultState };
     this.db = db;
     this.openDialog = openDialog;
-    this.foldersOptions = foldersOptions;
-    this.imagesOptions = imagesOptions;
     this.currentWindow = currentWindow;
   }
 
@@ -75,21 +61,12 @@ class ContextProvider extends React.Component {
     }
   }
 
-  setFolder(field) {
+  setFolder(field, title, buttonLabel) {
     const path = this.openDialog(
       this.currentWindow,
-      this.foldersOptions,
+      { title, properties: ['openDirectory'], buttonLabel },
     );
     const data = { ...this.state.data, [field]: path.replace(/\\/g, '/') };
-    this.setState({ data });
-  }
-
-  setLogo() {
-    const path = this.openDialog(
-      this.currentWindow,
-      this.imagesOptions,
-    );
-    const data = { ...this.state.data, logo: path.replace(/\\/g, '/') };
     this.setState({ data });
   }
 
@@ -159,7 +136,6 @@ class ContextProvider extends React.Component {
           actions: {
             openDialog: this.openDialog,
             setFolder: this.setFolder.bind(this),
-            setLogo: this.setLogo.bind(this),
             handleChange: this.handleChange.bind(this),
             handleLevelOrDepthChange: this.handleLevelOrDepthChange.bind(this),
             resetState: this.resetState.bind(this),
