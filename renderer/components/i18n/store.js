@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import electron from 'electron';
+import electron from 'electron';
 import en from './en';
 import fr from './fr';
 
-const LoadedLanguage = 'fr';
+let LoadedLanguage = 'en';
 if (typeof window !== 'undefined') {
-  // LoadedLanguage = electron.remote.app.getLocale().split('-', 1);
+  LoadedLanguage = electron.remote.app.getLocale().split('-', 1);
 }
 
 const I18nContext = React.createContext();
