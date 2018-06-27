@@ -4,16 +4,17 @@ import electron from 'electron';
 import en from './en';
 import fr from './fr';
 
-let LoadedLanguage = 'en';
+let locale = 'en';
 if (typeof window !== 'undefined') {
-  LoadedLanguage = electron.remote.app.getLocale().split('-', 1);
+  [locale] = electron.remote.app.getLocale().split('-', 1);
 }
 
 const I18nContext = React.createContext();
 
 const defaultState = { en, fr };
 
-const t9n = id => (defaultState[LoadedLanguage][id] || defaultState.en[id]);
+const t9n = id => ((defaultState[locale]) ? defaultState[locale][id] : defaultState.en[id]);
+const loadedLanguage = () => locale;
 
 class I18nContextProvider extends React.Component {
   constructor() {
@@ -22,7 +23,7 @@ class I18nContextProvider extends React.Component {
   }
 
   t9n(id) {
-    return this.state[LoadedLanguage][id] || this.state.en[id];
+    return (this.state[locale]) ? this.state[locale][id] : this.state.en[id];
   }
 
   render() {
@@ -61,6 +62,7 @@ function withI18nContextConsumer(Component) {
 }
 
 export {
+  loadedLanguage,
   t9n,
   withI18nContextProvider,
   withI18nContextConsumer,
