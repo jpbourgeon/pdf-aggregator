@@ -1,6 +1,7 @@
 describe('backlog', () => {
   describe('The app', () => {
     it('should have a detailed documentation', () => undefined);
+    it('should be hosted in the CDG71 organization\'s repo with up-to-date licences', () => undefined);
   });
 
   describe('Icebox', () => {
