@@ -67,13 +67,14 @@ class ContextProvider extends React.Component {
   }
 
   async componentDidMount() {
-    this.setCurrentTask('Initialisation');
+    this.setCurrentTask(t9n('aggregator.job.init'));
     await this.initStore(this.db.getState);
     this.addLogEntry({
       date: new Date(),
       isError: false,
       isLast: false,
-      label: 'Initialisation',
+      label: t9n('aggregator.job.init'),
+      comment: undefined,
     });
     this.aggregate(this.state.data, this.send);
   }
