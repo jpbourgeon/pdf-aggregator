@@ -22,6 +22,9 @@ describe('The renderView component of the about modal', () => {
         open: jest.fn(),
         close: jest.fn(),
       },
+      i18nActions: {
+        t9n: jest.fn(),
+      },
       classes: {
         paper: {},
         cardActions: {},

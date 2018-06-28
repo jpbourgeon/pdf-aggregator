@@ -15,12 +15,39 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="headline"
         >
-          name
+           
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="subheading"
+        />
+        <WithStyles(Typography)
+          variant="body1"
         >
-          description
+           
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          <a
+            rel="noopener noreferrer"
+            target="_blank"
+          />
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          <a
+            rel="noopener noreferrer"
+            target="_blank"
+          />
+        </WithStyles(Typography)>
+        <WithStyles(Typography)
+          variant="body1"
+        >
+          <a
+            rel="noopener noreferrer"
+            target="_blank"
+          />
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="body1"
@@ -30,58 +57,22 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="body1"
         >
-          Auteur :
           <a
-            href="mailto:email"
             rel="noopener noreferrer"
             target="_blank"
-          >
-            author
-          </a>
-        </WithStyles(Typography)>
-        <WithStyles(Typography)
-          variant="body1"
-        >
-          Dépôt :
-          <a
-            href="github"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Github
-          </a>
-        </WithStyles(Typography)>
-        <WithStyles(Typography)
-          variant="body1"
-        >
-          Version : 
-          version
-           (
-          <a
-            href="releases"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Notes de version
-          </a>
+          />
            | 
           <a
-            href="license"
             rel="noopener noreferrer"
             target="_blank"
-          >
-            License
-          </a>
-          )
+          />
         </WithStyles(Typography)>
         <div>
           <WithStyles(Button)
             onClick={[MockFunction]}
             size="small"
             variant="raised"
-          >
-            Fermer
-          </WithStyles(Button)>
+          />
         </div>
       </WithStyles(CardContent)>
     </WithStyles(Paper)>
