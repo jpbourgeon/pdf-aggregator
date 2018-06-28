@@ -1,5 +1,11 @@
 const electron = {
+  app: {
+    getLocale: jest.fn(),
+  },
   remote: {
+    app: {
+      getLocale: jest.fn().mockReturnValue('en'),
+    },
     require: (module) => {
       // default mock for './utils/dialog' './utils/gettree'
       let mock = jest.fn();
