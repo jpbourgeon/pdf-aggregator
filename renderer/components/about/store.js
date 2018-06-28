@@ -1,20 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import app from '../../../package.json';
 
 const AboutContext = React.createContext();
 
 const defaultState = {
-  data: {
-    name: app.name,
-    description: 'Une application de bureau pour fusionner des arborescences de documents PDF',
-    version: app.version,
-    releases: 'https://github.com/jpbourgeon/pdf-aggregator/releases',
-    github: 'https://github.com/jpbourgeon/pdf-aggregator',
-    author: 'Jean-Philippe Bourgeon',
-    email: 'jeanphilippe.bourgeon@gmail.com',
-    license: 'https://opensource.org/licenses/CECILL-2.1',
-  },
   open: false,
 };
 
@@ -71,8 +60,6 @@ function withAboutContextConsumer(Component) {
 }
 
 export {
-  defaultState,
-  AboutContextProvider,
   withAboutContextProvider,
   withAboutContextConsumer,
 };

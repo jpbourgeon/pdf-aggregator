@@ -1,293 +1,280 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The renderView component of the start page should render correctly 1`] = `
-<form
-  className={[MockFunction]}
-  onSubmit={[Function]}
->
-  <WithStyles(Component) />
-  <WithStyles(Grid)
-    container={true}
-    spacing={24}
+<React.Fragment>
+  <SideEffect(Head)>
+    <title />
+    <meta
+      name="description"
+    />
+    <meta
+      content="undefined <undefined>"
+      name="author"
+    />
+  </SideEffect(Head)>
+  <form
+    className={[MockFunction]}
+    onSubmit={[Function]}
   >
+    <WithStyles(Component) />
     <WithStyles(Grid)
-      item={true}
-      xs={12}
+      container={true}
+      spacing={24}
     >
-      <WithStyles(Typography)
-        className={[MockFunction]}
-        variant="display1"
+      <WithStyles(Grid)
+        item={true}
+        xs={12}
       >
-        Paramètres
-        <WithStyles(IconButton)
-          onClick={[MockFunction]}
-          size="small"
-          variant="raised"
+        <WithStyles(Typography)
+          className={[MockFunction]}
+          variant="display1"
         >
-          <pure(Info) />
-        </WithStyles(IconButton)>
-      </WithStyles(Typography)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="input"
-          shrink={true}
+          <WithStyles(IconButton)
+            onClick={[MockFunction]}
+            size="small"
+            variant="raised"
+          >
+            <pure(Info) />
+          </WithStyles(IconButton)>
+        </WithStyles(Typography)>
+        <WithStyles(FormControl)
+          className={[MockFunction]}
         >
-          Dossier source
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          disabled={true}
-          id="input"
-          startAdornment={
-            <WithStyles(InputAdornment)
-              position="start"
-            >
-              <WithStyles(IconButton)
-                aria-label="Choisir le dossier source"
-                onClick={[Function]}
+          <WithStyles(InputLabel)
+            htmlFor="input"
+            shrink={true}
+          />
+          <WithStyles(Input)
+            disabled={true}
+            id="input"
+            startAdornment={
+              <WithStyles(InputAdornment)
+                position="start"
               >
-                <pure(FolderOpen) />
-              </WithStyles(IconButton)>
-            </WithStyles(InputAdornment)>
-          }
-          type="text"
-          value=""
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="level"
-          shrink={true}
-        >
-          <span>
-            Niveau
-          </span>
-          <pure(HelpOutline)
-            onFocus={[Function]}
-            onMouseOver={[Function]}
+                <WithStyles(IconButton)
+                  onClick={[Function]}
+                >
+                  <pure(FolderOpen) />
+                </WithStyles(IconButton)>
+              </WithStyles(InputAdornment)>
+            }
+            type="text"
+            value=""
           />
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          className=""
-          id="level"
-          onChange={[Function]}
-          type="number"
-          value={0}
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="depth"
-          shrink={true}
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)
+          className={[MockFunction]}
         >
-          <span>
-            Profondeur
-          </span>
-          <pure(HelpOutline)
-            onFocus={[Function]}
-            onMouseOver={[Function]}
-          />
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          className=""
-          id="depth"
-          onChange={[Function]}
-          type="number"
-          value={0}
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="output"
-          shrink={true}
-        >
-          Dossier cible
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          disabled={true}
-          id="output"
-          label=""
-          startAdornment={
-            <WithStyles(InputAdornment)
-              position="start"
-            >
-              <WithStyles(IconButton)
-                aria-label="Choisir le dossier cible"
-                onClick={[Function]}
-              >
-                <pure(FolderOpen) />
-              </WithStyles(IconButton)>
-            </WithStyles(InputAdornment)>
-          }
-          type="text"
-          value=""
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(InputLabel)
-          htmlFor="filename"
-          shrink={true}
-        >
-          <span>
-            Nom de(s) fichier(s) cible(s)
-          </span>
-          <pure(HelpOutline)
-            onFocus={[Function]}
-            onMouseOver={[Function]}
-          />
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          id="filename"
-          onChange={[Function]}
-          type="text"
-          value="%dossiersource%_%dateiso%"
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className={[MockFunction]}
-      >
-        <WithStyles(FormControlLabel)
-          control={
-            <WithStyles(Checkbox)
-              checked={true}
-              onChange={[Function]}
+          <WithStyles(InputLabel)
+            htmlFor="level"
+            shrink={true}
+          >
+            <span />
+            <pure(HelpOutline)
+              onFocus={[Function]}
+              onMouseOver={[Function]}
             />
-          }
-          label={
-            Array [
-              <span>
-                Page de couverture
-              </span>,
-              <pure(HelpOutline)
-                onFocus={[Function]}
-                onMouseOver={[Function]}
-              />,
-            ]
-          }
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)
-        className="function () {
+          </WithStyles(InputLabel)>
+          <WithStyles(Input)
+            className=""
+            id="level"
+            onChange={[Function]}
+            type="number"
+            value={0}
+          />
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)
+          className={[MockFunction]}
+        >
+          <WithStyles(InputLabel)
+            htmlFor="depth"
+            shrink={true}
+          >
+            <span />
+            <pure(HelpOutline)
+              onFocus={[Function]}
+              onMouseOver={[Function]}
+            />
+          </WithStyles(InputLabel)>
+          <WithStyles(Input)
+            className=""
+            id="depth"
+            onChange={[Function]}
+            type="number"
+            value={0}
+          />
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)
+          className={[MockFunction]}
+        >
+          <WithStyles(InputLabel)
+            htmlFor="output"
+            shrink={true}
+          />
+          <WithStyles(Input)
+            disabled={true}
+            id="output"
+            label=""
+            startAdornment={
+              <WithStyles(InputAdornment)
+                position="start"
+              >
+                <WithStyles(IconButton)
+                  onClick={[Function]}
+                >
+                  <pure(FolderOpen) />
+                </WithStyles(IconButton)>
+              </WithStyles(InputAdornment)>
+            }
+            type="text"
+            value=""
+          />
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)
+          className={[MockFunction]}
+        >
+          <WithStyles(InputLabel)
+            htmlFor="filename"
+            shrink={true}
+          >
+            <span />
+            <pure(HelpOutline)
+              onFocus={[Function]}
+              onMouseOver={[Function]}
+            />
+          </WithStyles(InputLabel)>
+          <WithStyles(Input)
+            id="filename"
+            onChange={[Function]}
+            type="text"
+            value="%inputfolder%_%isodate%"
+          />
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)
+          className={[MockFunction]}
+        >
+          <WithStyles(FormControlLabel)
+            control={
+              <WithStyles(Checkbox)
+                checked={true}
+                onChange={[Function]}
+              />
+            }
+            label={
+              Array [
+                <span />,
+                <pure(HelpOutline)
+                  onFocus={[Function]}
+                  onMouseOver={[Function]}
+                />,
+              ]
+            }
+          />
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)
+          className="function () {
         return fn.apply(this, arguments);
       }"
-      >
-        <WithStyles(InputLabel)
-          htmlFor="coverpageFooter"
-          shrink={true}
         >
-          <span>
-            Pied de la page de couverture
-          </span>
-          <pure(HelpOutline)
-            onFocus={[Function]}
-            onMouseOver={[Function]}
+          <WithStyles(InputLabel)
+            htmlFor="coverpageFooter"
+            shrink={true}
+          >
+            <span />
+            <pure(HelpOutline)
+              onFocus={[Function]}
+              onMouseOver={[Function]}
+            />
+          </WithStyles(InputLabel)>
+          <WithStyles(Input)
+            id="coverpageFooter"
+            onChange={[Function]}
+            type="text"
+            value="%isodate%"
           />
-        </WithStyles(InputLabel)>
-        <WithStyles(Input)
-          id="coverpageFooter"
-          onChange={[Function]}
-          type="text"
-          value="%dateiso%"
-        />
-      </WithStyles(FormControl)>
-      <br />
-      <WithStyles(FormControl)>
-        <WithStyles(FormControlLabel)
-          control={
-            <WithStyles(Checkbox)
-              checked={true}
-              onChange={[Function]}
-            />
-          }
-          label="Journal des modifications"
-        />
-        <WithStyles(FormControlLabel)
-          control={
-            <WithStyles(Checkbox)
-              checked={true}
-              onChange={[Function]}
-            />
-          }
-          label="Signets"
-        />
-      </WithStyles(FormControl)>
-      <WithStyles(FormControl)>
-        <WithStyles(FormControlLabel)
-          control={
-            <WithStyles(Checkbox)
-              checked={true}
-              onChange={[Function]}
-            />
-          }
-          label="Table des matières"
-        />
-        <WithStyles(FormControlLabel)
-          control={
-            <WithStyles(Checkbox)
-              checked={true}
-              onChange={[Function]}
-            />
-          }
-          label="Numérotation des pages"
-        />
-      </WithStyles(FormControl)>
-      <div>
-        <WithStyles(Button)
-          className={[MockFunction]}
-          color="primary"
-          disabled={true}
-          type="submit"
-          variant="raised"
-        >
-          Valider
-        </WithStyles(Button)>
-        <WithStyles(Button)
-          className={[MockFunction]}
-          color="secondary"
-          onClick={[MockFunction]}
-          variant="raised"
-        >
-          Annuler
-        </WithStyles(Button)>
-      </div>
+        </WithStyles(FormControl)>
+        <br />
+        <WithStyles(FormControl)>
+          <WithStyles(FormControlLabel)
+            control={
+              <WithStyles(Checkbox)
+                checked={true}
+                onChange={[Function]}
+              />
+            }
+          />
+          <WithStyles(FormControlLabel)
+            control={
+              <WithStyles(Checkbox)
+                checked={true}
+                onChange={[Function]}
+              />
+            }
+          />
+        </WithStyles(FormControl)>
+        <WithStyles(FormControl)>
+          <WithStyles(FormControlLabel)
+            control={
+              <WithStyles(Checkbox)
+                checked={true}
+                onChange={[Function]}
+              />
+            }
+          />
+          <WithStyles(FormControlLabel)
+            control={
+              <WithStyles(Checkbox)
+                checked={true}
+                onChange={[Function]}
+              />
+            }
+          />
+        </WithStyles(FormControl)>
+        <div>
+          <WithStyles(Button)
+            className={[MockFunction]}
+            color="primary"
+            disabled={true}
+            type="submit"
+            variant="raised"
+          />
+          <WithStyles(Button)
+            className={[MockFunction]}
+            color="secondary"
+            onClick={[MockFunction]}
+            variant="raised"
+          />
+        </div>
+      </WithStyles(Grid)>
     </WithStyles(Grid)>
-  </WithStyles(Grid)>
-  <WithStyles(Popover)
-    anchorEl={null}
-    anchorOrigin={
-      Object {
-        "horizontal": "left",
-        "vertical": "bottom",
+    <WithStyles(Popover)
+      anchorEl={null}
+      anchorOrigin={
+        Object {
+          "horizontal": "left",
+          "vertical": "bottom",
+        }
       }
-    }
-    classes={
-      Object {
-        "paper": undefined,
+      classes={
+        Object {
+          "paper": undefined,
+        }
       }
-    }
-    disableRestoreFocus={true}
-    open={false}
-    transformOrigin={
-      Object {
-        "horizontal": "left",
-        "vertical": "top",
+      disableRestoreFocus={true}
+      open={false}
+      transformOrigin={
+        Object {
+          "horizontal": "left",
+          "vertical": "top",
+        }
       }
-    }
-  >
-    <WithStyles(Typography)
-      variant="body1"
     >
-      <span />
-    </WithStyles(Typography)>
-  </WithStyles(Popover)>
-</form>
+      <WithStyles(Typography)
+        variant="body1"
+      >
+        <span />
+      </WithStyles(Typography)>
+    </WithStyles(Popover)>
+  </form>
+</React.Fragment>
 `;

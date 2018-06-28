@@ -1,0 +1,31 @@
+module.exports = {
+  // Aggregator
+  'aggregator.errors.general': 'Le traitement s\'est achevé en erreur :',
+  'aggregator.errors.canceled': 'Le traitement a été interrompu par l\'utilisateur',
+  'aggregator.errors.noFilesToAggregate': 'Il n\'y a pas de fichier à aggréger',
+  'aggregator.errors.invalidItemsNumber': 'Nombre d\'éléments invalide',
+  'aggregator.errors.noCoverpage': (
+    'La couverture n\'a pas été fusionnée: le fichier _cover.pdf est absent du dossier source'
+  ),
+  'aggregator.job.start': 'Début du traitement',
+  'aggregator.job.readInputFolder': 'Lecture du dossier source',
+  'aggregator.job.createEmptyTemplate': 'Création du modèle de page vierge',
+  'aggregator.job.retrieveFoldersToMerge': 'Récupération des dossiers à fusionner',
+  'aggregator.job.prepareInputFolder': 'Préparation du dossier source :',
+  'aggregator.job.mergeCoverpage': 'Fusion de la couverture',
+  'aggregator.job.numberPages': 'Numérotation des pages',
+  'aggregator.job.addToc': 'Génération de la table des matières',
+  'aggregator.job.addChangelog': 'Génération du journal des modifications',
+  'aggregator.job.mergeItem': 'Fusion de l\'élément :',
+  'aggregator.job.saveFile': 'Enregistrement du fichier :',
+  'aggregator.job.emptyFolder': 'Le dossier source est vide :',
+  'aggregator.job.end': 'Traitement terminé',
+  'aggregator.job.end.nothingToMerge': 'Traitement terminé: il n\'y avait rien à fusionner',
+  'aggregator.job.end.unlinkEmptyTemplate': 'Suppression du modèle de page vierge',
+  'aggregator.result.toc.label': 'Table des matières',
+  'aggregator.result.toc.content.label': 'Contenu',
+  'aggregator.result.toc.page.label': 'Page',
+  'aggregator.result.changelog.label': 'Journal des modifications',
+  'aggregator.result.changelog.document.label': 'Document',
+  'aggregator.result.changelog.date.label': 'Date',
+};

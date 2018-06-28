@@ -4,6 +4,8 @@ import React from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
+import { t9n } from '../i18n/store';
+
 
 const debug = require('debug')('app:result/store.js');
 
@@ -35,7 +37,7 @@ const defaultState = {
   ui: {
     isDev,
     openSnackbar: false,
-    snackbarMessage: 'Coucou',
+    snackbarMessage: '',
   },
 };
 
@@ -65,13 +67,14 @@ class ContextProvider extends React.Component {
   }
 
   async componentDidMount() {
-    this.setCurrentTask('Initialisation');
+    this.setCurrentTask(t9n('aggregator.job.init'));
     await this.initStore(this.db.getState);
     this.addLogEntry({
       date: new Date(),
       isError: false,
       isLast: false,
-      label: 'Initialisation',
+      label: t9n('aggregator.job.init'),
+      comment: undefined,
     });
     this.aggregate(this.state.data, this.send);
   }
@@ -143,11 +146,11 @@ class ContextProvider extends React.Component {
     const ui = { ...this.state.ui };
     try {
       await this.saveJson(`${this.state.data.output}/log.json`, this.state.log).catch(e => debug(e));
-      ui.snackbarMessage = 'Le journal a été sauvegardé dans le dossier cible.';
+      ui.snackbarMessage = t9n('result.operationsLog.save.onSuccess.label');
       ui.openSnackbar = true;
       this.setState({ ui });
     } catch (e) {
-      ui.snackbarMessage = 'Erreur : le journal n\'a pas été sauvegardé.';
+      ui.snackbarMessage = t9n('result.operationsLog.save.onError.label');
       ui.openSnackbar = true;
       this.setState({ ui });
     }

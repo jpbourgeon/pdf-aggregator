@@ -102,35 +102,16 @@ describe('Given the start store ContextProvider component', () => {
     });
 
     it('should open the native folder picker', () => {
-      instance.setFolder('input');
+      instance.setFolder('input', 'title', 'buttonLabel');
       expect(instance.openDialog).toHaveBeenCalledWith(
         instance.currentWindow,
-        instance.foldersOptions,
+        { title: 'title', properties: ['openDirectory'], buttonLabel: 'buttonLabel' },
       );
     });
 
     it('should save the selected path to the provided field of the state\'s data property', () => {
       instance.setFolder('input');
       expect(instance.state.data.input).toBe('/path/');
-    });
-  });
-
-  describe('the method setLogo', () => {
-    beforeEach(() => {
-      instance.openDialog = jest.fn().mockReturnValueOnce('/path/to/image.jpg');
-    });
-
-    it('should open the native file picker', () => {
-      instance.setLogo();
-      expect(instance.openDialog).toHaveBeenCalledWith(
-        instance.currentWindow,
-        instance.imagesOptions,
-      );
-    });
-
-    it('should save the selected path to the provided field of the state\'s data property', () => {
-      instance.setLogo();
-      expect(instance.state.data.logo).toBe('/path/to/image.jpg');
     });
   });
 

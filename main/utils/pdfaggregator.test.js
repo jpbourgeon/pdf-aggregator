@@ -9,6 +9,7 @@ jest.setTimeout(15000); // Give some slack to the filesystem operations
 const testbed = resolvePath('main/utils/__testbed__').replace(/\\/g, '/');
 
 const defaultOptions = {
+  loadedLanguage: 'fr',
   input: `${testbed}/pdfaggregator/input`,
   level: 0,
   depth: 0,
@@ -129,7 +130,7 @@ describe('PDF Aggregator', () => {
     it('should throw an error if the tree is empty', () => {
       expect(() => {
         PdfAggregator.getSubTree([{ fullPath: '/file/path', depth: 5 }], '/another/path/');
-      }).toThrowError('There is no file to aggregate');
+      }).toThrowError('aggregator.errors.noFilesToAggregate');
     });
 
     it('should match the snapshot of the subtree with an unlimited depth', () => {

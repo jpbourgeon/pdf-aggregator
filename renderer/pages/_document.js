@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/html-has-lang */
 import React from 'react';
 import Document, { Head, Main, NextScript } from 'next/document';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -7,16 +8,10 @@ import getPageContext from '../components/styles/getPageContext';
 class MyDocument extends Document {
   render() {
     return (
-      <html lang="fr" dir="ltr">
+      <html>
         <Head>
-          <title>Agrégateur de fichiers PDF</title>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="description" content="Assistant de classement à la nomination stagiaire" />
-          <meta
-            name="author"
-            content="Jean-Philippe Bourgeon <jeanphilippe.bourgeon@gmail.com> (http://bourgeon.jp.net"
-          />
           {/* Use minimum-scale=1 to enable GPU rasterization */}
           <meta
             name="viewport"
@@ -27,7 +22,6 @@ class MyDocument extends Document {
           />
           {/* PWA primary color */}
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
-          <link rel="shortcut icon" href="/static/favicon.gif" />
         </Head>
         <body>
           <Main />
