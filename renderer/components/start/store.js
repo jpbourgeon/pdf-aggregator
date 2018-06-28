@@ -3,7 +3,7 @@ import React from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
-import { t9n } from '../i18n/store';
+import { t9n, loadedLanguage } from '../i18n/store';
 
 let remote;
 let openDialog;
@@ -22,6 +22,7 @@ const filename = t9n('start.state.defaults.filename');
 const coverpageFooter = t9n('start.state.defaults.coverpageFooter');
 const defaultState = {
   data: {
+    loadedLanguage: loadedLanguage(),
     input: '',
     output: '',
     logo: '',

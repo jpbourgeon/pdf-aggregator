@@ -102,10 +102,10 @@ describe('Given the start store ContextProvider component', () => {
     });
 
     it('should open the native folder picker', () => {
-      instance.setFolder('input');
+      instance.setFolder('input', 'title', 'buttonLabel');
       expect(instance.openDialog).toHaveBeenCalledWith(
         instance.currentWindow,
-        instance.foldersOptions,
+        { title: 'title', properties: ['openDirectory'], buttonLabel: 'buttonLabel' },
       );
     });
 

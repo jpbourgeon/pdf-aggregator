@@ -17,6 +17,9 @@ describe('The renderView component of the start page', () => {
       aboutActions: {
         open: jest.fn(),
       },
+      i18nActions: {
+        t9n: jest.fn(),
+      },
       classes: {
         root: jest.fn(),
         title: jest.fn(),
