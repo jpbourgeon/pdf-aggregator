@@ -14,6 +14,7 @@ const I18nContext = React.createContext();
 const defaultState = { en, fr };
 
 const t9n = id => ((defaultState[locale]) ? defaultState[locale][id] : defaultState.en[id]);
+
 const loadedLanguage = () => locale;
 
 class I18nContextProvider extends React.Component {
