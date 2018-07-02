@@ -349,55 +349,60 @@ const aggregate = async (data, send, isTest = false, testJobTerminator = false) 
 
           // merge files
           let foldersBuffer = [];
-          for (let i = 0; i < subTree.length; i += 1) {
-            const item = subTree[i];
-            // eslint-disable-next-line no-await-in-loop, no-loop-func
-            await stepAsync(`${t9n('aggregator.job.mergeItem', data.loadedLanguage)} ${item.name}`, async () => {
-              if (item.type === 'file') {
-                const file = await fs.readFile(item.fullPath).catch(e => debug(e));
-                const pdfFile = new pdf.ExternalDocument(file);
-                doc.setTemplate(pdfFile);
-                doc.text();
-                while (foldersBuffer.length !== 0) {
-                  const folderItem = foldersBuffer.shift();
-                  const folderPath = folderItem[0].fullPath.substr(data.input.length + 1);
-                  let folderParent = folderPath.split('/');
-                  folderParent.pop();
-                  folderParent = folderParent.join('/');
-                  doc.destination(folderPath);
-                  if (data.documentOutline) {
-                    subTree[folderItem[1]].outlineId = doc.outline(
-                      folderItem[0].name,
-                      folderPath,
-                      findParentOutlineId(subTree, folderParent, folderItem[1], data.input.length + 1),
-                    );
-                  }
-                }
-                let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
-                itemParent.pop();
-                itemParent = itemParent.join('/');
-                doc.destination(item.fullPath.substr(data.input.length + 1));
+          const mergeFunc = async (item, i) => {
+            if (item.type === 'file') {
+              const file = await fs.readFile(item.fullPath).catch(e => debug(e));
+              const pdfFile = new pdf.ExternalDocument(file);
+              doc.setTemplate(pdfFile);
+              doc.text();
+              while (foldersBuffer.length !== 0) {
+                const folderItem = foldersBuffer.shift();
+                const folderPath = folderItem[0].fullPath.substr(data.input.length + 1);
+                let folderParent = folderPath.split('/');
+                folderParent.pop();
+                folderParent = folderParent.join('/');
+                doc.destination(folderPath);
                 if (data.documentOutline) {
-                  doc.outline(
-                    item.name.substr(0, item.name.length - 4),
-                    item.fullPath.substr(data.input.length + 1),
-                    findParentOutlineId(subTree, itemParent, i, data.input.length + 1),
+                  subTree[folderItem[1]].outlineId = doc.outline(
+                    folderItem[0].name,
+                    folderPath,
+                    findParentOutlineId(subTree, folderParent, folderItem[1], data.input.length + 1),
                   );
                 }
-                for (let j = 2; j <= pdfFile.pageCount; j += 1) {
-                  const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
-                  otherPage.addPageOf(j, pdfFile);
-                  const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
-                  const extOtherPage = new pdf.ExternalDocument(otherPageDoc);
-                  doc.setTemplate(extOtherPage);
-                  doc.text();
-                }
-                doc.setTemplate(pdfEmpty);
-                foldersBuffer = [];
-              } else {
-                foldersBuffer.push([item, i]);
               }
-            }, send);
+              let itemParent = item.fullPath.substr(data.input.length + 1).split('/');
+              itemParent.pop();
+              itemParent = itemParent.join('/');
+              doc.destination(item.fullPath.substr(data.input.length + 1));
+              if (data.documentOutline) {
+                doc.outline(
+                  item.name.substr(0, item.name.length - 4),
+                  item.fullPath.substr(data.input.length + 1),
+                  findParentOutlineId(subTree, itemParent, i, data.input.length + 1),
+                );
+              }
+              for (let j = 2; j <= pdfFile.pageCount; j += 1) {
+                const otherPage = new pdf.Document({ font: Helvetica, fontSize: 11 });
+                otherPage.addPageOf(j, pdfFile);
+                const otherPageDoc = await otherPage.asBuffer(); // eslint-disable-line no-await-in-loop
+                const extOtherPage = new pdf.ExternalDocument(otherPageDoc);
+                doc.setTemplate(extOtherPage);
+                doc.text();
+              }
+              doc.setTemplate(pdfEmpty);
+              foldersBuffer = [];
+            } else {
+              foldersBuffer.push([item, i]);
+            }
+          };
+          for (let i = 0; i < subTree.length; i += 1) {
+            const item = subTree[i];
+            // eslint-disable-next-line no-await-in-loop
+            await stepAsync(
+              `${t9n('aggregator.job.mergeItem', data.loadedLanguage)} ${item.name}`,
+              async () => mergeFunc(item, i),
+              send,
+            );
           }
 
           // save the file into the output folder

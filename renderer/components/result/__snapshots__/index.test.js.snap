@@ -22,23 +22,17 @@ exports[`The renderView component of the result page should render correctly 1`]
       <WithStyles(Button)
         onClick={[Function]}
       >
-        isDone (
-        false
-        )
+        isDone (false)
       </WithStyles(Button)>
       <WithStyles(Button)
         onClick={[Function]}
       >
-        hasErrors (
-        false
-        )
+        hasErrors (false)
       </WithStyles(Button)>
       <WithStyles(Button)
         onClick={[Function]}
       >
-        isDev (
-        true
-        )
+        isDev (true)
       </WithStyles(Button)>
     </div>
     <WithStyles(Grid)

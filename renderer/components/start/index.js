@@ -94,15 +94,17 @@ const RenderView = (props) => {
   return (
     <React.Fragment>
       <Head>
-        <title>{t9n('about.app.name')}</title>
+        <title>
+          {t9n('about.app.name')}
+        </title>
         <meta name="description" content={t9n('about.app.description')} />
-        <meta name="author"content={`${t9n('about.author.name')} <${t9n('about.author.url')}>`} />
+        <meta name="author" content={`${t9n('about.author.name')} <${t9n('about.author.url')}>`} />
       </Head>
       <form className={classes.root} onSubmit={e => actions.submit(e)}>
         <About />
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} className={classes.item}>
-            <Typo variant="display1" className={classes.title} >
+            <Typo variant="display1" className={classes.title}>
               {t9n('start.title')}
               <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={aboutActions.open}>
                 <Info />
@@ -118,7 +120,7 @@ const RenderView = (props) => {
                 value={state.data.input}
                 disabled
                 className={classes.input}
-                startAdornment={
+                startAdornment={(
                   <InputAdornment position="start">
                     <IconButton
                       aria-label={t9n('start.sourceFolder.ariaLabel')}
@@ -131,13 +133,15 @@ const RenderView = (props) => {
                       <FolderOpen />
                     </IconButton>
                   </InputAdornment>
-                }
+                )}
               />
             </FormControl>
 
             <FormControl className={classes.smallFormControl}>
               <InputLabel htmlFor="level" shrink className={classes.inputLabel}>
-                <span>{t9n('start.level.label')}</span>
+                <span>
+                  {t9n('start.level.label')}
+                </span>
                 <HelpOutline
                   className={classes.helpButton}
                   onMouseOver={e => actions.handlePopoverOpen(e, t9n('start.messages.level'))}
@@ -157,7 +161,9 @@ const RenderView = (props) => {
 
             <FormControl className={classes.smallFormControl}>
               <InputLabel htmlFor="depth" shrink className={classes.inputLabel}>
-                <span>{t9n('start.depth.label')}</span>
+                <span>
+                  {t9n('start.depth.label')}
+                </span>
                 <HelpOutline
                   className={classes.helpButton}
                   onMouseOver={e => actions.handlePopoverOpen(e, t9n('start.messages.depth'))}
@@ -186,7 +192,7 @@ const RenderView = (props) => {
                 value={state.data.output}
                 disabled
                 className={classes.input}
-                startAdornment={
+                startAdornment={(
                   <InputAdornment position="start">
                     <IconButton
                       aria-label={t9n('start.outputFolder.ariaLabel')}
@@ -195,13 +201,15 @@ const RenderView = (props) => {
                       <FolderOpen />
                     </IconButton>
                   </InputAdornment>
-                }
+                )}
               />
             </FormControl>
 
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="filename" shrink className={classes.inputLabel}>
-                <span>{t9n('start.filename.label')}</span>
+                <span>
+                  {t9n('start.filename.label')}
+                </span>
                 <HelpOutline
                   className={classes.helpButton}
                   onMouseOver={e => actions.handlePopoverOpen(e, t9n('start.messages.options'))}
@@ -221,14 +229,16 @@ const RenderView = (props) => {
 
             <FormControl className={classes.formControl}>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={state.data.coverpage}
                     onChange={e => actions.handleChange('coverpage', e, 'checked')}
                   />
-                }
+                )}
                 label={[
-                  <span key="0">{t9n('start.coverpage.label')}</span>,
+                  <span key="0">
+                    {t9n('start.coverpage.label')}
+                  </span>,
                   <HelpOutline
                     key="1"
                     className={classes.helpButton}
@@ -247,7 +257,9 @@ const RenderView = (props) => {
             })}
             >
               <InputLabel htmlFor="coverpageFooter" shrink className={classes.inputLabel}>
-                <span>{t9n('start.coverpageFooter.label')}</span>
+                <span>
+                  {t9n('start.coverpageFooter.label')}
+                </span>
                 <HelpOutline
                   className={classes.helpButton}
                   onMouseOver={e => actions.handlePopoverOpen(e, t9n('start.messages.options'))}
@@ -269,44 +281,44 @@ const RenderView = (props) => {
 
             <FormControl className={classes.mediumFormControl}>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={state.data.changelog}
                     onChange={e => actions.handleChange('changelog', e, 'checked')}
                   />
-                }
+                )}
                 label={t9n('start.changelog.label')}
               />
 
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={state.data.documentOutline}
                     onChange={e => actions.handleChange('documentOutline', e, 'checked')}
                   />
-                }
+                )}
                 label={t9n('start.documentOutline.label')}
               />
             </FormControl>
 
             <FormControl className={classes.mediumFormControl}>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={state.data.toc}
                     onChange={e => actions.handleChange('toc', e, 'checked')}
                   />
-                }
+                )}
                 label={t9n('start.tableOfContents.label')}
               />
 
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     checked={state.data.pageNumbers}
                     onChange={e => actions.handleChange('pageNumbers', e, 'checked')}
                   />
-                }
+                )}
                 label={t9n('start.pageNumbers.label')}
               />
             </FormControl>
@@ -350,7 +362,8 @@ const RenderView = (props) => {
           <Typo
             variant="body1"
             className={classes.coverpageFooterLabel}
-          >{state.ui.message}
+          >
+            {state.ui.message}
           </Typo>
         </Popover>
       </form>

@@ -10,7 +10,11 @@ Date.now = jest.fn(() => 'MOCKED_DATE');
 describe('Given the result store ContextProvider component', () => {
   let instance;
   beforeEach(() => {
-    const renderer = TestRenderer.create(<ContextProvider><div /></ContextProvider>);
+    const renderer = TestRenderer.create(
+      <ContextProvider>
+        <div />
+      </ContextProvider>,
+    );
     ({ instance } = renderer.root);
   });
 

@@ -44,15 +44,22 @@ const AboutRenderView = (props) => {
       >
         <Card className={classes.paper}>
           <CardContent>
-            <Typo variant="headline">{t9n('about.app.name')} {t9n('about.app.version')}</Typo>
-            <Typo variant="subheading">{t9n('about.app.description')}</Typo>
-            <Typo variant="body1">&nbsp;</Typo>
+            <Typo variant="headline">
+              {`${t9n('about.app.name')} ${t9n('about.app.version')}`}
+            </Typo>
+            <Typo variant="subheading">
+              {t9n('about.app.description')}
+            </Typo>
+            <Typo variant="body1">
+              <br />
+            </Typo>
             <Typo variant="body1">
               <a
                 href={t9n('about.app.help.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >{t9n('about.app.help.label')}
+              >
+                {t9n('about.app.help.label')}
               </a>
             </Typo>
             <Typo variant="body1">
@@ -60,7 +67,8 @@ const AboutRenderView = (props) => {
                 href={t9n('about.app.github.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >{t9n('about.app.github.label')}
+              >
+                {t9n('about.app.github.label')}
               </a>
             </Typo>
             <Typo variant="body1">
@@ -68,22 +76,28 @@ const AboutRenderView = (props) => {
                 href={t9n('about.app.releases.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >{t9n('about.app.releases.label')}
+              >
+                {t9n('about.app.releases.label')}
               </a>
             </Typo>
-            <Typo variant="body1">&nbsp;</Typo>
+            <Typo variant="body1">
+              <br />
+            </Typo>
             <Typo variant="body1">
               <a
                 href={t9n('about.app.license.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >{t9n('about.app.license.label')}
-              </a>&nbsp;|&nbsp;
+              >
+                {t9n('about.app.license.label')}
+              </a>
+              {' | '}
               <a
                 href={t9n('about.author.url')}
                 target="_blank"
                 rel="noopener noreferrer"
-              >{t9n('about.author.label')}
+              >
+                {t9n('about.author.label')}
               </a>
             </Typo>
             <div className={classes.actions}>

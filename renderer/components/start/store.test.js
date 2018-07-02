@@ -8,7 +8,11 @@ jest.mock('next/router');
 describe('Given the start store ContextProvider component', () => {
   let instance;
   beforeEach(() => {
-    const renderer = TestRenderer.create(<ContextProvider><div /></ContextProvider>);
+    const renderer = TestRenderer.create(
+      <ContextProvider>
+        <div />
+      </ContextProvider>,
+    );
     ({ instance } = renderer.root);
   });
 

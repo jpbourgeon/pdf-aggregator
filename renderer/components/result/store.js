@@ -4,7 +4,7 @@ import React from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import deepEqual from 'deep-equal';
-import { t9n } from '../i18n/store';
+import { t9n, loadedLanguage } from '../i18n/store';
 
 
 const debug = require('debug')('app:result/store.js');
@@ -76,7 +76,9 @@ class ContextProvider extends React.Component {
       label: t9n('aggregator.job.init'),
       comment: undefined,
     });
-    this.aggregate(this.state.data, this.send);
+    const { data } = this.state;
+    data.loadedLanguage = loadedLanguage();
+    this.aggregate(data, this.send);
   }
 
   componentWillUnmount() {
@@ -108,31 +110,32 @@ class ContextProvider extends React.Component {
   }
 
   addLogEntry(entry) {
-    const log = [...this.state.log];
+    const { prevJob, log } = this.state;
     log.unshift(entry);
     const job = log.reduce((prev, curr) => {
       const result = { ...prev };
       if (curr.isError !== undefined && curr.isError) result.hasErrors = true;
       if (curr.isLast !== undefined && curr.isLast) result.isDone = true;
       return result;
-    }, { ...this.state.job });
+    }, prevJob);
     this.setState({ log, job });
   }
 
   switchBool(path) {
-    const target = path.split('.');
-    let state = { ...this.state };
-    for (let i = 0; i < target.length - 1; i += 1) {
-      const n = target[i];
-      if (n in state) {
-        state = state[n];
-      } else {
-        state[n] = {};
-        state = state[n];
+    this.setState((prevState) => {
+      const target = path.split('.');
+      let state = { ...prevState };
+      for (let i = 0; i < target.length - 1; i += 1) {
+        const n = target[i];
+        if (n in state) {
+          state = state[n];
+        } else {
+          state[n] = {};
+          state = state[n];
+        }
       }
-    }
-    state[target[target.length - 1]] = !state[target[target.length - 1]];
-    this.setState({ state });
+      state[target[target.length - 1]] = !state[target[target.length - 1]];
+    });
   }
 
   handleClose() {
@@ -143,9 +146,9 @@ class ContextProvider extends React.Component {
   }
 
   async saveLog() {
-    const ui = { ...this.state.ui };
+    const { ui, data, log } = this.state;
     try {
-      await this.saveJson(`${this.state.data.output}/log.json`, this.state.log).catch(e => debug(e));
+      await this.saveJson(`${data.output}/log.json`, log).catch(e => debug(e));
       ui.snackbarMessage = t9n('result.operationsLog.save.onSuccess.label');
       ui.openSnackbar = true;
       this.setState({ ui });
@@ -157,6 +160,7 @@ class ContextProvider extends React.Component {
   }
 
   render() {
+    const { children } = this.props;
     return (
       <Context.Provider
         value={{
@@ -171,7 +175,7 @@ class ContextProvider extends React.Component {
           },
         }}
       >
-        {this.props.children}
+        {children}
       </Context.Provider>
     );
   }

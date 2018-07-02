@@ -77,7 +77,9 @@ const formatLog = (log, classes) => log.map((item, index) => {
       <ListItemIcon className={(item.isError) ? classes.secondary : classes.primary}>
         {(item.isError) ? <Error /> : <Check />}
       </ListItemIcon>
-      <ListItemText>{item.label}</ListItemText>
+      <ListItemText>
+        {item.label}
+      </ListItemText>
     </ListItem>
   );
 }, []);
@@ -89,28 +91,34 @@ const RenderView = (props) => {
   return (
     <React.Fragment>
       <Head>
-        <title>{t9n('about.app.name')}</title>
+        <title>
+          {t9n('about.app.name')}
+        </title>
         <meta name="description" content={t9n('about.app.description')} />
-        <meta name="author"content={`${t9n('about.author.name')} <${t9n('about.author.url')}>`} />
+        <meta name="author" content={`${t9n('about.author.name')} <${t9n('about.author.url')}>`} />
       </Head>
       <div className={classes.root}>
         <About />
         <div className={(state.ui.isDev) ? '' : classes.hidden}>
           <Button onClick={() => actions.switchBool('job.isDone')}>
-          isDone ({JSON.stringify(state.job.isDone)})
+            {`isDone (${JSON.stringify(state.job.isDone)})`}
           </Button>
           <Button onClick={() => actions.switchBool('job.hasErrors')}>
-          hasErrors ({JSON.stringify(state.job.hasErrors)})
+            {`hasErrors (${JSON.stringify(state.job.hasErrors)})`}
           </Button>
           <Button onClick={() => actions.switchBool('ui.isDev')}>
-          isDev ({JSON.stringify(state.ui.isDev)})
+            {`isDev (${JSON.stringify(state.ui.isDev)})`}
           </Button>
         </div>
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} className={classes.item}>
             <Typo variant="display1" className={classes.title}>
-              <span className={(state.job.isDone) ? classes.hidden : ''}>{t9n('result.title.inProgress.label')}</span>
-              <span className={(state.job.isDone) ? '' : classes.hidden}>{t9n('result.title.completed.label')}</span>
+              <span className={(state.job.isDone) ? classes.hidden : ''}>
+                {t9n('result.title.inProgress.label')}
+              </span>
+              <span className={(state.job.isDone) ? '' : classes.hidden}>
+                {t9n('result.title.completed.label')}
+              </span>
               <IconButton size="small" variant="raised" className={classes.buttonRight} onClick={aboutActions.open}>
                 <Info />
               </IconButton>
@@ -188,7 +196,9 @@ const RenderView = (props) => {
                 </Typo>
               </CardContent>
               <CardContent>
-                <List>{formatLog(state.log, classes)}</List>
+                <List>
+                  {formatLog(state.log, classes)}
+                </List>
               </CardContent>
             </Card>
           </Grid>
@@ -204,8 +214,12 @@ const RenderView = (props) => {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">{state.ui.snackbarMessage}</span>}
-          action={
+          message={(
+            <span id="message-id">
+              {state.ui.snackbarMessage}
+            </span>
+          )}
+          action={(
             <IconButton
               key="close"
               aria-label="Close"
@@ -215,7 +229,7 @@ const RenderView = (props) => {
             >
               <CloseIcon />
             </IconButton>
-          }
+          )}
         />
       </div>
     </React.Fragment>

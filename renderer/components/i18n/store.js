@@ -24,10 +24,12 @@ class I18nContextProvider extends React.Component {
   }
 
   t9n(id) {
-    return (this.state[locale]) ? this.state[locale][id] : this.state.en[id];
+    const { state } = this;
+    return (state[locale]) ? state[locale][id] : state.en[id];
   }
 
   render() {
+    const { children } = this.props;
     return (
       <I18nContext.Provider
         value={{
@@ -36,7 +38,7 @@ class I18nContextProvider extends React.Component {
           },
         }}
       >
-        {this.props.children}
+        {children}
       </I18nContext.Provider>
     );
   }

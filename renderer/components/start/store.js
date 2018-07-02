@@ -57,17 +57,19 @@ class ContextProvider extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!deepEqual(this.state.data, prevState.data)) {
-      this.db.setState(this.state.data).write();
+    const { data } = this.state;
+    if (!deepEqual(data, prevState.data)) {
+      this.db.setState(data).write();
     }
   }
 
   setFolder(field, title, buttonLabel) {
+    const { data } = this.state;
     const path = this.openDialog(
       this.currentWindow,
       { title, properties: ['openDirectory'], buttonLabel },
     );
-    const data = { ...this.state.data, [field]: path.replace(/\\/g, '/') };
+    data[field] = path.replace(/\\/g, '/');
     this.setState({ data });
   }
 
@@ -81,7 +83,8 @@ class ContextProvider extends React.Component {
   }
 
   handleChange(field, event, property = 'value') {
-    const data = { ...this.state.data, [field]: event.target[property] };
+    const { data } = this.state;
+    data[field] = event.target[property];
     this.setState({ data });
   }
 
@@ -92,7 +95,8 @@ class ContextProvider extends React.Component {
     if (value < this.defaultState.data[field] || Number.isNaN(value)) {
       value = this.defaultState.data[field];
     }
-    const data = { ...this.state.data, [field]: value };
+    const { data } = this.state;
+    data[field] = value;
     this.setState({ data });
   }
 
@@ -130,6 +134,7 @@ class ContextProvider extends React.Component {
   }
 
   render() {
+    const { children } = this.props;
     return (
       <Context.Provider
         value={{
@@ -147,7 +152,7 @@ class ContextProvider extends React.Component {
           },
         }}
       >
-        {this.props.children}
+        {children}
       </Context.Provider>
     );
   }

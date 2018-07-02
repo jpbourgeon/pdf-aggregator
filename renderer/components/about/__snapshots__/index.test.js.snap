@@ -15,7 +15,7 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="headline"
         >
-           
+          undefined undefined
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="subheading"
@@ -23,7 +23,7 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="body1"
         >
-           
+          <br />
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="body1"
@@ -52,7 +52,7 @@ exports[`The renderView component of the about modal should render correctly 1`]
         <WithStyles(Typography)
           variant="body1"
         >
-           
+          <br />
         </WithStyles(Typography)>
         <WithStyles(Typography)
           variant="body1"
@@ -61,7 +61,7 @@ exports[`The renderView component of the about modal should render correctly 1`]
             rel="noopener noreferrer"
             target="_blank"
           />
-           | 
+           | 
           <a
             rel="noopener noreferrer"
             target="_blank"

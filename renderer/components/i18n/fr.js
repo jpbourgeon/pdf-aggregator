@@ -21,21 +21,42 @@ export default {
   'start.state.defaults.filename': '%dossiersource%_%dateiso%',
   'start.state.defaults.coverpageFooter': '%dateiso%',
   'start.title': 'Paramètres',
-  'start.messages.level': <span>0 = niveau racine</span>,
-  'start.messages.depth': <span>0 = profondeur illimitée</span>,
+  'start.messages.level': (
+    <span>
+      {'0 = niveau racine'}
+    </span>
+  ),
+  'start.messages.depth': (
+    <span>
+      {'0 = profondeur illimitée'}
+    </span>
+  ),
   'start.messages.options': (
     <span>
-      <strong>Options</strong><br />
-      %dateiso% : date au format ISO-8601 (AAAA-MM-JJ)<br />
-      %dossiersource% : nom du dossier source<br />
-      %ligne% : aller à la ligne
+      <strong>
+        {'Options'}
+      </strong>
+      <br />
+      {'%dateiso% : date au format ISO-8601 (AAAA-MM-JJ)'}
+      <br />
+      {'%dossiersource% : nom du dossier source'}
+      <br />
+      {'%ligne% : aller à la ligne'}
     </span>
   ),
   'start.messages.coverpage': (
     <span>
-      <strong>Important</strong><br />
-    Placez un fichier <em>_cover.pdf</em> dans le dossier source.<br />
-    La première page de ce document sera utilisée comme couverture.
+      <strong>
+        {'Important'}
+      </strong>
+      <br />
+      {'Placez un fichier'}
+      <em>
+        {' _cover.pdf'}
+      </em>
+      {' dans le dossier source.'}
+      <br />
+      {'La première page de ce document sera utilisée comme couverture.'}
     </span>
   ),
   'start.sourceFolder.inputLabel': 'Dossier source',

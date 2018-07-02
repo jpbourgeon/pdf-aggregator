@@ -21,21 +21,42 @@ export default {
   'start.state.defaults.filename': '%inputfolder%_%isodate%',
   'start.state.defaults.coverpageFooter': '%isodate%',
   'start.title': 'Parameters',
-  'start.messages.level': <span>0 = root level</span>,
-  'start.messages.depth': <span>0 = unlimited depth</span>,
+  'start.messages.level': (
+    <span>
+      {'0 = root level'}
+    </span>
+  ),
+  'start.messages.depth': (
+    <span>
+      {'0 = unlimited depth'}
+    </span>
+  ),
   'start.messages.options': (
     <span>
-      <strong>Options</strong><br />
-      %isodate% : ISO-8601 formatted date (YYYY-MM-DD)<br />
-      %inputfolder% : input folder&apos;s name<br />
-      %line% : go to the line
+      <strong>
+        {'Options'}
+      </strong>
+      <br />
+      {'%isodate%: ISO-8601 formatted date (YYYY-MM-DD)'}
+      <br />
+      {'%inputfolder%: input folder\'s name'}
+      <br />
+      {'%line%: go to the line'}
     </span>
   ),
   'start.messages.coverpage': (
     <span>
-      <strong>Important</strong><br />
-    Place a file <em>_cover.pdf</em> in the input folder.<br />
-    The first page of this document will be used as the cover page.
+      <strong>
+        {'Important'}
+      </strong>
+      <br />
+      {'Place a file '}
+      <em>
+        {'_cover.pdf'}
+      </em>
+      {' in the input folder.'}
+      <br />
+      {'The first page of this document will be used as the cover page.'}
     </span>
   ),
   'start.sourceFolder.inputLabel': 'Source folder',

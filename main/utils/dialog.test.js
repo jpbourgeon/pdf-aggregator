@@ -1,5 +1,5 @@
-const selectDirectory = require('./dialog');
 const { dialog } = require('electron');
+const selectDirectory = require('./dialog');
 
 describe('Given the selectDirectory function', () => {
   it('should open electron\'s dialog window', () => {

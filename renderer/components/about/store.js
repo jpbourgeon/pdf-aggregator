@@ -23,6 +23,7 @@ class AboutContextProvider extends React.Component {
   }
 
   render() {
+    const { children } = this.props;
     return (
       <AboutContext.Provider
         value={{
@@ -33,7 +34,7 @@ class AboutContextProvider extends React.Component {
           },
         }}
       >
-        {this.props.children}
+        {children}
       </AboutContext.Provider>
     );
   }
