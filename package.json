@@ -54,7 +54,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
     "jest": "^23.2.0",
-    "jest-junit": "^5.1.0",
+    "jest-junit": "5.1.0",
     "react-test-renderer": "^16.4.1"
   },
   "greenkeeper": {
