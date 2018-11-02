@@ -47,7 +47,7 @@
     "babel-core": "7.0.0-bridge.0",
     "cross-env": "^5.2.0",
     "electron": "^2.0.3",
-    "electron-builder": "^20.17.1",
+    "electron-builder": "^20.31.2",
     "eslint": "^4.19.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.12.0",
